@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GLOOD | Stick it everywhere</title>
+    <meta name="description" content="GLOOD stickers. Racing, anime vibe, gaming, gym and meme stickers for your laptop, bottle, helmet and everything else. Stick it everywhere." />
+    <meta name="theme-color" content="#ffa905" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a class="skip-link" href="#gallery">Skip to the stickers</a>
+
+    <header class="nav">
+      <a class="nav-logo" href="#top" aria-label="GLOOD, back to top">
+        <img src="/src/assets/glood-logo-sticker.svg" alt="" width="1604" height="1019" />
+      </a>
+      <nav aria-label="Main">
+        <a href="#gallery">Stickers</a>
+        <a href="#drops">Fresh drops</a>
+        <a href="#about">Story</a>
+      </nav>
+      <a class="btn btn-small" href="#gallery">Shop</a>
+    </header>
+
+    <main id="top">
+      <section class="story" id="story" aria-labelledby="story-title">
+        <h1 id="story-title" class="visually-hidden">GLOOD stickers. Stick it everywhere.</h1>
+        <canvas class="stage-canvas" aria-hidden="true"></canvas>
+        <ul class="stage-fallback" aria-hidden="true" hidden></ul>
+
+        <div class="hero-copy">
+          <p class="kicker">Die-cut stickers</p>
+          <div class="hero-scatter" aria-hidden="true">
+            <img src="/src/stickers/custom/skill-issue.svg" alt="" class="scatter s1" />
+            <img src="/src/stickers/custom/chai-over-everything.svg" alt="" class="scatter s2" />
+            <img src="/src/stickers/custom/lap-1-delulu.svg" alt="" class="scatter s3" />
+            <img src="/src/stickers/custom/mochi-chan.svg" alt="" class="scatter s4" />
+          </div>
+          <p class="tagline">Stick it everywhere.</p>
+          <p class="scroll-hint"><span>Scroll to slap</span></p>
+        </div>
+
+        <div class="hero-logo"></div>
+
+        <div class="captions" aria-live="polite">
+          <p class="caption">Meet the canvas.</p>
+          <p class="caption">Slap it on. <span class="counter">00 / 00</span></p>
+          <p class="caption">Fully sticker-bombed.</p>
+          <p class="caption">Now open it up.</p>
+        </div>
+        <div class="story-progress" aria-hidden="true"><span></span></div>
+      </section>
+
+      <section class="gallery" id="gallery" aria-labelledby="gallery-title">
+        <div class="section-head">
+          <p class="eyebrow">The sticker wall</p>
+          <h2 id="gallery-title">Pick your chaos</h2>
+          <p class="lede">Every design comes in three sizes. Hover one to peel it.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filter stickers by category"></div>
+        <p class="visually-hidden" role="status" aria-live="polite" id="gallery-status"></p>
+        <ul class="sticker-grid"></ul>
+      </section>
+
+      <section class="drops" id="drops" aria-labelledby="drops-title">
+        <div class="marquee" aria-hidden="true">
+          <div class="marquee-track">
+            <span>Fresh drops ✦ New slaps ✦ Fresh drops ✦ New slaps ✦ Fresh drops ✦ New slaps ✦ </span>
+            <span>Fresh drops ✦ New slaps ✦ Fresh drops ✦ New slaps ✦ Fresh drops ✦ New slaps ✦ </span>
+          </div>
+        </div>
+        <div class="section-head">
+          <p class="eyebrow">Just landed</p>
+          <h2 id="drops-title">Fresh Drops</h2>
+          <p class="lede">Brand new GLOOD originals, fresh off the drawing board.</p>
+        </div>
+        <ul class="drop-grid"></ul>
+      </section>
+
+      <section class="about" id="about" aria-labelledby="about-title">
+        <div class="about-card">
+          <p class="eyebrow">The story</p>
+          <h2 id="about-title">Blank laptops are boring.</h2>
+          <p>
+            GLOOD makes loud little stickers for the stuff you carry every day: laptops, bottles, helmets,
+            phone cases, notebooks, that one cupboard door. Racing, anime vibes, gaming, gym and memes, all
+            cut to shape with a clean white border so they pop on anything.
+          </p>
+          <p>
+            The idea is simple. Your things should look like you. Slap on one, slap on twenty, and keep
+            going until it says something.
+          </p>
+        </div>
+        <div class="sizes" aria-labelledby="sizes-title">
+          <h3 id="sizes-title">Same designs. Pick a size.</h3>
+          <ul>
+            <li class="size size-s"><span class="size-dim">1 to 2 in</span><span class="size-price">₹20</span></li>
+            <li class="size size-m"><span class="size-dim">2 to 3 in</span><span class="size-price">₹30</span></li>
+            <li class="size size-l"><span class="size-dim">3+ in</span><span class="size-price">₹50</span></li>
+          </ul>
+          <p class="size-note">Size is measured along the longest side of the sticker.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <img class="footer-logo" src="/src/assets/glood-logo-sticker.svg" alt="GLOOD" width="1604" height="1019" loading="lazy" />
+      <p class="footer-tagline">Stick it everywhere.</p>
+      <a class="btn btn-insta" data-instagram href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="17.4" cy="6.6" r="1.4" fill="currentColor"/></svg>
+        Follow GLOOD on Instagram
+      </a>
+      <p class="footer-small">&copy; GLOOD stickers</p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
