@@ -1,0 +1,32 @@
+{
+  "name": "glood",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "GLOOD sticker shop website",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "stickers": "node scripts/build-stickers.mjs",
+    "shots": "node scripts/screenshots.mjs",
+    "logo": "python scripts/logo_masks.py && node scripts/trace-logo.mjs && node scripts/compare-logo.mjs",
+    "assets": "python scripts/process_assets.py"
+  },
+  "dependencies": {
+    "@fontsource/bungee": "^5.3.0",
+    "@fontsource/lilita-one": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "gsap": "^3.15.0",
+    "three": "^0.186.0"
+  },
+  "devDependencies": {
+    "opentype.js": "^2.0.0",
+    "playwright": "^1.63.0",
+    "potrace": "^2.1.8",
+    "vite": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}
