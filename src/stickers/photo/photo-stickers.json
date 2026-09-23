@@ -1,0 +1,332 @@
+[
+  {
+    "slug": "box-box-box",
+    "title": "BOX BOX BOX",
+    "category": "racing",
+    "file": "box-box-box.webp",
+    "width": 301,
+    "height": 351,
+    "peelInset": 0.0698,
+    "source": "sticker-board/5.png"
+  },
+  {
+    "slug": "checkered-flags",
+    "title": "Checkered Flags",
+    "category": "racing",
+    "file": "checkered-flags.webp",
+    "width": 431,
+    "height": 270,
+    "peelInset": 0.4519,
+    "source": "sticker-board/9.png"
+  },
+  {
+    "slug": "baka",
+    "title": "BAKA!",
+    "category": "anime",
+    "file": "baka.webp",
+    "width": 499,
+    "height": 192,
+    "peelInset": 0.25,
+    "source": "sticker-board/17.png"
+  },
+  {
+    "slug": "reading-bubble",
+    "title": "Reading Bubble",
+    "category": "memes",
+    "file": "reading-bubble.webp",
+    "width": 634,
+    "height": 429,
+    "peelInset": 0.3939,
+    "source": "sticker-board/20 (2).png"
+  },
+  {
+    "slug": "villains",
+    "title": "Villains Do It For Me",
+    "category": "memes",
+    "file": "villains.webp",
+    "width": 660,
+    "height": 282,
+    "peelInset": 0.1879,
+    "source": "sticker-board/20 (3).png"
+  },
+  {
+    "slug": "dropped-this",
+    "title": "You Dropped This",
+    "category": "memes",
+    "file": "dropped-this.webp",
+    "width": 444,
+    "height": 318,
+    "peelInset": 0.3459,
+    "source": "sticker-board/27.png"
+  },
+  {
+    "slug": "dont-touch-laptop",
+    "title": "Don't Touch My Laptop",
+    "category": "gaming",
+    "file": "dont-touch-laptop.webp",
+    "width": 517,
+    "height": 276,
+    "peelInset": 0.2826,
+    "source": "sticker-board/28.png"
+  },
+  {
+    "slug": "own-muse",
+    "title": "I Am My Own Muse",
+    "category": "memes",
+    "file": "own-muse.webp",
+    "width": 611,
+    "height": 824,
+    "peelInset": 0.2799,
+    "source": "sticker-board/30 (3).png"
+  },
+  {
+    "slug": "crumpled-cash",
+    "title": "Crumpled Cash",
+    "category": "memes",
+    "file": "crumpled-cash.webp",
+    "width": 537,
+    "height": 968,
+    "peelInset": 0.2309,
+    "source": "sticker-board/30 (5).png"
+  },
+  {
+    "slug": "plus-1000-aura",
+    "title": "+1000 AURA",
+    "category": "gaming",
+    "file": "plus-1000-aura.webp",
+    "width": 486,
+    "height": 290,
+    "peelInset": 0.1414,
+    "source": "sticker-board/33.png"
+  },
+  {
+    "slug": "pixel-heart",
+    "title": "Pixel Heart",
+    "category": "gaming",
+    "file": "pixel-heart.webp",
+    "width": 338,
+    "height": 316,
+    "peelInset": 0.4905,
+    "source": "sticker-board/34.png"
+  },
+  {
+    "slug": "it-is-what-it-is",
+    "title": "It Is What It Is",
+    "category": "memes",
+    "file": "it-is-what-it-is.webp",
+    "width": 295,
+    "height": 185,
+    "peelInset": 0.1351,
+    "source": "sticker-board/35.png"
+  },
+  {
+    "slug": "suit-up",
+    "title": "SUIT UP!",
+    "category": "memes",
+    "file": "suit-up.webp",
+    "width": 432,
+    "height": 275,
+    "peelInset": 0.0982,
+    "source": "sticker-board/44.png"
+  },
+  {
+    "slug": "after-cigarette",
+    "title": "After Cigarette",
+    "category": "memes",
+    "file": "after-cigarette.webp",
+    "width": 393,
+    "height": 221,
+    "peelInset": 0.7014,
+    "source": "sticker-board/50.png"
+  },
+  {
+    "slug": "favourite-hoon",
+    "title": "Main Apni Favourite Hoon",
+    "category": "memes",
+    "file": "favourite-hoon.webp",
+    "width": 420,
+    "height": 220,
+    "peelInset": 0.1273,
+    "source": "sticker-board/73.png"
+  },
+  {
+    "slug": "kalesh-aurat",
+    "title": "Kalesh Aurat",
+    "category": "memes",
+    "file": "kalesh-aurat.webp",
+    "width": 304,
+    "height": 302,
+    "peelInset": 0.2848,
+    "source": "sticker-board/74.png"
+  },
+  {
+    "slug": "need-money",
+    "title": "Need Money For Porsche",
+    "category": "racing",
+    "file": "need-money.webp",
+    "width": 303,
+    "height": 362,
+    "peelInset": 0.1122,
+    "source": "sticker-board/79.png"
+  },
+  {
+    "slug": "mentally-unstable",
+    "title": "Mentally Unstable",
+    "category": "memes",
+    "file": "mentally-unstable.webp",
+    "width": 391,
+    "height": 389,
+    "peelInset": 0.2751,
+    "source": "sticker-board/96.png"
+  },
+  {
+    "slug": "no-kushi",
+    "title": "No Kushi Only Gham",
+    "category": "memes",
+    "file": "no-kushi.webp",
+    "width": 381,
+    "height": 219,
+    "peelInset": 0.1689,
+    "source": "sticker-board/97.png"
+  },
+  {
+    "slug": "dafa-ho",
+    "title": "DAFA HO",
+    "category": "memes",
+    "file": "dafa-ho.webp",
+    "width": 414,
+    "height": 119,
+    "peelInset": 0.2773,
+    "source": "sticker-board/100.png"
+  },
+  {
+    "slug": "hundred-bill",
+    "title": "Hundred Bill",
+    "category": "memes",
+    "file": "hundred-bill.webp",
+    "width": 730,
+    "height": 383,
+    "peelInset": 0.107,
+    "source": "sticker-board/123.png"
+  },
+  {
+    "slug": "starry-night",
+    "title": "Starry Night",
+    "category": "memes",
+    "file": "starry-night.webp",
+    "width": 673,
+    "height": 415,
+    "peelInset": 0.0916,
+    "source": "sticker-board/125.png"
+  },
+  {
+    "slug": "loading-420",
+    "title": "Loading 4:20",
+    "category": "gaming",
+    "file": "loading-420.webp",
+    "width": 768,
+    "height": 486,
+    "peelInset": 0.1358,
+    "source": "sticker-board/129.png"
+  },
+  {
+    "slug": "japan-stamp",
+    "title": "Pagoda Stamp",
+    "category": "anime",
+    "file": "japan-stamp.webp",
+    "width": 405,
+    "height": 479,
+    "peelInset": 0.0864,
+    "source": "sticker-board/134.png"
+  },
+  {
+    "slug": "manifest-bow",
+    "title": "Manifest",
+    "category": "memes",
+    "file": "manifest-bow.webp",
+    "width": 184,
+    "height": 171,
+    "peelInset": 0.3333,
+    "source": "sticker-board/137.png"
+  },
+  {
+    "slug": "mumbai-stamp",
+    "title": "Mumbai Stamp",
+    "category": "memes",
+    "file": "mumbai-stamp.webp",
+    "width": 430,
+    "height": 494,
+    "peelInset": 0.0628,
+    "source": "sticker-board/138.png"
+  },
+  {
+    "slug": "great-wave-stamp",
+    "title": "Great Wave Stamp",
+    "category": "anime",
+    "file": "great-wave-stamp.webp",
+    "width": 521,
+    "height": 374,
+    "peelInset": 0.0695,
+    "source": "sticker-board/139.png"
+  },
+  {
+    "slug": "creation-hands",
+    "title": "Creation Hands",
+    "category": "memes",
+    "file": "creation-hands.webp",
+    "width": 368,
+    "height": 369,
+    "peelInset": 0.2989,
+    "source": "sticker-board/143.png"
+  },
+  {
+    "slug": "jet-fuel-only",
+    "title": "Jet Fuel Only",
+    "category": "racing",
+    "file": "jet-fuel-only.webp",
+    "width": 1200,
+    "height": 436,
+    "peelInset": 0.0528,
+    "source": "sticker-set/Sticker_01.png"
+  },
+  {
+    "slug": "street-legal-ish",
+    "title": "Street Legal(ish)",
+    "category": "racing",
+    "file": "street-legal-ish.webp",
+    "width": 1200,
+    "height": 528,
+    "peelInset": 0.1098,
+    "source": "sticker-set/Sticker_03.png"
+  },
+  {
+    "slug": "hello-single",
+    "title": "Hello I'm Single",
+    "category": "memes",
+    "file": "hello-single.webp",
+    "width": 1200,
+    "height": 902,
+    "peelInset": 0.0576,
+    "source": "sticker-set/Sticker_07.png"
+  },
+  {
+    "slug": "hello-taken",
+    "title": "Hello I'm Taken",
+    "category": "memes",
+    "file": "hello-taken.webp",
+    "width": 1200,
+    "height": 897,
+    "peelInset": 0.0546,
+    "source": "sticker-set/Sticker_08.png"
+  },
+  {
+    "slug": "donut-poke",
+    "title": "Donut Poke",
+    "category": "memes",
+    "file": "donut-poke.webp",
+    "width": 1019,
+    "height": 1200,
+    "peelInset": 0.156,
+    "source": "sticker-set/Sticker_09.png"
+  }
+]
