@@ -14,6 +14,10 @@ export const CATEGORIES = [
   { id: 'gaming', label: 'Gaming' },
   { id: 'gym', label: 'Gym' },
   { id: 'memes', label: 'Memes' },
+  { id: 'sports', label: 'Sports' },
+  { id: 'music', label: 'Music' },
+  { id: 'screen', label: 'TV & film' },
+  { id: 'heroes', label: 'Superheroes' },
 ];
 
 const CATEGORY_IDS = new Set(CATEGORIES.map((c) => c.id));

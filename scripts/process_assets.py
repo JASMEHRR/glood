@@ -5,7 +5,8 @@ Run from the repo root:  python scripts/process_assets.py
 What it does:
   1. Every image in source-assets/sticker-board and source-assets/sticker-set gets a
      verdict below (SAFE or RISKY) after a manual visual review.
-  2. RISKY files are moved to source-assets/_risky (never used on the site).
+  2. Flagged (RISKY) files are moved to source-assets/_risky. They are only used on the site
+     while USE_FLAGGED is True (owner decision, see DECISIONS.md).
   3. SAFE files are cleaned (plain white background removed, fresh white die-cut
      border added), cropped, resized to max 1200px and saved as WebP in
      src/stickers/photo/.
@@ -30,7 +31,7 @@ MAX_SIDE = 1200
 
 # Verdicts from a manual review of every image.
 # SAFE entries: (slug, title, filter category, note)
-# RISKY entries: reason string
+# RISKY entries: see the flagged section below
 SAFE = {
     "sticker-board/5.png": ("box-box-box", "BOX BOX BOX", "racing", "Pit radio phrase with generic tyre graphics, no team or supplier logo"),
     "sticker-board/9.png": ("checkered-flags", "Checkered Flags", "racing", "Generic chequered flags"),
@@ -70,11 +71,20 @@ SAFE = {
 # Board files that are lower-resolution copies of sticker-set files. Kept in place, not used.
 DUPLICATES = {
     "sticker-board/144.png": "sticker-set/Sticker_01.png",
+    "sticker-board/145.png": "sticker-set/Sticker_02.png",
     "sticker-board/146.png": "sticker-set/Sticker_03.png",
+    "sticker-board/147.png": "sticker-set/Sticker_04.png",
+    "sticker-board/148.png": "sticker-set/Sticker_05.png",
+    "sticker-board/149.png": "sticker-set/Sticker_06.png",
     "sticker-board/150.png": "sticker-set/Sticker_07.png",
     "sticker-board/151.png": "sticker-set/Sticker_08.png",
     "sticker-board/152.png": "sticker-set/Sticker_09.png",
+    "sticker-board/153.png": "sticker-set/Sticker_10.png",
 }
+
+# Owner decision (2026-09-24): show every design, including the flagged ones below. Set this to
+# False to take the flagged designs off the site again.
+USE_FLAGGED = True
 
 F1 = "F1 team, driver or series branding"
 ANIME = "Anime/manga character or symbol"
@@ -86,144 +96,143 @@ BRAND = "Third-party brand logo or trade dress"
 CAR = "Car maker logo or recognisable car design"
 GAME = "Video game logo or trade dress"
 
+# Flagged entries: (slug, title, filter category, copyright/trademark reason)
 RISKY = {
-    "sticker-board/1.png": F1 + " (Ferrari car and livery)",
-    "sticker-board/2.png": F1 + " (F1 logo)",
-    "sticker-board/3.png": F1 + " (Ferrari logo) plus Disney/Pixar Cars character",
-    "sticker-board/4.png": F1 + " (Ferrari team kit, real driver)",
-    "sticker-board/6.png": F1 + " (team steering wheel with sponsor marks)",
-    "sticker-board/7.png": F1 + " (Red Bull livery, real driver)",
-    "sticker-board/8.png": F1 + " (Ferrari kit, real driver)",
-    "sticker-board/10.png": "Real F1 driver likeness (podium shoey)",
-    "sticker-board/11.png": ANIME + " (One Piece)",
-    "sticker-board/12.png": ANIME + " (Chainsaw Man)",
-    "sticker-board/13.png": ANIME + " (One Punch Man)",
-    "sticker-board/14.png": ANIME + " (One Piece)",
-    "sticker-board/15.png": ANIME + " (Naruto, Akatsuki cloud)",
-    "sticker-board/16.png": ANIME + " (Naruto)",
-    "sticker-board/18.png": ANIME + " (Demon Slayer)",
-    "sticker-board/19.png": ANIME + " (One Piece)",
-    "sticker-board/20.png": ANIME + " (Attack on Titan)",
-    "sticker-board/20 (4).png": TV + " (The Boys logo)",
-    "sticker-board/20 (5).png": BRAND + " (Hot Wheels logo parody)",
-    "sticker-board/20 (6).png": MUSIC + " (Starboy logo parody)",
-    "sticker-board/20 (7).png": BRAND + " (Spotify code)",
-    "sticker-board/21.png": ANIME + " (Jujutsu Kaisen)",
-    "sticker-board/22.png": ANIME + " (Naruto)",
-    "sticker-board/23.png": ANIME + " (Jujutsu Kaisen)",
-    "sticker-board/24.png": ANIME + " (Solo Leveling)",
-    "sticker-board/25.png": "Painting of uncertain copyright status used as a meme",
-    "sticker-board/26.png": BRAND + " (Parental Advisory mark)",
-    "sticker-board/29.png": BRAND + " (OnlyFans logo parody)",
-    "sticker-board/30.png": BRAND + " (Disney logo lettering)",
-    "sticker-board/30 (2).png": BRAND + " (Red Bull can)",
-    "sticker-board/30 (4).png": BRAND + " (Nike and Adidas logos)",
-    "sticker-board/30 (6).png": BRAND + " (BASF cassette label)",
-    "sticker-board/30 (7).png": F1 + " (McLaren speedmark)",
-    "sticker-board/31.png": GAME + " (GTA 'wasted' screen)",
-    "sticker-board/32.png": BRAND + " (platform verified badge)",
-    "sticker-board/36.png": TV + " (Breaking Bad reference) and musician likeness",
-    "sticker-board/37.png": TV + " (Breaking Bad)",
-    "sticker-board/38.png": TV + " (Stranger Things)",
-    "sticker-board/39.png": TV + " (The Office still)",
-    "sticker-board/40.png": TV + " (show cast illustration)",
-    "sticker-board/41.png": TV + " (Suits)",
-    "sticker-board/42.png": TV + " (The Office actor)",
-    "sticker-board/43.png": TV + " (character illustration)",
-    "sticker-board/45.png": TV + " (Brooklyn Nine-Nine catchphrase in show colours)",
-    "sticker-board/46.png": MUSIC + " (Taylor Swift branding)",
-    "sticker-board/47.png": MUSIC + " (Kendrick Lamar name logo)",
-    "sticker-board/48.png": MUSIC + " (The Weeknd)",
-    "sticker-board/49.png": MUSIC + " (Eminem / Slim Shady)",
-    "sticker-board/50 (2).png": F1 + " (Mercedes kit, real driver)",
-    "sticker-board/50 (3).png": MUSIC + " (Yeezus album art)",
-    "sticker-board/50 (4).png": SPORT + " (Real Madrid crest)",
-    "sticker-board/50 (5).png": TV + " (Friends cast still)",
-    "sticker-board/50 (6).png": MUSIC + " (album art in Spotify player frame)",
-    "sticker-board/51.png": MUSIC + " (Kendrick Lamar album art)",
-    "sticker-board/52.png": MUSIC + " (SZA album art)",
-    "sticker-board/53.png": MUSIC + " (Seedhe Maut)",
-    "sticker-board/54.png": MUSIC + " (Lana Del Rey)",
-    "sticker-board/55.png": MUSIC + " (Frank Ocean album art)",
-    "sticker-board/56.png": MUSIC + " (Drake album art)",
-    "sticker-board/57.png": MUSIC + " (Seedhe Maut)",
-    "sticker-board/58.png": MUSIC + " (Travis Scott Utopia)",
-    "sticker-board/59.png": MARVEL_DC + " (Avengers icons)",
-    "sticker-board/60.png": MARVEL_DC + " (Hulk)",
-    "sticker-board/61.png": MARVEL_DC + " (Infinity Gauntlet)",
-    "sticker-board/62.png": MARVEL_DC + " (Mjolnir)",
-    "sticker-board/63.png": MARVEL_DC + " (Superman)",
-    "sticker-board/64.png": MARVEL_DC + " (Spider-Man meme)",
-    "sticker-board/65.png": MARVEL_DC + " (Spider-Man)",
-    "sticker-board/66.png": TV + " (Star Wars quote in Star Wars lettering)",
-    "sticker-board/67.png": MARVEL_DC + " (Batman)",
-    "sticker-board/68.png": MARVEL_DC + " (Spider-Verse)",
-    "sticker-board/69.png": MARVEL_DC + " (Deadpool and Wolverine)",
-    "sticker-board/70.png": TV + " (film actors illustration)",
-    "sticker-board/71.png": TV + " (film scene illustration)",
-    "sticker-board/72.png": TV + " (actor likeness meme)",
-    "sticker-board/75.png": CAR + " (Porsche 911 GT3 RS)",
-    "sticker-board/76.png": CAR + " (Mercedes-AMG logo)",
-    "sticker-board/77.png": TV + " (Pixar Cars character)",
-    "sticker-board/78.png": CAR + " (Toyota Supra script)",
-    "sticker-board/80.png": CAR + " (BMW M logo)",
-    "sticker-board/81.png": CAR + " (Ferrari logo)",
-    "sticker-board/82.png": BRAND + " (NOS logo)",
-    "sticker-board/83.png": SPORT + " (FC Barcelona crest)",
-    "sticker-board/84.png": SPORT + " (Real Madrid slogan)",
-    "sticker-board/85.png": SPORT + " (Virat Kohli)",
-    "sticker-board/86.png": SPORT + " (Michael Jordan, Bulls kit)",
-    "sticker-board/87.png": SPORT + " (Stephen Curry)",
-    "sticker-board/88.png": SPORT + " (footballer)",
-    "sticker-board/89.png": SPORT + " (Arsenal crest)",
-    "sticker-board/90.png": SPORT + " (footballer, Spain kit)",
-    "sticker-board/91.png": SPORT + " (Manchester United crest)",
-    "sticker-board/92.png": SPORT + " (footballer)",
-    "sticker-board/93.png": SPORT + " (Messi poster)",
-    "sticker-board/94.png": GAME + " (GTA San Andreas meme in GTA lettering)",
-    "sticker-board/95.png": BRAND + " (Diet Coke can)",
-    "sticker-board/98.png": "Photo of a real person (likeness)",
-    "sticker-board/99.png": "Book title branding (Verity)",
-    "sticker-board/101.png": BRAND + " (I love NY trade mark parody)",
-    "sticker-board/102.png": SPORT + " (Jordan 23 in Bulls lettering)",
-    "sticker-board/103.png": BRAND + " (Nike Air Jordan / Off-White)",
-    "sticker-board/121.png": BRAND + " (Marlboro)",
-    "sticker-board/122.png": CAR + " (Porsche) and another seller's watermark",
-    "sticker-board/124.png": BRAND + " (Supreme)",
-    "sticker-board/126.png": MUSIC + " (Starboy)",
-    "sticker-board/127.png": CAR + " (Porsche) and another seller's watermark",
-    "sticker-board/128.png": CAR + " (Porsche RWB)",
-    "sticker-board/130.png": GAME + " (Pokemon Charizard)",
-    "sticker-board/131.png": MARVEL_DC + " (Infinity Gauntlet)",
-    "sticker-board/132.png": ANIME + " style character, suggestive",
-    "sticker-board/133.png": BRAND + " (Google Chrome dino)",
-    "sticker-board/135.png": SPORT + " (Conor McGregor)",
-    "sticker-board/136.png": ANIME + " (Bleach)",
-    "sticker-board/140.png": ANIME + " (Cowboy Bebop)",
-    "sticker-board/141.png": BRAND + " (Pinterest)",
-    "sticker-board/142.png": CAR + " (Toyota Supra)",
-    "sticker-board/145.png": BRAND + " (Hoonigan)",
-    "sticker-board/147.png": MUSIC + " (Starboy album art)",
-    "sticker-board/148.png": CAR + " (Lamborghini Huracan)",
-    "sticker-board/149.png": CAR + " (Lamborghini Countach)",
-    "sticker-board/153.png": SPORT + " (Virat Kohli name and number)",
-    "sticker-set/Sticker_02.png": BRAND + " (Hoonigan)",
-    "sticker-set/Sticker_04.png": MUSIC + " (Starboy album art)",
-    "sticker-set/Sticker_05.png": CAR + " (Lamborghini Huracan)",
-    "sticker-set/Sticker_06.png": CAR + " (Lamborghini Countach)",
-    "sticker-set/Sticker_10.png": SPORT + " (Virat Kohli name and number)",
+    "sticker-board/1.png": ("smooth-operator", "Smooooth Operator", "racing", F1 + " (Ferrari car and livery)"),
+    "sticker-board/2.png": ("f1-logo", "F1", "racing", F1 + " (F1 logo)"),
+    "sticker-board/3.png": ("tifosi-car", "Tifosi Car", "racing", F1 + " (Ferrari logo) plus Disney/Pixar Cars character"),
+    "sticker-board/4.png": ("hamilton-ferrari", "Hamilton in Red", "racing", F1 + " (Ferrari team kit, real driver)"),
+    "sticker-board/6.png": ("f1-steering-wheel", "F1 Steering Wheel", "racing", F1 + " (team steering wheel with sponsor marks)"),
+    "sticker-board/7.png": ("verstappen", "Max Celebrates", "racing", F1 + " (Red Bull livery, real driver)"),
+    "sticker-board/8.png": ("leclerc", "Charles in Red", "racing", F1 + " (Ferrari kit, real driver)"),
+    "sticker-board/10.png": ("shoey", "The Shoey", "racing", "Real F1 driver likeness (podium shoey)"),
+    "sticker-board/11.png": ("gear-5-eyes", "Gear 5 Eyes", "anime", ANIME + " (One Piece)"),
+    "sticker-board/12.png": ("chainsaw-denji", "Denji", "anime", ANIME + " (Chainsaw Man)"),
+    "sticker-board/13.png": ("saitama-ok", "Saitama OK", "anime", ANIME + " (One Punch Man)"),
+    "sticker-board/14.png": ("zoro", "Zoro", "anime", ANIME + " (One Piece)"),
+    "sticker-board/15.png": ("akatsuki-cloud", "Akatsuki Cloud", "anime", ANIME + " (Naruto, Akatsuki cloud)"),
+    "sticker-board/16.png": ("itachi-sasuke", "Itachi and Sasuke", "anime", ANIME + " (Naruto)"),
+    "sticker-board/18.png": ("zenitsu", "Zenitsu Panic", "anime", ANIME + " (Demon Slayer)"),
+    "sticker-board/19.png": ("daaamn", "DAAAMN!!", "anime", ANIME + " (One Piece)"),
+    "sticker-board/20.png": ("eren", "Eren", "anime", ANIME + " (Attack on Titan)"),
+    "sticker-board/20 (4).png": ("the-boys", "The Boys", "screen", TV + " (The Boys logo)"),
+    "sticker-board/20 (5).png": ("hot-mess", "Hot Mess", "memes", BRAND + " (Hot Wheels logo parody)"),
+    "sticker-board/20 (6).png": ("star-girl", "Star Girl", "music", MUSIC + " (Starboy logo parody)"),
+    "sticker-board/20 (7).png": ("spotify-code", "Spotify Code", "music", BRAND + " (Spotify code)"),
+    "sticker-board/21.png": ("gojo", "Gojo", "anime", ANIME + " (Jujutsu Kaisen)"),
+    "sticker-board/22.png": ("kakashi", "Kakashi", "anime", ANIME + " (Naruto)"),
+    "sticker-board/23.png": ("sukuna", "Sukuna", "anime", ANIME + " (Jujutsu Kaisen)"),
+    "sticker-board/24.png": ("level-up", "Level Up", "anime", ANIME + " (Solo Leveling)"),
+    "sticker-board/25.png": ("i-saw-that", "I Saw That", "memes", "Painting of uncertain copyright status used as a meme"),
+    "sticker-board/26.png": ("parental-advisory", "Parental Advisory", "music", BRAND + " (Parental Advisory mark)"),
+    "sticker-board/29.png": ("only-gains", "OnlyGains", "gym", BRAND + " (OnlyFans logo parody)"),
+    "sticker-board/30.png": ("daddy-issues", "Daddy Issues", "memes", BRAND + " (Disney logo lettering)"),
+    "sticker-board/30 (2).png": ("crushed-can", "Crushed Can", "memes", BRAND + " (Red Bull can)"),
+    "sticker-board/30 (4).png": ("sneaker-boxes", "Sneaker Boxes", "memes", BRAND + " (Nike and Adidas logos)"),
+    "sticker-board/30 (6).png": ("cassette", "Cassette", "music", BRAND + " (BASF cassette label)"),
+    "sticker-board/30 (7).png": ("papaya-swoosh", "Papaya Swoosh", "racing", F1 + " (McLaren speedmark)"),
+    "sticker-board/31.png": ("wasted", "Wasted", "gaming", GAME + " (GTA 'wasted' screen)"),
+    "sticker-board/32.png": ("idiot-verified", "Idiot (Verified)", "memes", BRAND + " (platform verified badge)"),
+    "sticker-board/36.png": ("say-drake", "Say Drake", "music", TV + " (Breaking Bad reference) and musician likeness"),
+    "sticker-board/37.png": ("heisenberg", "Heisenberg", "screen", TV + " (Breaking Bad)"),
+    "sticker-board/38.png": ("steve", "Steve", "screen", TV + " (Stranger Things)"),
+    "sticker-board/39.png": ("no-god-please-no", "No God Please No", "screen", TV + " (The Office still)"),
+    "sticker-board/40.png": ("the-squad", "The Squad", "screen", TV + " (show cast illustration)"),
+    "sticker-board/41.png": ("suits", "Suits", "screen", TV + " (Suits)"),
+    "sticker-board/42.png": ("thats-what-she-said", "That's What She Said", "screen", TV + " (The Office actor)"),
+    "sticker-board/43.png": ("besties", "Besties", "screen", TV + " (character illustration)"),
+    "sticker-board/45.png": ("nine-nine", "NINE-NINE!", "screen", TV + " (Brooklyn Nine-Nine catchphrase in show colours)"),
+    "sticker-board/46.png": ("taylors-version", "Taylor's Version", "music", MUSIC + " (Taylor Swift branding)"),
+    "sticker-board/47.png": ("kendrick-lamar", "Kendrick Lamar", "music", MUSIC + " (Kendrick Lamar name logo)"),
+    "sticker-board/48.png": ("save-your-tears", "Save Your Tears", "music", MUSIC + " (The Weeknd)"),
+    "sticker-board/49.png": ("slim-shady", "Hi! My Name Is", "music", MUSIC + " (Eminem / Slim Shady)"),
+    "sticker-board/50 (2).png": ("hamilton-silver", "Hamilton in Black", "racing", F1 + " (Mercedes kit, real driver)"),
+    "sticker-board/50 (3).png": ("yeezus", "Yeezus", "music", MUSIC + " (Yeezus album art)"),
+    "sticker-board/50 (4).png": ("real-madrid", "Real Madrid", "sports", SPORT + " (Real Madrid crest)"),
+    "sticker-board/50 (5).png": ("friends", "Friends", "screen", TV + " (Friends cast still)"),
+    "sticker-board/50 (6).png": ("sweater-weather", "Sweater Weather", "music", MUSIC + " (album art in Spotify player frame)"),
+    "sticker-board/51.png": ("kendrick-car", "Kendrick", "music", MUSIC + " (Kendrick Lamar album art)"),
+    "sticker-board/52.png": ("sos", "SOS", "music", MUSIC + " (SZA album art)"),
+    "sticker-board/53.png": ("seedhe-maut", "Seedhe Maut", "music", MUSIC + " (Seedhe Maut)"),
+    "sticker-board/54.png": ("lana-lips", "Lana Lips", "music", MUSIC + " (Lana Del Rey)"),
+    "sticker-board/55.png": ("blonde", "Blonde", "music", MUSIC + " (Frank Ocean album art)"),
+    "sticker-board/56.png": ("for-all-the-dogs", "For All The Dogs", "music", MUSIC + " (Drake album art)"),
+    "sticker-board/57.png": ("seedhe-maut-duo", "Seedhe Maut Duo", "music", MUSIC + " (Seedhe Maut)"),
+    "sticker-board/58.png": ("utopia", "Utopia", "music", MUSIC + " (Travis Scott Utopia)"),
+    "sticker-board/59.png": ("avengers-icons", "Avengers Icons", "heroes", MARVEL_DC + " (Avengers icons)"),
+    "sticker-board/60.png": ("chibi-hulk", "Chibi Hulk", "heroes", MARVEL_DC + " (Hulk)"),
+    "sticker-board/61.png": ("infinity-gauntlet", "Infinity Gauntlet", "heroes", MARVEL_DC + " (Infinity Gauntlet)"),
+    "sticker-board/62.png": ("mjolnir", "Mjolnir", "heroes", MARVEL_DC + " (Mjolnir)"),
+    "sticker-board/63.png": ("superman", "Superman", "heroes", MARVEL_DC + " (Superman)"),
+    "sticker-board/64.png": ("spidey-pointing", "Spidey Pointing", "heroes", MARVEL_DC + " (Spider-Man meme)"),
+    "sticker-board/65.png": ("upside-down-spidey", "Upside Down Spidey", "heroes", MARVEL_DC + " (Spider-Man)"),
+    "sticker-board/66.png": ("may-the-force", "May The Force", "screen", TV + " (Star Wars quote in Star Wars lettering)"),
+    "sticker-board/67.png": ("batman", "Bat Symbol", "heroes", MARVEL_DC + " (Batman)"),
+    "sticker-board/68.png": ("miles-and-gwen", "Miles and Gwen", "heroes", MARVEL_DC + " (Spider-Verse)"),
+    "sticker-board/69.png": ("deadpool-wolverine", "Deadpool and Wolverine", "heroes", MARVEL_DC + " (Deadpool and Wolverine)"),
+    "sticker-board/70.png": ("couple-scene", "Couple Scene", "screen", TV + " (film actors illustration)"),
+    "sticker-board/71.png": ("all-is-well", "All Is Well", "screen", TV + " (film scene illustration)"),
+    "sticker-board/72.png": ("mantally-challenged", "Mantally Challenged Bwoy", "memes", TV + " (actor likeness meme)"),
+    "sticker-board/75.png": ("gt3-rs", "GT3 RS", "racing", CAR + " (Porsche 911 GT3 RS)"),
+    "sticker-board/76.png": ("amg", "AMG", "racing", CAR + " (Mercedes-AMG logo)"),
+    "sticker-board/77.png": ("kachow", "Kachow", "screen", TV + " (Pixar Cars character)"),
+    "sticker-board/78.png": ("supra-script", "Supra Script", "racing", CAR + " (Toyota Supra script)"),
+    "sticker-board/80.png": ("m-stripes", "M Stripes", "racing", CAR + " (BMW M logo)"),
+    "sticker-board/81.png": ("ferrari-shield", "Prancing Horse", "racing", CAR + " (Ferrari logo)"),
+    "sticker-board/82.png": ("nos", "NOS", "racing", BRAND + " (NOS logo)"),
+    "sticker-board/83.png": ("barcelona", "Barca", "sports", SPORT + " (FC Barcelona crest)"),
+    "sticker-board/84.png": ("hala-madrid", "Hala Madrid", "sports", SPORT + " (Real Madrid slogan)"),
+    "sticker-board/85.png": ("virat-sip", "King Kohli", "sports", SPORT + " (Virat Kohli)"),
+    "sticker-board/86.png": ("jordan-cigar", "Championship Cigar", "sports", SPORT + " (Michael Jordan, Bulls kit)"),
+    "sticker-board/87.png": ("curry-30", "Curry 30", "sports", SPORT + " (Stephen Curry)"),
+    "sticker-board/88.png": ("bicycle-kick", "Bicycle Kick", "sports", SPORT + " (footballer)"),
+    "sticker-board/89.png": ("arsenal", "Arsenal", "sports", SPORT + " (Arsenal crest)"),
+    "sticker-board/90.png": ("number-19", "Number 19", "sports", SPORT + " (footballer, Spain kit)"),
+    "sticker-board/91.png": ("man-united", "Man United", "sports", SPORT + " (Manchester United crest)"),
+    "sticker-board/92.png": ("knee-slide", "Knee Slide", "sports", SPORT + " (footballer)"),
+    "sticker-board/93.png": ("goat-poster", "GOAT", "sports", SPORT + " (Messi poster)"),
+    "sticker-board/94.png": ("here-we-go-again", "Here We Go Again", "gaming", GAME + " (GTA San Andreas meme in GTA lettering)"),
+    "sticker-board/95.png": ("diet-coke", "Diet Coke Can", "memes", BRAND + " (Diet Coke can)"),
+    "sticker-board/98.png": ("i-dont-care", "I Don't Care", "memes", "Photo of a real person (likeness)"),
+    "sticker-board/99.png": ("verity", "Verity", "memes", "Book title branding (Verity)"),
+    "sticker-board/101.png": ("i-love-men", "I Love Men", "memes", BRAND + " (I love NY trade mark parody)"),
+    "sticker-board/102.png": ("twenty-three", "23", "sports", SPORT + " (Jordan 23 in Bulls lettering)"),
+    "sticker-board/103.png": ("air-one", "Air One", "sports", BRAND + " (Nike Air Jordan / Off-White)"),
+    "sticker-board/121.png": ("cig-pack", "Cig Pack", "memes", BRAND + " (Marlboro)"),
+    "sticker-board/122.png": ("porsche-poster", "911 Poster", "racing", CAR + " (Porsche) and another seller's watermark"),
+    "sticker-board/124.png": ("supreme-roll", "Supreme Roll", "memes", BRAND + " (Supreme)"),
+    "sticker-board/126.png": ("starboy", "Starboy", "music", MUSIC + " (Starboy)"),
+    "sticker-board/127.png": ("gt3-rs-white", "GT3 RS White", "racing", CAR + " (Porsche) and another seller's watermark"),
+    "sticker-board/128.png": ("rwb-911", "Widebody 911", "racing", CAR + " (Porsche RWB)"),
+    "sticker-board/130.png": ("geo-charizard", "Geo Charizard", "gaming", GAME + " (Pokemon Charizard)"),
+    "sticker-board/131.png": ("golden-gauntlet", "Golden Gauntlet", "heroes", MARVEL_DC + " (Infinity Gauntlet)"),
+    "sticker-board/132.png": ("cute-girl", "Cute Girl", "anime", ANIME + " style character, suggestive"),
+    "sticker-board/133.png": ("dino-laptop", "Dino Says Don't Touch", "gaming", BRAND + " (Google Chrome dino)"),
+    "sticker-board/135.png": ("notorious", "Notorious", "sports", SPORT + " (Conor McGregor)"),
+    "sticker-board/136.png": ("rangiku", "Rangiku", "anime", ANIME + " (Bleach)"),
+    "sticker-board/140.png": ("space-cowboy", "Space Cowboy", "anime", ANIME + " (Cowboy Bebop)"),
+    "sticker-board/141.png": ("pinterest", "Pinterest", "memes", BRAND + " (Pinterest)"),
+    "sticker-board/142.png": ("supra-sun", "Supra Sunset", "racing", CAR + " (Toyota Supra)"),
+    "sticker-set/Sticker_02.png": ("hoonigan-rocket", "Hoonigan Rocket", "racing", BRAND + " (Hoonigan)"),
+    "sticker-set/Sticker_04.png": ("starboy-poster", "Starboy Poster", "music", MUSIC + " (Starboy album art)"),
+    "sticker-set/Sticker_05.png": ("huracan", "Huracan", "racing", CAR + " (Lamborghini Huracan)"),
+    "sticker-set/Sticker_06.png": ("countach", "Countach", "racing", CAR + " (Lamborghini Countach)"),
+    "sticker-set/Sticker_10.png": ("virat-18", "Virat 18", "sports", SPORT + " (Virat Kohli name and number)"),
 }
 
 OTHER_FILES = {
     "Glood_Logo.png": "GLOOD logo master (copied to ./glood-logo.png)",
-    "board-photo.png": "Photo of the physical sticker board. Reference only, contains many risky designs, not used on the site",
-    "size-reference.png": "Size and price reference graphic. Shows an F1 logo, so not used on the site",
+    "board-photo.png": "Photo of the physical sticker board. Reference only, not used on the site",
+    "size-reference.png": "Size and price reference graphic. Source of the prices on the site, image itself not used",
     "board-doc.pdf": "Print sheet of the board designs (156 pages). Reference only",
     "sticker-set/Stickers_Sheet.pdf": "Print sheet of the board designs (153 pages). Reference only",
     "STICKER.zip": "Original archive of sticker-board/ (already extracted, contents identical)",
 }
 
-CATEGORY_LABELS = {"racing": "Racing", "anime": "Anime vibe", "gaming": "Gaming", "gym": "Gym", "memes": "Memes"}
+CATEGORY_LABELS = {
+    "racing": "Racing", "anime": "Anime vibe", "gaming": "Gaming", "gym": "Gym", "memes": "Memes",
+    "sports": "Sports", "music": "Music", "screen": "TV & film", "heroes": "Superheroes",
+}
 
 
 def remove_white_background(img: Image.Image) -> Image.Image:
@@ -310,11 +319,21 @@ def main() -> int:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     manifest = []
-    for rel, (slug, title, category, note) in SAFE.items():
-        w, h, inset = optimise(SRC / rel, OUT_DIR / f"{slug}.webp", from_board=rel.startswith("sticker-board"))
-        manifest.append({"slug": slug, "title": title, "category": category, "file": f"{slug}.webp",
-                         "width": w, "height": h, "peelInset": inset, "source": rel})
+    jobs = [(SRC / rel, rel, slug, title, category, False) for rel, (slug, title, category, _note) in SAFE.items()]
+    if USE_FLAGGED:
+        jobs += [(RISKY_DIR / rel, rel, slug, title, category, True) for rel, (slug, title, category, _reason) in RISKY.items()]
+    for path, rel, slug, title, category, flagged in jobs:
+        w, h, inset = optimise(path, OUT_DIR / f"{slug}.webp", from_board=rel.startswith("sticker-board"))
+        entry = {"slug": slug, "title": title, "category": category, "file": f"{slug}.webp",
+                 "width": w, "height": h, "peelInset": inset, "source": rel}
+        if flagged:
+            entry["flagged"] = True
+        manifest.append(entry)
         print(f"ok  {rel} -> {slug}.webp {w}x{h}")
+    # Drop optimised files of flagged designs if they have been switched off.
+    if not USE_FLAGGED:
+        for _rel, (slug, *_rest) in RISKY.items():
+            (OUT_DIR / f"{slug}.webp").unlink(missing_ok=True)
     # Keep stickers that were added by hand (entries without a "source"), see README.md.
     manifest_path = OUT_DIR / "photo-stickers.json"
     if manifest_path.exists():
@@ -323,16 +342,20 @@ def main() -> int:
         manifest += [e for e in existing if "source" not in e and e["slug"] not in generated]
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
+    flagged_note = (
+        "**Used on the site at the owner's request** (`USE_FLAGGED = True` in `scripts/process_assets.py`)."
+        if USE_FLAGGED else "Not used on the site (`USE_FLAGGED = False`)."
+    )
     lines = [
         "# ASSETS",
         "",
         "Every image found in `./source-assets`, with the verdict from a manual visual review.",
         "Regenerate with `python scripts/process_assets.py`.",
         "",
-        f"Totals: {len(all_images)} sticker images. {len(SAFE)} safe and used, {len(RISKY)} risky and moved to "
-        f"`source-assets/_risky`, {len(DUPLICATES)} low-res duplicates of safe files.",
+        f"Totals: {len(all_images)} sticker images. {len(SAFE)} clear, {len(RISKY)} flagged for copyright or "
+        f"trademark (kept in `source-assets/_risky`), {len(DUPLICATES)} low-res duplicates.",
         "",
-        "## Safe (used on the site)",
+        "## Clear",
         "",
         "Optimised copies live in `src/stickers/photo/` (WebP, max 1200px, white background removed, die-cut border added).",
         "",
@@ -345,15 +368,19 @@ def main() -> int:
     lines += [f"| `{rel}` | `{orig}` |" for rel, orig in DUPLICATES.items()]
     lines += [
         "",
-        "## Risky (moved to `source-assets/_risky`, NOT used)",
+        "## Flagged for copyright or trademark",
         "",
-        "Flagged because they contain copyrighted or trademarked material. Selling these without a licence can get",
-        "listings removed or lead to legal notices, so the site does not show them.",
+        flagged_note,
         "",
-        "| File | Reason |",
-        "|---|---|",
+        "These contain characters, logos, liveries, crests, album art, show branding or real people. Selling them",
+        "without a licence can get listings removed or lead to legal notices. The originals are kept in",
+        "`source-assets/_risky`.",
+        "",
+        "| File | Output | Filter | Reason |",
+        "|---|---|---|---|",
     ]
-    lines += [f"| `{rel}` | {reason} |" for rel, reason in RISKY.items()]
+    lines += [f"| `{rel}` | `{slug}.webp` ({title}) | {CATEGORY_LABELS[category]} | {reason} |"
+              for rel, (slug, title, category, reason) in RISKY.items()]
     lines += ["", "## Other files", "", "| File | What it is |", "|---|---|"]
     lines += [f"| `{rel}` | {what} |" for rel, what in OTHER_FILES.items()]
     lines += [
@@ -365,7 +392,7 @@ def main() -> int:
         "",
     ]
     (ROOT / "ASSETS.md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"\n{len(SAFE)} safe, {len(RISKY)} risky, {len(DUPLICATES)} duplicates. ASSETS.md written.")
+    print(f"\n{len(SAFE)} clear, {len(RISKY)} flagged (used: {USE_FLAGGED}), {len(DUPLICATES)} duplicates. ASSETS.md written.")
     return 0
 
 
