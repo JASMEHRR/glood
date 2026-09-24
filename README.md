@@ -9,6 +9,9 @@ slap onto the lid until it is fully sticker-bombed, then the lid opens and the s
 sticker gallery. Below that: the gallery with category filters and a peel-on-hover effect, Fresh Drops,
 the brand story, and the footer.
 
+Stickers are grouped into nine categories, reachable from the "Shop by category" tiles, the Categories menu in
+the nav, the pinned filter bar, or a link like `index.html?cat=racing#gallery`.
+
 Every sticker has its own page (`sticker.html?s=<slug>`) with its size and price, quantity, Add to cart,
 Buy now and similar stickers. The cart (`cart.html`) checks out over WhatsApp: the order is written out in a chat to
 GLOOD and the buyer presses send. No payment is taken on the site.

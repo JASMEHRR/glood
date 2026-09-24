@@ -58,9 +58,22 @@ async function main() {
         await page.screenshot({ path: path.join(OUT, `${vp.name}-${name}.png`) });
       }
 
+      await page.evaluate(() => document.querySelector('#categories').scrollIntoView({ behavior: 'instant' }));
+      await page.waitForTimeout(1200);
+      await page.screenshot({ path: path.join(OUT, `${vp.name}-05b-categories.png`) });
+
       await page.evaluate(() => document.querySelector('#gallery').scrollIntoView({ behavior: 'instant' }));
       await page.waitForTimeout(1200);
       await page.screenshot({ path: path.join(OUT, `${vp.name}-06-gallery.png`) });
+
+      // Deep in the grid: the filter bar should still be pinned under the nav.
+      await page.evaluate(() => window.scrollBy(0, window.innerHeight * 2));
+      await page.waitForTimeout(1000);
+      await page.screenshot({ path: path.join(OUT, `${vp.name}-06b-gallery-scrolled.png`) });
+      await page.click('.cat-menu-btn');
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: path.join(OUT, `${vp.name}-06c-categories-menu.png`) });
+      await page.keyboard.press('Escape');
 
       if (!vp.mobile) {
         const card = page.locator('.sticker-card').nth(1);

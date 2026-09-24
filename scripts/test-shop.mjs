@@ -45,6 +45,29 @@ try {
     `found ${await page.locator('.sticker-grid > li').count()}`);
   check('gallery cards show fixed prices', (await page.locator('.sticker-card .price').first().textContent()).includes('₹'));
 
+  // ---- categories: tiles, nav menu, shareable links ----
+  const shownCount = () => page.evaluate(() => [...document.querySelectorAll('.sticker-grid > li')].filter((li) => !li.hidden).length);
+  const shownCats = () => page.evaluate(() => [...new Set([...document.querySelectorAll('.sticker-grid > li')].filter((li) => !li.hidden).map((li) => li.dataset.category))]);
+  check('shop-by-category tiles are on the home page', (await page.locator('.cat-tile').count()) === 9);
+  await page.locator('.cat-racing .cat-link').click();
+  await page.waitForTimeout(400);
+  check('racing tile filters the gallery to racing only', JSON.stringify(await shownCats()) === '["racing"]' && (await shownCount()) > 0);
+  check('racing tile puts the category in the address', page.url().includes('?cat=racing#gallery'));
+  await page.click('.cat-menu-btn');
+  check('nav categories menu opens', await page.isVisible('.cat-menu-panel'));
+  await page.click('.cat-menu-list a[data-cat="music"]');
+  await page.waitForTimeout(400);
+  check('nav menu filters in place on the home page', JSON.stringify(await shownCats()) === '["music"]' && page.url().includes('?cat=music'));
+  check('menu closes after picking', !(await page.isVisible('.cat-menu-panel')));
+  await page.goto(`${base}?cat=heroes#gallery`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(800);
+  check('a ?cat= link opens the gallery already filtered', JSON.stringify(await shownCats()) === '["heroes"]' &&
+    (await page.getAttribute('.chip[data-filter="heroes"]', 'aria-pressed')) === 'true');
+  check('a ?cat= link lands on the gallery', await page.evaluate(() => {
+    const r = document.querySelector('#gallery').getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0;
+  }));
+
   // ---- product page: one fixed size per sticker, price copied from VentureAdda ----
   await page.goto(`${base}sticker.html?s=f1-logo`, { waitUntil: 'networkidle' });
   check('product title is the VentureAdda name', (await page.textContent('.product-title')) === 'F1 Logo');
@@ -55,6 +78,10 @@ try {
   check('cart badge shows 1', (await page.textContent('.cart-count')) === '1');
 
   await page.goto(`${base}sticker.html?s=kalesh-aurat`, { waitUntil: 'networkidle' });
+  check('category tag links to its category', (await page.getAttribute('.product-tags a.tag', 'href')) === 'index.html?cat=memes#gallery');
+  await page.click('.cat-menu-btn');
+  check('nav menu on other pages links to the filtered gallery', (await page.getAttribute('.cat-menu-list a[data-cat="sports"]', 'href')) === 'index.html?cat=sports#gallery');
+  await page.keyboard.press('Escape');
   check('Kalesh Aurat is Large, Rs 50', (await page.textContent('.price-now')) === '₹50' &&
     (await page.textContent('.fixed-size-band')) === 'Large, 3+ in');
   await page.click('.qty-plus');

@@ -108,7 +108,7 @@ Newest thinking is at the bottom of each section.
   sticker-bombed, lid open, gallery, peel hover, Fresh Drops, story, footer, product page, cart and checkout,
   plus the motion-off still. The script fails if the page logs any console error, page error or failed
   request. The final run was clean.
-- `npm run test:shop`: 31 end-to-end checks of the shop (fixed sizes and VentureAdda prices, add to cart, cart steppers, bad cart
+- `npm run test:shop`: 41 end-to-end checks of the shop (categories, fixed sizes and VentureAdda prices, add to cart, cart steppers, bad cart
   data dropped, checkout validation, the exact WhatsApp message, cart cleared after ordering, Buy now leaving
   the cart alone, remembered buyer details, unknown sticker page, motion switch on and off). All pass.
 - Extra checks: the page is exactly 390px wide on a phone (no sideways scroll); the pupils move about 30 units
@@ -169,4 +169,18 @@ Newest thinking is at the bottom of each section.
   repo so every push to `main` redeploys. Vercel builds from source (`npm run build`); `.vercelignore` keeps the
   360 MB of raw source images, screenshots and local work files out of the upload.
 - Checked after deploy: every page and asset returns 200 to a logged-out visitor, hashed assets are cached for a
-  year, and all 31 `test:shop` checks pass against the live URL (`GLOOD_URL=https://glood.vercel.app/`).
+  year, and every `test:shop` check passes against the live URL (`GLOOD_URL=https://glood.vercel.app/`).
+
+## Owner changes (round 4, 2026-09-24): faster story, categories people can actually see
+
+- **The scroll story takes about half the scrolling**: 3.5 screen heights on desktop (was 6.5), 3 on phones
+  (was 5), and it catches up with the scrollbar in 0.5 s (was 0.8 s). Timeline and frames are unchanged.
+- **Categories are now hard to miss.** The owner liked the nine categories but found the filter chips too easy
+  to overlook, so:
+  - a "Shop by category" section of big coloured tiles, each showing three of its stickers and a count, sits
+    straight after the scroll story (the first thing a visitor reaches);
+  - a Categories menu in the nav on every page, labelled on phones too (the text nav links are hidden there);
+  - the filter chips stay pinned under the nav while browsing the grid, as one row (swipeable on phones);
+  - category links are shareable (`index.html?cat=racing#gallery`), and a product page's category tag and a
+    "See all ..." button lead to its category. On the home page the menu filters in place instead of reloading
+    the 3D story.

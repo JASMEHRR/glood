@@ -4,6 +4,10 @@
 import logoStickerUrl from '../assets/glood-logo-sticker.svg?url';
 import { INSTAGRAM_URL } from '../config.js';
 import { onCart, count } from './shop.js';
+import { CATEGORIES, STICKERS } from './stickers.js';
+
+/** Fired on the home page when a category is picked from the nav, so the gallery filters in place. */
+export const CATEGORY_EVENT = 'glood:category';
 
 const MOTION_KEY = 'glood:motion';
 
@@ -32,6 +36,8 @@ export function applyMotionClass() {
   document.documentElement.classList.toggle('reduced-motion', !motionEnabled());
 }
 
+const GRID_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="currentColor"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="currentColor"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>';
+
 const CART_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.5L21 8H6.3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.6" fill="currentColor"/><circle cx="17" cy="20" r="1.6" fill="currentColor"/></svg>';
 
 /**
@@ -52,6 +58,16 @@ export function mountNav({ home = false, reloadOnMotion = false } = {}) {
       <a href="${base}#about">Story</a>
     </nav>
     <div class="nav-actions">
+      <div class="cat-menu">
+        <button type="button" class="cat-menu-btn" aria-expanded="false" aria-controls="cat-menu-panel">
+          ${GRID_ICON}<span class="cat-menu-label">Categories</span>
+        </button>
+        <div class="cat-menu-panel" id="cat-menu-panel" hidden>
+          <p class="cat-menu-title">Shop by category</p>
+          <ul class="cat-menu-list"></ul>
+          <a class="cat-menu-all" href="${base}#gallery" data-cat="all">See all ${STICKERS.length} stickers</a>
+        </div>
+      </div>
       <button type="button" class="motion-toggle" aria-pressed="true">
         <span class="motion-dot" aria-hidden="true"></span><span class="motion-label">Motion on</span>
       </button>
@@ -78,6 +94,8 @@ export function mountNav({ home = false, reloadOnMotion = false } = {}) {
     paint();
   });
 
+  mountCategoryMenu(nav, { home, base });
+
   const badge = nav.querySelector('.cart-count');
   const link = nav.querySelector('.cart-link');
   onCart((cart) => {
@@ -85,6 +103,44 @@ export function mountNav({ home = false, reloadOnMotion = false } = {}) {
     badge.hidden = n === 0;
     badge.textContent = String(n);
     link.setAttribute('aria-label', n ? `Cart, ${n} sticker${n === 1 ? '' : 's'}` : 'Cart, empty');
+  });
+}
+
+function mountCategoryMenu(nav, { home, base }) {
+  const btn = nav.querySelector('.cat-menu-btn');
+  const panel = nav.querySelector('.cat-menu-panel');
+  const list = nav.querySelector('.cat-menu-list');
+  for (const c of CATEGORIES) {
+    const n = STICKERS.filter((s) => s.category === c.id).length;
+    if (!n) continue;
+    const li = document.createElement('li');
+    li.innerHTML = `<a class="tag tag-${c.id}" href="${base}?cat=${c.id}#gallery" data-cat="${c.id}"><span></span> <small>${n}</small></a>`;
+    li.querySelector('span').textContent = c.label;
+    list.append(li);
+  }
+  const setOpen = (open) => {
+    panel.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+  };
+  btn.addEventListener('click', () => setOpen(panel.hidden));
+  document.addEventListener('click', (e) => {
+    if (!panel.hidden && !e.target.closest('.cat-menu')) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) {
+      setOpen(false);
+      btn.focus();
+    }
+  });
+  panel.addEventListener('click', (e) => {
+    const link = e.target.closest('a[data-cat]');
+    if (!link) return;
+    setOpen(false);
+    // On the home page the gallery is right here: filter it instead of reloading the 3D story.
+    if (home) {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent(CATEGORY_EVENT, { detail: link.dataset.cat }));
+    }
   });
 }
 

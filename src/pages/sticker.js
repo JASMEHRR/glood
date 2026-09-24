@@ -21,11 +21,13 @@ if (!sticker) {
 
 function renderProduct() {
   document.title = `${sticker.title} sticker | GLOOD`;
+  const categoryLabel = CATEGORY_LABEL[sticker.category] ?? sticker.category;
+  const categoryUrl = `index.html?cat=${encodeURIComponent(sticker.category)}#gallery`;
   $('.product').hidden = false;
   $('.product-title').textContent = sticker.title;
   $('.product-sheet').append(stickerFigure(sticker, { eager: true }));
   $('.product-tags').innerHTML =
-    `<span class="tag tag-${sticker.category}">${escapeHtml(CATEGORY_LABEL[sticker.category] ?? sticker.category)}</span>` +
+    `<a class="tag tag-${sticker.category}" href="${categoryUrl}" title="See all ${escapeHtml(categoryLabel)} stickers">${escapeHtml(categoryLabel)}</a>` +
     (sticker.kind === 'original' ? '<span class="badge-original static">GLOOD original</span>' : '');
 
   let qty = 1;
@@ -65,6 +67,9 @@ function renderProduct() {
     const cards = similar.map((s, i) => stickerCard(s, i));
     $('.similar-grid').append(...cards);
     $('.similar').hidden = false;
+    const all = $('.similar-all');
+    all.href = categoryUrl;
+    all.textContent = `See all ${categoryLabel} stickers`;
     revealOnScroll(cards);
   }
 }

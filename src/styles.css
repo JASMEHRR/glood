@@ -1975,6 +1975,303 @@ dialog.checkout::backdrop {
   }
 }
 
+/* ---------- shop by category ---------- */
+
+.shop-cats {
+  position: relative;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.09) 1.3px, transparent 1.6px) 0 0 / 18px 18px,
+    var(--black);
+  border-top: var(--line);
+  padding: clamp(70px, 9vw, 120px) var(--gutter);
+}
+
+.shop-cats .section-head h2 {
+  text-shadow: 6px 6px 0 var(--orange);
+}
+
+.shop-cats .lede {
+  color: var(--white);
+}
+
+.cat-tiles {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.6vw, 30px);
+}
+
+.cat-tile {
+  --tile: var(--yellow);
+  --tile-ink: var(--black);
+  transform: rotate(var(--tilt));
+  transition: transform 0.3s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.cat-tile:hover,
+.cat-tile:focus-within {
+  transform: rotate(0deg) translate(-3px, -3px);
+}
+
+.cat-racing { --tile: var(--red); --tile-ink: var(--white); }
+.cat-anime { --tile: var(--pink); }
+.cat-gaming { --tile: var(--purple); --tile-ink: var(--white); }
+.cat-gym { --tile: var(--cyan); }
+.cat-memes { --tile: var(--yellow); }
+.cat-sports { --tile: var(--green); }
+.cat-music { --tile: var(--orange); }
+.cat-screen { --tile: var(--cream); }
+.cat-heroes { --tile: var(--crimson); --tile-ink: var(--white); }
+
+.cat-link {
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  min-height: clamp(190px, 22vw, 260px);
+  padding: 18px 20px 16px;
+  color: var(--tile-ink);
+  text-decoration: none;
+  background: var(--tile);
+  border: var(--line);
+  border-radius: var(--radius);
+  box-shadow: 8px 8px 0 var(--white);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.cat-link:hover {
+  box-shadow: 12px 12px 0 var(--white);
+}
+
+.cat-link::after {
+  content: '\2192';
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  font-family: var(--font-label);
+  font-size: 26px;
+}
+
+.cat-fan {
+  position: relative;
+  min-height: 110px;
+}
+
+.cat-fan img {
+  position: absolute;
+  top: 0;
+  width: 42%;
+  height: 100%;
+  max-height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(3px 4px 0 rgba(0, 0, 0, 0.25));
+  transition: transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+.cat-fan img:nth-child(1) { left: 0; transform: rotate(-12deg); }
+.cat-fan img:nth-child(2) { left: 29%; transform: rotate(4deg) translateY(-6px); z-index: 1; }
+.cat-fan img:nth-child(3) { left: 58%; transform: rotate(14deg); }
+
+.cat-link:hover .cat-fan img:nth-child(1) { transform: rotate(-20deg) translate(-6px, -4px); }
+.cat-link:hover .cat-fan img:nth-child(2) { transform: rotate(0deg) translateY(-14px) scale(1.08); }
+.cat-link:hover .cat-fan img:nth-child(3) { transform: rotate(22deg) translate(6px, -4px); }
+
+.cat-name {
+  font-family: var(--font-head);
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1;
+  margin-top: 10px;
+}
+
+.cat-count {
+  font-family: var(--font-label);
+  font-size: 12px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* Filters stay pinned under the nav while browsing the grid, as one row that swipes when it has to. */
+.filters {
+  position: sticky;
+  top: 90px;
+  z-index: 30;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 12px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 8px;
+  background: var(--cream);
+  border: 3px solid var(--black);
+  border-radius: 24px;
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.filters::-webkit-scrollbar {
+  display: none;
+}
+
+.filters .chip {
+  flex-shrink: 0;
+  font-size: 13px;
+  padding: 7px 10px;
+}
+
+.sticker-grid {
+  scroll-margin-top: 190px;
+}
+
+/* ---------- nav: categories menu ---------- */
+
+.cat-menu {
+  position: relative;
+}
+
+.cat-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-label);
+  font-size: 13px;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--black);
+  border: 3px solid var(--black);
+  border-radius: 999px;
+  padding: 7px 14px 7px 10px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--orange);
+}
+
+.cat-menu-btn[aria-expanded='true'] {
+  background: var(--red);
+}
+
+.cat-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 14px);
+  width: min(380px, calc(100vw - 24px));
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: var(--white);
+  border: var(--line);
+  border-radius: 20px;
+  box-shadow: 8px 8px 0 var(--black);
+  z-index: 60;
+}
+
+.cat-menu-panel[hidden] {
+  display: none;
+}
+
+.cat-menu-title {
+  font-family: var(--font-head);
+  font-size: 24px;
+}
+
+.cat-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cat-menu-list .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 6px 12px;
+  text-decoration: none;
+  box-shadow: 3px 3px 0 var(--black);
+}
+
+.cat-menu-list .tag:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.cat-menu-all {
+  font-weight: 700;
+}
+
+a.tag {
+  text-decoration: none;
+}
+
+.similar .section-head .similar-all {
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .cat-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .cat-menu-btn {
+    font-size: 11px;
+    padding: 7px 10px 7px 8px;
+    gap: 6px;
+  }
+
+  .cat-menu-panel {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 84px;
+    width: auto;
+  }
+
+  .cat-link {
+    min-height: 170px;
+    padding: 14px 14px 12px;
+    box-shadow: 5px 5px 0 var(--white);
+  }
+
+  .cat-fan {
+    min-height: 84px;
+  }
+
+  .cat-name {
+    font-size: 24px;
+  }
+
+  .cat-link::after {
+    font-size: 20px;
+    right: 12px;
+    bottom: 8px;
+  }
+
+  .filters {
+    top: 82px;
+    width: auto;
+    border-radius: 18px;
+    padding: 8px;
+  }
+
+  .filters .chip {
+    font-size: 12px;
+    padding: 7px 11px;
+  }
+
+  .sticker-grid {
+    scroll-margin-top: 160px;
+  }
+}
+
 /* Motion off. base.js adds .reduced-motion when the visitor has switched motion off with the nav
    toggle. */
 html.reduced-motion {

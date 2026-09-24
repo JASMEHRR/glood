@@ -29,7 +29,7 @@ logoEl.removeAttribute('height');
 animateLogoFace(logoEl, { reducedMotion });
 
 // ---------- sections ----------
-buildGallery({ grid: $('.sticker-grid'), filterBar: $('.filters'), status: $('#gallery-status') });
+buildGallery({ grid: $('.sticker-grid'), filterBar: $('.filters'), status: $('#gallery-status'), tiles: $('.cat-tiles') });
 buildDrops($('.drop-grid'));
 
 // ---------- 3D sticker story ----------
@@ -72,6 +72,7 @@ async function startStory() {
     root.classList.add('story-still');
     laptop.resize();
     await storyModule.renderStill(laptop);
+    jumpToHash();
     return;
   }
 
@@ -87,8 +88,16 @@ async function startStory() {
     mobile,
   });
   laptop.render();
+  jumpToHash();
   // Textures arrive after the first frame; the scroll timeline re-renders on its own after that.
   laptop.loaded.then(() => laptop.render());
+}
+
+// Arriving on a link like index.html?cat=racing#gallery: the browser jumps to #gallery before the
+// scroll story has pinned, and pinning adds several screens of scroll above it. Jump again after.
+function jumpToHash() {
+  const target = window.location.hash && document.querySelector(window.location.hash);
+  if (target) requestAnimationFrame(() => target.scrollIntoView());
 }
 
 startStory();
