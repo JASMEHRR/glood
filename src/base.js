@@ -6,6 +6,8 @@ import '@fontsource/space-grotesk/600.css';
 import '@fontsource/space-grotesk/700.css';
 import './styles.css';
 import { applyMotionClass } from './js/chrome.js';
+import { mountCursor } from './js/cursor.js';
 
 document.documentElement.classList.add('js');
 applyMotionClass();
+mountCursor();

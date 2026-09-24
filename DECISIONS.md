@@ -184,3 +184,15 @@ Newest thinking is at the bottom of each section.
   - category links are shareable (`index.html?cat=racing#gallery`), and a product page's category tag and a
     "See all ..." button lead to its category. On the home page the menu filters in place instead of reloading
     the 3D story.
+
+## Owner changes (round 5, 2026-09-24): sticker backdrop and cursor
+
+- **Stickers sit on a dark "laptop lid" backdrop** everywhere they appear (gallery cards, Fresh Drops, product
+  page, cart and checkout thumbnails). On the old white and cream panels, the stickers' white die-cut borders
+  merged into the background. The dark lid matches the 3D laptop and makes every border read. Shadows were
+  deepened so the hover lift still shows on dark.
+- **Cursor follower** (`src/js/cursor.js`): a yellow, black-outlined ring trails the pointer, grows over
+  anything clickable, says View / Peel / Open over cards, the product sticker and category tiles, and throws a
+  small burst of sticker confetti on click. The normal cursor stays visible (no loss of precision or
+  accessibility). Mouse only; hidden on touch screens, while a checkout dialog is open, and when motion is off.
+  The animation loop stops as soon as the ring catches up, so an idle page does no work.
