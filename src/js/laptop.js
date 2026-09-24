@@ -96,12 +96,12 @@ function loadImage(url) {
   });
 }
 
-// Draw any image (SVG or bitmap) onto a canvas no bigger than maxSize and wrap it as a texture.
-function imageTexture(img, maxSize, renderer) {
-  const scale = Math.min(1, maxSize / Math.max(img.naturalWidth, img.naturalHeight));
+// Draw any image (SVG or bitmap) at w x h, scaled to fit maxSize, and wrap it as a texture.
+function imageTexture(img, w, h, maxSize, renderer) {
+  const scale = Math.min(1, maxSize / Math.max(w, h));
   const c = document.createElement('canvas');
-  c.width = Math.max(1, Math.round(img.naturalWidth * scale));
-  c.height = Math.max(1, Math.round(img.naturalHeight * scale));
+  c.width = Math.max(1, Math.round(w * scale));
+  c.height = Math.max(1, Math.round(h * scale));
   c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -278,10 +278,13 @@ export function createLaptop(canvas, { mobile, stickers, logo }) {
   const loaded = Promise.all(slots.map(async (slot) => {
     try {
       const img = await loadImage(slot.def.url);
+      // An SVG with only a viewBox can report a 0x0 natural size; fall back to the manifest's size.
+      const w = img.naturalWidth || slot.def.width || 512;
+      const h = img.naturalHeight || slot.def.height || Math.round(w / (slot.def.aspect || 1));
       slot.image = img;
-      slot.aspect = img.naturalWidth / img.naturalHeight;
+      slot.aspect = w / h;
       setSlotSize(slot);
-      slot.mesh.material.map = imageTexture(img, texSize, renderer);
+      slot.mesh.material.map = imageTexture(img, w, h, texSize, renderer);
       slot.drop.material.map = slot.mesh.material.map;
       slot.mesh.material.needsUpdate = true;
       slot.drop.material.needsUpdate = true;
