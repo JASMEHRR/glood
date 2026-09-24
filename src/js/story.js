@@ -45,9 +45,10 @@ export function buildStory({ section, stage, heroLogo, heroCopy, captions, count
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: () => `+=${window.innerHeight * (mobile ? 5 : 6.5)}`,
+      // How much scrolling the whole story takes, in screen heights. Lower is faster.
+      end: () => `+=${window.innerHeight * (mobile ? 3 : 3.5)}`,
       pin: section,
-      scrub: 0.8,
+      scrub: 0.5, // seconds the animation takes to catch up with the scrollbar
       invalidateOnRefresh: true,
       anticipatePin: 1,
       onUpdate: (self) => gsap.set(progress, { scaleX: self.progress }),
