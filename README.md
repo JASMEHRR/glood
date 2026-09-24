@@ -2,6 +2,8 @@
 
 Website for GLOOD stickers. Stick it everywhere.
 
+**Live: https://glood.vercel.app** (Vercel, deploys automatically on every push to `main`)
+
 A big GLOOD logo whose eyes follow your cursor, which flies onto a 3D laptop as you scroll. More stickers
 slap onto the lid until it is fully sticker-bombed, then the lid opens and the screen lights up with the
 sticker gallery. Below that: the gallery with category filters and a peel-on-hover effect, Fresh Drops,
@@ -132,7 +134,7 @@ logo). Swap slugs in that list to change which stickers get slapped on.
 | `npm run dev` | Local dev server with hot reload |
 | `npm run build` | Production build into `dist/` |
 | `npm run shots` | Screenshots of the scroll story, every section, a product page, the cart and checkout at 1440px and 390px into `screenshots/` (run `npm run build` first, and `npx playwright install chromium` once) |
-| `npm run test:shop` | End-to-end checks of the product page, cart, checkout and WhatsApp message (run `npm run build` first) |
+| `npm run test:shop` | End-to-end checks of the product page, cart, checkout and WhatsApp message (run `npm run build` first). Add `GLOOD_URL=https://glood.vercel.app/` in front to test the live site |
 | `npm run stickers` | Regenerates the original SVG stickers |
 | `npm run assets` | Screens and optimises raw sticker images (needs Python with Pillow and numpy) |
 | `npm run prices` | Copies each sticker's price and name from GLOOD's VentureAdda listing into `src/stickers/sizes.json` |

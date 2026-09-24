@@ -1,0 +1,7 @@
+# Vercel builds the site from the source with `npm run build`. None of this is needed for that,
+# and source-assets holds about 360 MB of raw originals that must not be uploaded.
+source-assets/
+screenshots/
+.logo-work/
+dist/
+node_modules/

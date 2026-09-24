@@ -1,7 +1,8 @@
 // End-to-end check of the shop: product page, cart, checkout, WhatsApp message, motion switch.
-// Serves ./dist, so run `npm run build` first.
+// Serves ./dist, so run `npm run build` first. Set GLOOD_URL to test a deployed site instead.
 //
 //   npm run build && npm run test:shop
+//   GLOOD_URL=https://glood.vercel.app/ npm run test:shop
 //
 // Exits non-zero if any check fails. window.open is stubbed so no real WhatsApp tab opens;
 // the test reads the link it was given instead.
@@ -18,8 +19,10 @@ function check(label, ok, detail = '') {
   if (!ok) failures++;
 }
 
-const server = await preview({ root: ROOT, preview: { port: 4176 }, logLevel: 'error' });
-const base = server.resolvedUrls.local[0];
+const remote = process.env.GLOOD_URL;
+const server = remote ? null : await preview({ root: ROOT, preview: { port: 4176 }, logLevel: 'error' });
+const base = remote ? (remote.endsWith('/') ? remote : `${remote}/`) : server.resolvedUrls.local[0];
+console.log(`Testing ${base}`);
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const errors = [];
 
@@ -137,7 +140,7 @@ try {
   await context.close();
 } finally {
   await browser.close();
-  await server.close();
+  await server?.close();
 }
 
 console.log(failures ? `\n${failures} check(s) failed` : '\nAll shop checks passed');

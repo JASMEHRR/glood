@@ -162,3 +162,11 @@ Newest thinking is at the bottom of each section.
 - **The 12 GLOOD originals are not on VentureAdda**, so they show as Medium (₹30) until they are listed there
   or given a size in `sizes.json`.
 - **Old carts** saved while sizes were selectable are merged into one line per sticker, not thrown away.
+
+## Deployment (2026-09-24)
+
+- **Live at https://glood.vercel.app**, on the owner's Vercel account, project `glood`, connected to the GitHub
+  repo so every push to `main` redeploys. Vercel builds from source (`npm run build`); `.vercelignore` keeps the
+  360 MB of raw source images, screenshots and local work files out of the upload.
+- Checked after deploy: every page and asset returns 200 to a logged-out visitor, hashed assets are cached for a
+  year, and all 31 `test:shop` checks pass against the live URL (`GLOOD_URL=https://glood.vercel.app/`).
