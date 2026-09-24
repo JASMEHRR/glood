@@ -3,6 +3,7 @@
 
 import customList from '../stickers/custom/custom-stickers.json';
 import photoList from '../stickers/photo/photo-stickers.json';
+import sizeList from '../stickers/sizes.json';
 import logoStickerUrl from '../assets/glood-logo-sticker.svg?url';
 
 const customUrls = import.meta.glob('../stickers/custom/*.svg', { eager: true, query: '?url', import: 'default' });
@@ -22,6 +23,29 @@ export const CATEGORIES = [
 
 const CATEGORY_IDS = new Set(CATEGORIES.map((c) => c.id));
 
+// Every sticker is printed at one fixed size, and its price is set by the band that size falls in.
+// Bands and prices are from GLOOD's size chart (source-assets/size-reference.png). Size is the longest side.
+export const SIZE_BANDS = [
+  { id: 's', short: 'Small', label: '1 to 2 in', price: 20 },
+  { id: 'm', short: 'Medium', label: '2 to 3 in', price: 30 },
+  { id: 'l', short: 'Large', label: '3+ in', price: 50 },
+];
+export const bandById = (id) => SIZE_BANDS.find((b) => b.id === id);
+
+// Each sticker's size band, price and product name come from GLOOD's VentureAdda listing, copied
+// into src/stickers/sizes.json by scripts/import_prices.py (price 20/30/50 = band s/m/l).
+// A sticker not listed there (the new GLOOD originals, which are not on VentureAdda yet) falls back
+// to Medium and is marked sizeConfirmed: false.
+export const FALLBACK_BAND = 'm';
+function listing(slug) {
+  const entry = sizeList[slug];
+  const band = bandById(entry?.size);
+  if (entry && !band) console.warn(`[glood] Unknown size "${entry.size}" for "${slug}" in sizes.json`);
+  if (!band) return { band: bandById(FALLBACK_BAND), price: bandById(FALLBACK_BAND).price, sizeConfirmed: false };
+  const price = Number.isFinite(entry.price) ? entry.price : band.price;
+  return { band, price, name: entry.name, sizeConfirmed: true };
+}
+
 function resolve(list, urls, folder, kind) {
   return list.flatMap((entry) => {
     const url = urls[`../stickers/${folder}/${entry.file}`];
@@ -33,7 +57,9 @@ function resolve(list, urls, folder, kind) {
       console.warn(`[glood] Unknown category "${entry.category}" for "${entry.slug}"`);
       return [];
     }
-    return [{ ...entry, url, kind, aspect: entry.width / entry.height }];
+    const { band, price, name, sizeConfirmed } = listing(entry.slug);
+    // The VentureAdda product name is the title when there is one, so both shops call it the same.
+    return [{ ...entry, title: name || entry.title, url, kind, aspect: entry.width / entry.height, band, price, sizeConfirmed }];
   });
 }
 

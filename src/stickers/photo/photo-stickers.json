@@ -1648,5 +1648,25 @@
     "peelInset": 0.1097,
     "source": "sticker-set/Sticker_10.png",
     "flagged": true
+  },
+  {
+    "slug": "aviation-warning-meme",
+    "title": "Aviation Warning Meme",
+    "category": "memes",
+    "file": "aviation-warning-meme.webp",
+    "width": 171,
+    "height": 98,
+    "peelInset": 0.1224,
+    "ventureadda_id": "gEMz8Q3ebRZnAHMAZwO4"
+  },
+  {
+    "slug": "single-af",
+    "title": "Single AF",
+    "category": "memes",
+    "file": "single-af.webp",
+    "width": 143,
+    "height": 94,
+    "peelInset": 0.2979,
+    "ventureadda_id": "vUlLaCro0WBJ1QPrdQxx"
   }
 ]

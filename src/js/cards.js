@@ -1,11 +1,10 @@
 // Sticker card and peel figure, shared by the gallery, Fresh Drops, the product page and the cart.
 
 import { CATEGORIES } from './stickers.js';
-import { productUrl, SIZES } from './shop.js';
+import { productUrl, rupees } from './shop.js';
 
 export const CATEGORY_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.id, c.label]));
 const TILTS = [-2.2, 1.6, -1, 2.4, -1.8, 0.8, 1.9, -2.6];
-const FROM_PRICE = Math.min(...SIZES.map((s) => s.price));
 
 // Square frame > peel box with the sticker's own aspect ratio > image + folded-corner flap.
 export function stickerFigure(sticker, { eager = false } = {}) {
@@ -54,7 +53,7 @@ export function stickerCard(sticker, i = 0) {
   }
   const meta = document.createElement('div');
   meta.className = 'sticker-meta';
-  meta.innerHTML = `<h3></h3><p><span class="tag tag-${sticker.category}"></span><span class="price">from ₹${FROM_PRICE}</span></p>`;
+  meta.innerHTML = `<h3></h3><p><span class="tag tag-${sticker.category}"></span><span class="price"><small>${sticker.band.short}</small> ${rupees(sticker.price)}</span></p>`;
   meta.querySelector('h3').textContent = sticker.title;
   meta.querySelector('.tag').textContent = CATEGORY_LABEL[sticker.category] ?? sticker.category;
   a.append(stickerFigure(sticker), meta);

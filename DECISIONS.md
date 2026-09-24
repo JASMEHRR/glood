@@ -75,7 +75,8 @@ Newest thinking is at the bottom of each section.
 - Peel hover is pure CSS: the corner is clipped off the sticker and a mirrored, paper-coloured copy of that corner
   is folded back over it. It works on any die-cut shape, not just rectangles.
 - Brand story copy avoids invented facts (no founding year, no customer numbers). Please rewrite it in your own
-  words. Prices shown ("from ₹20", and the ₹20 / ₹30 / ₹50 size tiers) come from your `size-reference.png`.
+  words. The ₹20 / ₹30 / ₹50 size bands come from your `size-reference.png`; each sticker's own price comes from
+  VentureAdda (see round 3 below).
 - The Instagram link is a placeholder in `src/config.js`.
 
 ## Changes made after looking at the screenshots
@@ -107,7 +108,7 @@ Newest thinking is at the bottom of each section.
   sticker-bombed, lid open, gallery, peel hover, Fresh Drops, story, footer, product page, cart and checkout,
   plus the motion-off still. The script fails if the page logs any console error, page error or failed
   request. The final run was clean.
-- `npm run test:shop`: 28 end-to-end checks of the shop (sizes and prices, add to cart, cart steppers, bad cart
+- `npm run test:shop`: 31 end-to-end checks of the shop (fixed sizes and VentureAdda prices, add to cart, cart steppers, bad cart
   data dropped, checkout validation, the exact WhatsApp message, cart cleared after ordering, Buy now leaving
   the cart alone, remembered buyer details, unknown sticker page, motion switch on and off). All pass.
 - Extra checks: the page is exactly 390px wide on a phone (no sideways scroll); the pupils move about 30 units
@@ -141,3 +142,23 @@ Newest thinking is at the bottom of each section.
 - **GLOOD's WhatsApp number is a placeholder** (`WHATSAPP_NUMBER` in `src/config.js`). Until it is set, WhatsApp
   opens with the order and asks the buyer which chat to send it to, and the checkout says so.
 - **Buy now orders just that sticker** and leaves the cart as it is, which is what people expect from Buy now.
+
+## Owner changes (round 3, 2026-09-24): one fixed size per sticker
+
+- **No size picker.** Every sticker is printed at one size and its price is its size band (₹20 Small, ₹30 Medium,
+  ₹50 Large). Product pages show that size; cards show size and price; cart and WhatsApp lines carry the size.
+- **Prices are copied from GLOOD's VentureAdda listing** (`scripts/import_prices.py`, `npm run prices`). All 155
+  VentureAdda products are priced; menu items there are public by design, so no key or login is needed. Each
+  product is matched to its sticker by picture, one to one, and every pair was checked by eye
+  (`.logo-work/va-matches.jpg`), including look-alikes such as Hello Single and Hello Taken. The three stickers on
+  the size chart agree with VentureAdda (F1 Logo ₹20, Nine Nine ₹30, Kaali Sadi Aurat ₹50).
+- **VentureAdda product names are the titles**, so both shops call each sticker the same thing.
+- **Two VentureAdda products had no file here** (Aviation Warning Meme, Single AF). They were added from their
+  VentureAdda photos. Those photos are 260 px, so these two are softer than the rest; swap in the originals if
+  you have them.
+- **Before VentureAdda was pointed out, I tried measuring sizes from the board photo.** It was rejected and the
+  script deleted: the board lays stickers out in equal grid cells (a 2 in and a 3.5 in sticker look the same
+  size there), and matches at that resolution were often wrong.
+- **The 12 GLOOD originals are not on VentureAdda**, so they show as Medium (₹30) until they are listed there
+  or given a size in `sizes.json`.
+- **Old carts** saved while sizes were selectable are merged into one line per sticker, not thrown away.

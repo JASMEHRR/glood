@@ -79,10 +79,9 @@ async function main() {
 
       // Shop: product page, cart, checkout. window.open is stubbed so no WhatsApp tab opens.
       await page.evaluate(() => { window.open = () => null; });
-      await page.goto(`${url}sticker.html?s=lap-1-delulu`, { waitUntil: 'networkidle' });
+      await page.goto(`${url}sticker.html?s=box-box-box`, { waitUntil: 'networkidle' });
       await page.waitForTimeout(600);
       await page.screenshot({ path: path.join(OUT, `${vp.name}-11-product.png`) });
-      await page.click('.opt-l');
       await page.click('.btn-add');
       await page.goto(`${url}sticker.html?s=mochi-chan`, { waitUntil: 'networkidle' });
       await page.click('.btn-add');

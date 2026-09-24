@@ -48,7 +48,7 @@ function ensureDialog() {
  * @param {object} opts
  * @param {'cart'|'buynow'} opts.source  cart: lines come from (and edit) the cart. buynow: a single
  *   product, edited locally, and the cart is left alone.
- * @param {{slug:string,size:string,qty:number}[]} [opts.lines]  for buynow
+ * @param {{slug:string,qty:number}[]} [opts.lines]  for buynow
  * @param {() => void} [opts.onPlaced]
  */
 export function openCheckout({ source, lines: buyNowLines = [], onPlaced = () => {} }) {
@@ -111,9 +111,9 @@ export function openCheckout({ source, lines: buyNowLines = [], onPlaced = () =>
   function renderLines() {
     const lines = describe(entries());
     list.innerHTML = lines.map((l) => `
-      <li data-slug="${escapeHtml(l.slug)}" data-size="${l.size}">
+      <li data-slug="${escapeHtml(l.slug)}">
         <img src="${l.sticker.url}" alt="" width="48" height="48" loading="lazy">
-        <span class="line-name">${escapeHtml(l.sticker.title)}<small>${l.sizeInfo.label}</small></span>
+        <span class="line-name">${escapeHtml(l.sticker.title)}<small>${l.band.short}, ${l.band.label} · ${rupees(l.unit)} each</small></span>
         <span class="stepper">
           <button type="button" data-step="-1" aria-label="${l.qty === 1 ? 'Remove' : 'One less'} ${escapeHtml(l.sticker.title)}">&minus;</button>
           <span aria-live="polite">${l.qty}</span>
@@ -130,13 +130,13 @@ export function openCheckout({ source, lines: buyNowLines = [], onPlaced = () =>
     const btn = e.target.closest('button[data-step]');
     if (!btn) return;
     const li = btn.closest('li');
-    const { slug, size } = li.dataset;
+    const { slug } = li.dataset;
     const step = Number(btn.dataset.step);
     if (source === 'cart') {
-      const current = getCart().find((x) => x.slug === slug && x.size === size);
-      setQty(slug, size, (current?.qty ?? 0) + step);
+      const current = getCart().find((x) => x.slug === slug);
+      setQty(slug, (current?.qty ?? 0) + step);
     } else {
-      local = local.map((x) => (x.slug === slug && x.size === size ? { ...x, qty: Math.min(MAX_QTY, x.qty + step) } : x))
+      local = local.map((x) => (x.slug === slug ? { ...x, qty: Math.min(MAX_QTY, x.qty + step) } : x))
         .filter((x) => x.qty > 0);
       renderLines();
     }

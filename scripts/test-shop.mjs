@@ -3,7 +3,7 @@
 //
 //   npm run build && npm run test:shop
 //
-// Exits non-zero on the first failed check. window.open is stubbed so no real WhatsApp tab opens;
+// Exits non-zero if any check fails. window.open is stubbed so no real WhatsApp tab opens;
 // the test reads the link it was given instead.
 
 import { preview } from 'vite';
@@ -38,42 +38,45 @@ try {
   await page.waitForTimeout(800);
   check('home loads with motion on (story pinned)', await page.evaluate(() =>
     !document.documentElement.classList.contains('reduced-motion') && !!document.querySelector('.pin-spacer')));
-  check('gallery has every sticker', (await page.locator('.sticker-grid > li').count()) === 165,
+  check('gallery has every sticker', (await page.locator('.sticker-grid > li').count()) === 167,
     `found ${await page.locator('.sticker-grid > li').count()}`);
+  check('gallery cards show fixed prices', (await page.locator('.sticker-card .price').first().textContent()).includes('₹'));
 
-  // ---- product page ----
-  await page.goto(`${base}sticker.html?s=lap-1-delulu`, { waitUntil: 'networkidle' });
-  check('product page shows the sticker', (await page.textContent('.product-title')) === 'Lap 1 Delulu');
-  check('default price is Medium', (await page.textContent('.price-now')) === '₹30');
-  await page.click('.opt-l');
-  await page.click('.qty-plus');
-  check('Large x2 is ₹100', (await page.textContent('.price-now')) === '₹100');
+  // ---- product page: one fixed size per sticker, price copied from VentureAdda ----
+  await page.goto(`${base}sticker.html?s=f1-logo`, { waitUntil: 'networkidle' });
+  check('product title is the VentureAdda name', (await page.textContent('.product-title')) === 'F1 Logo');
+  check('F1 Logo is Small, Rs 20 (size chart and VentureAdda agree)', (await page.textContent('.price-now')) === '₹20' &&
+    (await page.textContent('.fixed-size-band')) === 'Small, 1 to 2 in');
+  check('no size picker on the page', (await page.locator('input[name="size"]').count()) === 0);
   await page.click('.btn-add');
-  await page.waitForTimeout(300);
-  check('cart badge shows 2', (await page.textContent('.cart-count')) === '2');
-  check('similar stickers are listed', (await page.locator('.similar-grid > li').count()) > 0);
+  check('cart badge shows 1', (await page.textContent('.cart-count')) === '1');
 
-  // Add a second product, Small x1.
-  await page.goto(`${base}sticker.html?s=mochi-chan`, { waitUntil: 'networkidle' });
-  await page.click('.opt-s');
+  await page.goto(`${base}sticker.html?s=kalesh-aurat`, { waitUntil: 'networkidle' });
+  check('Kalesh Aurat is Large, Rs 50', (await page.textContent('.price-now')) === '₹50' &&
+    (await page.textContent('.fixed-size-band')) === 'Large, 3+ in');
+  await page.click('.qty-plus');
+  check('quantity 2 shows Rs 100', (await page.textContent('.price-now')) === '₹100');
   await page.click('.btn-add');
   check('cart badge shows 3', (await page.textContent('.cart-count')) === '3');
+  check('similar stickers are listed', (await page.locator('.similar-grid > li').count()) > 0);
 
   // ---- cart ----
   await page.goto(`${base}cart.html`, { waitUntil: 'networkidle' });
   check('cart lists 2 lines', (await page.locator('.cart-line').count()) === 2);
-  check('cart total is ₹120', (await page.textContent('.sum-price')) === '₹120');
+  check('cart total is Rs 120', (await page.textContent('.sum-price')) === '₹120');
   await page.locator('.cart-line').first().locator('button[data-step="1"]').click();
-  check('stepper raises the total to ₹170', (await page.textContent('.sum-price')) === '₹170');
+  check('stepper raises the total to Rs 140', (await page.textContent('.sum-price')) === '₹140');
 
-  // Cart survives a reload and rejects junk written into storage.
+  // Carts saved while sizes were selectable are merged per sticker; junk is dropped.
   await page.evaluate(() => {
     const cart = JSON.parse(localStorage.getItem('glood:cart'));
-    cart.push({ slug: 'not-a-sticker', size: 'm', qty: 3 }, { slug: 'mochi-chan', size: 'xl', qty: 1 }, { slug: 'baka', size: 's', qty: 'lots' });
+    cart.push({ slug: 'baka', size: 's', qty: 1 }, { slug: 'baka', size: 'l', qty: 2 },
+      { slug: 'not-a-sticker', qty: 3 }, { slug: 'box-box-box', qty: 'lots' });
     localStorage.setItem('glood:cart', JSON.stringify(cart));
   });
   await page.reload({ waitUntil: 'networkidle' });
-  check('bad cart entries are dropped on load', (await page.locator('.cart-line').count()) === 2);
+  check('old per-size lines merge, junk is dropped', (await page.locator('.cart-line').count()) === 3 &&
+    (await page.textContent('.sum-price')) === '₹230');
 
   // ---- checkout from the cart ----
   await page.click('.cart-checkout');
@@ -89,11 +92,12 @@ try {
   const opened = await page.evaluate(() => window.__opened);
   const message = opened[0] ? decodeURIComponent(new URL(opened[0]).searchParams.get('text')) : '';
   check('WhatsApp opened once from the click', opened.length === 1 && opened[0].startsWith('https://wa.me/'), JSON.stringify(opened));
-  check('message lists both stickers with sizes', message.includes('3 x Lap 1 Delulu (3+ in), ₹150') && message.includes('1 x Mochi-chan (1 to 2 in), ₹20'), message);
-  check('message has total, payment, buyer', message.includes('Total: ₹170') && message.includes('Paying by: UPI') &&
+  check('message lists each sticker with its size', message.includes('2 x F1 Logo (1 to 2 in), ₹40') &&
+    message.includes('2 x Kaali Sadi Aurat (3+ in), ₹100') && message.includes('3 x Baka (2 to 3 in), ₹90'), message);
+  check('message has total, payment, buyer', message.includes('Total: ₹230') && message.includes('Paying by: UPI') &&
     message.includes('Name: Test Buyer') && message.includes('Number: 919876543210') && message.includes('Deliver to: Hostel J, room 214'), message);
   check('message has an order id', /Order: GLD-[23456789A-HJKMNP-Z]{5}/.test(message), message);
-  check('confirmation screen shows the order', ((await page.textContent('.done-id')) || '').includes('₹170'));
+  check('confirmation screen shows the order', ((await page.textContent('.done-id')) || '').includes('₹230'));
   check('cart is emptied after placing', (await page.evaluate(() => localStorage.getItem('glood:cart'))) === '[]');
   await page.click('.done-close');
   // The dialog's close event is dispatched as a separate task, so wait for the page to react.
@@ -109,7 +113,7 @@ try {
   await page.waitForSelector('.checkout-done:not([hidden])');
   const opened2 = await page.evaluate(() => window.__opened);
   const msg2 = decodeURIComponent(new URL(opened2.at(-1)).searchParams.get('text'));
-  check('buy now orders just that sticker', msg2.includes('1 x BAKA! (2 to 3 in), ₹30') && msg2.includes('Total: ₹30'), msg2);
+  check('buy now orders just that sticker', msg2.includes('1 x Baka (2 to 3 in), ₹30') && msg2.includes('Total: ₹30'), msg2);
   check('buy now does not touch the cart', (await page.evaluate(() => localStorage.getItem('glood:cart'))) === '[]');
 
   // ---- unknown product ----

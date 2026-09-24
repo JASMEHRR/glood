@@ -14,11 +14,11 @@ let similarFor = null;
 
 function renderLine(l) {
   return `
-    <li class="cart-line" data-slug="${escapeHtml(l.slug)}" data-size="${l.size}">
+    <li class="cart-line" data-slug="${escapeHtml(l.slug)}">
       <a class="cart-thumb" href="${productUrl(l.slug)}"><img src="${l.sticker.url}" alt="" loading="lazy"></a>
       <div class="cart-line-info">
         <a class="cart-line-name" href="${productUrl(l.slug)}">${escapeHtml(l.sticker.title)}</a>
-        <span class="cart-line-size">${l.sizeInfo.short}, ${l.sizeInfo.label} · ${rupees(l.unit)} each</span>
+        <span class="cart-line-size">${l.band.short}, ${l.band.label} · ${rupees(l.unit)} each</span>
       </div>
       <div class="stepper">
         <button type="button" data-step="-1" aria-label="${l.qty === 1 ? 'Remove' : 'One less'} ${escapeHtml(l.sticker.title)}">${l.qty === 1 ? '&times;' : '&minus;'}</button>
@@ -47,7 +47,7 @@ onCart((cart) => {
 
   // Suggestions follow what is in the cart. Rebuilt only when the set of stickers changes, not on
   // every quantity tap.
-  const key = [...new Set(cart.map((e) => e.slug))].sort().join(',');
+  const key = cart.map((e) => e.slug).sort().join(',');
   if (key !== similarFor) {
     similarFor = key;
     const picks = similarTo(key ? key.split(',') : [], 8);
@@ -61,9 +61,9 @@ onCart((cart) => {
 list.addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-step]');
   if (!btn) return;
-  const { slug, size } = btn.closest('li').dataset;
-  const current = getCart().find((x) => x.slug === slug && x.size === size);
-  setQty(slug, size, (current?.qty ?? 0) + Number(btn.dataset.step));
+  const { slug } = btn.closest('li').dataset;
+  const current = getCart().find((x) => x.slug === slug);
+  setQty(slug, (current?.qty ?? 0) + Number(btn.dataset.step));
 });
 
 $('.cart-clear').addEventListener('click', () => {

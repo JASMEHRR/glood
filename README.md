@@ -7,8 +7,8 @@ slap onto the lid until it is fully sticker-bombed, then the lid opens and the s
 sticker gallery. Below that: the gallery with category filters and a peel-on-hover effect, Fresh Drops,
 the brand story, and the footer.
 
-Every sticker has its own page (`sticker.html?s=<slug>`) with sizes, quantity, Add to cart, Buy now and
-similar stickers. The cart (`cart.html`) checks out over WhatsApp: the order is written out in a chat to
+Every sticker has its own page (`sticker.html?s=<slug>`) with its size and price, quantity, Add to cart,
+Buy now and similar stickers. The cart (`cart.html`) checks out over WhatsApp: the order is written out in a chat to
 GLOOD and the buyer presses send. No payment is taken on the site.
 
 Built with Vite, plain JavaScript, Three.js and GSAP (ScrollTrigger). No paid services, no API keys.
@@ -54,7 +54,21 @@ Both live in `src/config.js`:
   Orders open a chat to this number. Until it is set, WhatsApp asks the buyer which chat to send the order to.
 - `INSTAGRAM_URL`: your Instagram profile.
 
-Prices per size are in `SIZES` in `src/js/shop.js`.
+## Prices and sizes
+
+Every sticker is printed at one fixed size, and its price is its size band: ₹20 Small (1 to 2 in), ₹30 Medium
+(2 to 3 in), ₹50 Large (3+ in). Prices are copied from GLOOD's VentureAdda listing, which already has every
+product priced:
+
+```bash
+npm run prices
+```
+
+It reads the public GLOOD menu on VentureAdda, matches each product to its sticker by picture, and writes
+`src/stickers/sizes.json` (size, price and the VentureAdda product name, which the site uses as the title). Any
+VentureAdda product with no sticker here yet is added automatically. Run it again after changing prices on
+VentureAdda, then rebuild. The 12 GLOOD originals are not on VentureAdda yet, so they show as Medium (₹30);
+list them there, or add them to `sizes.json` by hand (`"slug": { "size": "l", "price": 50 }`).
 
 ## Adding stickers later
 
@@ -118,9 +132,10 @@ logo). Swap slugs in that list to change which stickers get slapped on.
 | `npm run dev` | Local dev server with hot reload |
 | `npm run build` | Production build into `dist/` |
 | `npm run shots` | Screenshots of the scroll story, every section, a product page, the cart and checkout at 1440px and 390px into `screenshots/` (run `npm run build` first, and `npx playwright install chromium` once) |
-| `npm run test:shop` | 28 end-to-end checks of the product page, cart, checkout and WhatsApp message (run `npm run build` first) |
+| `npm run test:shop` | End-to-end checks of the product page, cart, checkout and WhatsApp message (run `npm run build` first) |
 | `npm run stickers` | Regenerates the original SVG stickers |
 | `npm run assets` | Screens and optimises raw sticker images (needs Python with Pillow and numpy) |
+| `npm run prices` | Copies each sticker's price and name from GLOOD's VentureAdda listing into `src/stickers/sizes.json` |
 | `npm run logo` | Re-traces the logo SVG from `glood-logo.png` and prints how closely it matches |
 
 ## Project notes

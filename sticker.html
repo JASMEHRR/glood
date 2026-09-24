@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sticker | GLOOD</title>
-    <meta name="description" content="A GLOOD sticker. Pick a size, add it to your cart, and order on WhatsApp." />
+    <meta name="description" content="A GLOOD sticker. Add it to your cart and order on WhatsApp." />
     <meta name="theme-color" content="#ffa905" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
@@ -24,11 +24,11 @@
           <h1 class="product-title"></h1>
           <p class="product-price"><span class="price-now"></span> <span class="price-size"></span></p>
 
-          <fieldset class="size-picker">
-            <legend>Pick a size</legend>
-            <div class="size-options"></div>
-            <p class="size-note">Size is measured along the longest side of the sticker.</p>
-          </fieldset>
+          <div class="fixed-size">
+            <span class="size-dot" aria-hidden="true"></span>
+            <p><span class="fixed-size-label">Size</span><strong class="fixed-size-band"></strong>
+              <small>Measured along the longest side. Every GLOOD sticker comes in one size, priced by its size band.</small></p>
+          </div>
 
           <div class="qty-row">
             <span class="qty-label" id="qty-label">Quantity</span>
@@ -47,7 +47,6 @@
 
           <ul class="product-facts">
             <li>Die-cut to shape with a white border</li>
-            <li>Three sizes, same design</li>
             <li>Order on WhatsApp, pay on delivery or by UPI</li>
           </ul>
         </div>
