@@ -191,7 +191,7 @@ Newest thinking is at the bottom of each section.
   page, cart and checkout thumbnails). On the old white and cream panels, the stickers' white die-cut borders
   merged into the background. The dark lid matches the 3D laptop and makes every border read. Shadows were
   deepened so the hover lift still shows on dark.
-- **Cursor follower** (`src/js/cursor.js`): a yellow, black-outlined ring trails the pointer, grows over
+- **Cursor follower** (`src/js/cursor.js`): a small (28 px) yellow, black-outlined ring trails the pointer, grows over
   anything clickable, says View / Peel / Open over cards, the product sticker and category tiles, and throws a
   small burst of sticker confetti on click. The normal cursor stays visible (no loss of precision or
   accessibility). Mouse only; hidden on touch screens, while a checkout dialog is open, and when motion is off.
