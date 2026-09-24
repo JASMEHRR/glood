@@ -13,9 +13,9 @@ Newest thinking is at the bottom of each section.
   - `Stickers/*` → `source-assets/sticker-set/` (10 transparent PNGs + a print PDF)
   - the ChatGPT size chart → `source-assets/size-reference.png`, the board photo → `source-assets/board-photo.png`
 - **Raw source images are not committed to git.** They total about 360 MB (GitHub rejects big pushes and
-  it would make every clone slow), and 125 of them are risky designs that should not be published in a repo.
-  `.gitignore` excludes `source-assets/`. Only the optimised safe WebPs (about 0.8 MB), the original SVGs and
-  `glood-logo.png` are committed. Your originals stay on your disk untouched.
+  it would make every clone slow). `.gitignore` excludes `source-assets/`. Only the optimised WebPs (about
+  3.3 MB for all 153 designs), the original SVGs and `glood-logo.png` are committed. Your originals stay on
+  your disk untouched.
 - **The GitHub repo is created as private.** It still deploys on Vercel for free. Make it public in GitHub
   settings if you want.
 
@@ -69,8 +69,8 @@ Newest thinking is at the bottom of each section.
 - The lid opens toward the camera, so the sticker-bombed back of the lid turns away and the screen, showing a
   sticker gallery preview, lights up. The real gallery follows directly below.
 - Mobile (under 768px wide): 9 stickers instead of 15, lower pixel ratio, smaller textures, no antialiasing.
-- Reduced motion: no pinned scroll story, no eye tracking. The finished sticker-bombed laptop is rendered once
-  as a still.
+- Motion off (nav switch): no pinned scroll story, no eye tracking, no CSS animation. The finished
+  sticker-bombed laptop is rendered once as a still. See "Owner changes" below for why this is a switch.
 - No WebGL: the story section falls back to a flat sticker collage.
 - Peel hover is pure CSS: the corner is clipped off the sticker and a mirrored, paper-coloured copy of that corner
   is folded back over it. It works on any die-cut shape, not just rectangles.
@@ -104,11 +104,40 @@ Newest thinking is at the bottom of each section.
 
 - `npm run build`: no errors, no warnings.
 - `npm run shots`: Playwright at 1440px and 390px, captures the hero, logo landing, mid-slap, fully
-  sticker-bombed, lid open, gallery, peel hover, Fresh Drops, story and footer, plus the reduced-motion still.
-  The script fails if the page logs any console error, page error or failed request. The final run was clean.
+  sticker-bombed, lid open, gallery, peel hover, Fresh Drops, story, footer, product page, cart and checkout,
+  plus the motion-off still. The script fails if the page logs any console error, page error or failed
+  request. The final run was clean.
+- `npm run test:shop`: 28 end-to-end checks of the shop (sizes and prices, add to cart, cart steppers, bad cart
+  data dropped, checkout validation, the exact WhatsApp message, cart cleared after ordering, Buy now leaving
+  the cart alone, remembered buyer details, unknown sticker page, motion switch on and off). All pass.
 - Extra checks: the page is exactly 390px wide on a phone (no sideways scroll); the pupils move about 30 units
   toward the pointer on each side; a blink was caught mid-close; scrolling to the end and back gives a
   pixel-identical mid-slap frame (0.00% difference) and restores the hero.
 - Not measured: real frame rate. Headless Chromium renders WebGL on the CPU, so its numbers mean nothing. The
   scene only re-renders when the scroll timeline moves, uses about 30 draw calls, and caps pixel ratio at 2
   (1.5 on phones).
+
+## Owner changes (round 2, 2026-09-24)
+
+- **All designs are on the site, including the 120 flagged for copyright or trademark.** Owner's call after
+  seeing the screening. `USE_FLAGGED = True` in `scripts/process_assets.py` controls it; set it to `False` and
+  run `npm run assets` to take them down again. `ASSETS.md` still records every reason. Risk stays as written
+  there: licensed characters, team and club marks, artists' art and brand logos can get listings removed or
+  bring legal notices.
+- **Four more filters** so 165 stickers stay browsable: Sports, Music, TV & film, Superheroes. Car designs sit
+  under Racing.
+- **Motion is always on at load, with an on/off switch in the nav.** This overrides the original brief's
+  "respect prefers-reduced-motion" at the owner's request, because many Windows machines ship with animations
+  off and would never see the scroll story. The switch is on every page and remembered on the device.
+- **Shop pages, modelled on VentureAdda.** `sticker.html?s=<slug>` for each sticker (size, quantity, Add to cart,
+  Buy now, similar stickers) and `cart.html`. Like VentureAdda, the cart lives in localStorage (no account, no
+  server) and is validated on every read. Only slug, size and quantity are stored; prices come from the size
+  chart every time, so a stored cart can never show an old price.
+- **Checkout is VentureAdda's flow without Firebase.** Name, WhatsApp number, address, "ordering for someone
+  else", cash on delivery or UPI. Placing the order opens WhatsApp with the order written out (sticker, size,
+  quantity, total, order id, payment, buyer) and the buyer presses send. No payment is taken on the site, which
+  keeps the "no paid services, no API keys" rule. VentureAdda also writes orders to Firestore; GLOOD has no
+  backend, so the WhatsApp message is the order.
+- **GLOOD's WhatsApp number is a placeholder** (`WHATSAPP_NUMBER` in `src/config.js`). Until it is set, WhatsApp
+  opens with the order and asks the buyer which chat to send it to, and the checkout says so.
+- **Buy now orders just that sticker** and leaves the cart as it is, which is what people expect from Buy now.

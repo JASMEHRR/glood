@@ -76,11 +76,29 @@ async function main() {
         await page.waitForTimeout(900);
         await page.screenshot({ path: path.join(OUT, `${vp.name}-${name}.png`) });
       }
+
+      // Shop: product page, cart, checkout. window.open is stubbed so no WhatsApp tab opens.
+      await page.evaluate(() => { window.open = () => null; });
+      await page.goto(`${url}sticker.html?s=lap-1-delulu`, { waitUntil: 'networkidle' });
+      await page.waitForTimeout(600);
+      await page.screenshot({ path: path.join(OUT, `${vp.name}-11-product.png`) });
+      await page.click('.opt-l');
+      await page.click('.btn-add');
+      await page.goto(`${url}sticker.html?s=mochi-chan`, { waitUntil: 'networkidle' });
+      await page.click('.btn-add');
+      await page.goto(`${url}cart.html`, { waitUntil: 'networkidle' });
+      await page.waitForTimeout(600);
+      await page.screenshot({ path: path.join(OUT, `${vp.name}-12-cart.png`) });
+      await page.click('.cart-checkout');
+      await page.waitForSelector('dialog.checkout[open]');
+      await page.waitForTimeout(400);
+      await page.screenshot({ path: path.join(OUT, `${vp.name}-13-checkout.png`) });
       await context.close();
     }
 
-    // Reduced motion: the finished laptop as a still.
-    const rm = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    // Motion switched off in the nav: the finished laptop as a still.
+    const rm = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await rm.addInitScript(() => localStorage.setItem('glood:motion', 'off'));
     const page = await rm.newPage();
     page.on('pageerror', (err) => problems.push(`[reduced] page error: ${err.message}`));
     await page.goto(url, { waitUntil: 'networkidle' });

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your cart | GLOOD</title>
+    <meta name="description" content="Your GLOOD sticker cart. Order on WhatsApp, pay on delivery or by UPI." />
+    <meta name="theme-color" content="#ffa905" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="page">
+    <a class="skip-link" href="#cart">Skip to your cart</a>
+    <header class="nav"></header>
+
+    <main class="page-main" id="cart" tabindex="-1">
+      <a class="back-link" href="index.html#gallery">&larr; Keep shopping</a>
+      <h1 class="page-title">Your cart</h1>
+
+      <div class="cart-layout" hidden>
+        <section class="cart-lines-card" aria-label="Stickers in your cart">
+          <ul class="cart-lines"></ul>
+          <button type="button" class="link-button cart-clear">Clear cart</button>
+        </section>
+        <aside class="cart-summary" aria-label="Order summary">
+          <h2>Summary</h2>
+          <dl>
+            <div><dt>Stickers</dt><dd class="sum-count"></dd></div>
+            <div class="sum-total"><dt>Total</dt><dd class="sum-price"></dd></div>
+          </dl>
+          <button type="button" class="btn btn-buy cart-checkout">Checkout</button>
+          <p class="summary-note">You order on WhatsApp and pay GLOOD directly, on delivery or by UPI. Nothing is charged on this site.</p>
+        </aside>
+      </div>
+
+      <section class="cart-empty" hidden>
+        <img src="/src/stickers/custom/brb-overthinking.svg" alt="" width="240" height="227" />
+        <h2>Your cart is empty</h2>
+        <p>Pick a sticker, choose a size, and it waits here until you order.</p>
+        <a class="btn" href="index.html#gallery">Browse stickers</a>
+      </section>
+
+      <section class="similar" aria-labelledby="similar-title" hidden>
+        <div class="section-head">
+          <p class="eyebrow">Goes well with</p>
+          <h2 id="similar-title">You might also like</h2>
+        </div>
+        <ul class="sticker-grid similar-grid"></ul>
+      </section>
+    </main>
+
+    <footer class="footer"></footer>
+    <script type="module" src="/src/pages/cart.js"></script>
+  </body>
+</html>

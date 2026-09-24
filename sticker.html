@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sticker | GLOOD</title>
+    <meta name="description" content="A GLOOD sticker. Pick a size, add it to your cart, and order on WhatsApp." />
+    <meta name="theme-color" content="#ffa905" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="page">
+    <a class="skip-link" href="#product">Skip to the sticker</a>
+    <header class="nav"></header>
+
+    <main class="page-main" id="product" tabindex="-1">
+      <a class="back-link" href="index.html#gallery">&larr; All stickers</a>
+      <article class="product" hidden>
+        <div class="product-stage">
+          <div class="product-sheet"></div>
+          <p class="product-hint">Hover to peel</p>
+        </div>
+        <div class="product-info">
+          <p class="product-tags"></p>
+          <h1 class="product-title"></h1>
+          <p class="product-price"><span class="price-now"></span> <span class="price-size"></span></p>
+
+          <fieldset class="size-picker">
+            <legend>Pick a size</legend>
+            <div class="size-options"></div>
+            <p class="size-note">Size is measured along the longest side of the sticker.</p>
+          </fieldset>
+
+          <div class="qty-row">
+            <span class="qty-label" id="qty-label">Quantity</span>
+            <div class="stepper big" role="group" aria-labelledby="qty-label">
+              <button type="button" class="qty-minus" aria-label="One less">&minus;</button>
+              <output class="qty-value" aria-live="polite">1</output>
+              <button type="button" class="qty-plus" aria-label="One more">+</button>
+            </div>
+          </div>
+
+          <div class="buy-row">
+            <button type="button" class="btn btn-add">Add to cart</button>
+            <button type="button" class="btn btn-buy">Buy now</button>
+          </div>
+          <p class="in-cart" hidden></p>
+
+          <ul class="product-facts">
+            <li>Die-cut to shape with a white border</li>
+            <li>Three sizes, same design</li>
+            <li>Order on WhatsApp, pay on delivery or by UPI</li>
+          </ul>
+        </div>
+      </article>
+
+      <section class="not-found" hidden>
+        <h1>That sticker is not here</h1>
+        <p>It may have been taken down, or the link is wrong.</p>
+        <a class="btn" href="index.html#gallery">See all stickers</a>
+      </section>
+
+      <section class="similar" aria-labelledby="similar-title" hidden>
+        <div class="section-head">
+          <p class="eyebrow">You might also slap</p>
+          <h2 id="similar-title">Similar stickers</h2>
+        </div>
+        <ul class="sticker-grid similar-grid"></ul>
+      </section>
+    </main>
+
+    <footer class="footer"></footer>
+    <script type="module" src="/src/pages/sticker.js"></script>
+  </body>
+</html>

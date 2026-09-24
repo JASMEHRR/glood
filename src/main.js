@@ -1,21 +1,18 @@
-import '@fontsource/lilita-one/400.css';
-import '@fontsource/bungee/400.css';
-import '@fontsource/space-grotesk/400.css';
-import '@fontsource/space-grotesk/600.css';
-import '@fontsource/space-grotesk/700.css';
-import './styles.css';
+import './base.js';
 
 import logoSvg from './assets/glood-logo.svg?raw';
-import { INSTAGRAM_URL } from './config.js';
 import { animateLogoFace } from './js/logo-face.js';
 import { buildGallery, buildDrops } from './js/gallery.js';
 import { LOGO_STICKER, laptopStickers } from './js/stickers.js';
+import { mountNav, mountFooter, motionEnabled } from './js/chrome.js';
 
 const root = document.documentElement;
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Motion is on unless switched off with the nav toggle (base.js has already set .reduced-motion).
+const reducedMotion = !motionEnabled();
 const mobile = window.matchMedia('(max-width: 767px)').matches;
-root.classList.add('js');
-if (reducedMotion) root.classList.add('reduced-motion');
+
+mountNav({ home: true, reloadOnMotion: true });
+mountFooter();
 
 const $ = (sel) => {
   const el = document.querySelector(sel);
@@ -34,7 +31,6 @@ animateLogoFace(logoEl, { reducedMotion });
 // ---------- sections ----------
 buildGallery({ grid: $('.sticker-grid'), filterBar: $('.filters'), status: $('#gallery-status') });
 buildDrops($('.drop-grid'));
-for (const a of document.querySelectorAll('[data-instagram]')) a.href = INSTAGRAM_URL;
 
 // ---------- 3D sticker story ----------
 function showFallback(stickers) {

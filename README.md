@@ -7,6 +7,10 @@ slap onto the lid until it is fully sticker-bombed, then the lid opens and the s
 sticker gallery. Below that: the gallery with category filters and a peel-on-hover effect, Fresh Drops,
 the brand story, and the footer.
 
+Every sticker has its own page (`sticker.html?s=<slug>`) with sizes, quantity, Add to cart, Buy now and
+similar stickers. The cart (`cart.html`) checks out over WhatsApp: the order is written out in a chat to
+GLOOD and the buyer presses send. No payment is taken on the site.
+
 Built with Vite, plain JavaScript, Three.js and GSAP (ScrollTrigger). No paid services, no API keys.
 
 ## Run it locally
@@ -42,16 +46,23 @@ npm run preview
 
 Every push to `main` redeploys automatically.
 
-## Change the Instagram link
+## Settings to fill in
 
-Edit `src/config.js` and replace the placeholder with your profile URL.
+Both live in `src/config.js`:
+
+- `WHATSAPP_NUMBER`: GLOOD's WhatsApp number with country code, digits only (for example `919876543210`).
+  Orders open a chat to this number. Until it is set, WhatsApp asks the buyer which chat to send the order to.
+- `INSTAGRAM_URL`: your Instagram profile.
+
+Prices per size are in `SIZES` in `src/js/shop.js`.
 
 ## Adding stickers later
 
 Every sticker needs one entry in a manifest file. The site reads the manifest, builds the gallery card and
 the filter counts from it, and Vite takes care of hashing and caching the image.
 
-Categories (the `category` field) must be one of: `racing`, `anime`, `gaming`, `gym`, `memes`.
+Categories (the `category` field) must be one of: `racing`, `anime`, `gaming`, `gym`, `memes`, `sports`,
+`music`, `screen` (TV & film), `heroes` (Superheroes).
 
 ### Option A: you already have a clean sticker image (easiest)
 
@@ -81,8 +92,9 @@ A hand-made SVG works the same way: put it in `src/stickers/custom/` and add the
 ### Option B: raw images with a plain white background
 
 1. Put the image in `source-assets/sticker-board/` or `source-assets/sticker-set/`.
-2. Check it for copyrighted or trademarked content (characters, team or club logos, album art, other brands).
-   Add a line for it to `SAFE` (or `RISKY`, with the reason) in `scripts/process_assets.py`.
+2. Add a line for it to `SAFE` in `scripts/process_assets.py`, or to `RISKY` with the reason if it shows
+   characters, team or club logos, album art or other brands (flagged designs are used while `USE_FLAGGED`
+   is `True`).
 3. Run `npm run assets`. It removes the white background, adds a white die-cut border, converts it to WebP,
    updates `photo-stickers.json` and rewrites `ASSETS.md`. Entries you added by hand (Option A) are kept.
 
@@ -105,14 +117,16 @@ logo). Swap slugs in that list to change which stickers get slapped on.
 |---|---|
 | `npm run dev` | Local dev server with hot reload |
 | `npm run build` | Production build into `dist/` |
-| `npm run shots` | Screenshots of the scroll story and every section at 1440px and 390px into `screenshots/` (run `npm run build` first, and `npx playwright install chromium` once) |
+| `npm run shots` | Screenshots of the scroll story, every section, a product page, the cart and checkout at 1440px and 390px into `screenshots/` (run `npm run build` first, and `npx playwright install chromium` once) |
+| `npm run test:shop` | 28 end-to-end checks of the product page, cart, checkout and WhatsApp message (run `npm run build` first) |
 | `npm run stickers` | Regenerates the original SVG stickers |
 | `npm run assets` | Screens and optimises raw sticker images (needs Python with Pillow and numpy) |
 | `npm run logo` | Re-traces the logo SVG from `glood-logo.png` and prints how closely it matches |
 
 ## Project notes
 
-- `ASSETS.md`: every source image, which ones are used, and which were excluded for copyright reasons.
+- `ASSETS.md`: every source image, and which ones are flagged for copyright or trademark (with the reason).
 - `DECISIONS.md`: choices made while building, and why.
-- Respects `prefers-reduced-motion`: the scroll story is replaced by a still of the sticker-bombed laptop.
+- Motion is on by default. The switch in the nav turns it off (a still of the sticker-bombed laptop instead of
+  the scroll story) and the choice is remembered on that device.
 - Falls back to a flat sticker collage if WebGL is not available.
