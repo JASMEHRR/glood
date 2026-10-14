@@ -7,3 +7,8 @@ dist/
 # Raw source images (about 360 MB, and many are copyrighted designs that must not be published).
 # Screened, optimised copies live in src/stickers/photo/. See ASSETS.md and DECISIONS.md.
 source-assets/
+
+deck/out/
+deck/*.pptx
+deck/fonts/
+.claude/

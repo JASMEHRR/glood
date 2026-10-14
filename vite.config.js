@@ -13,6 +13,7 @@ export default defineConfig({
         main: resolve(import.meta.dirname, 'index.html'),
         sticker: resolve(import.meta.dirname, 'sticker.html'),
         cart: resolve(import.meta.dirname, 'cart.html'),
+        deck: resolve(import.meta.dirname, 'deck/index.html'), // the pitch deck, at /deck/
       },
     },
   },

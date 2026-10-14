@@ -13,6 +13,7 @@
     "logo": "python scripts/logo_masks.py && node scripts/trace-logo.mjs && node scripts/compare-logo.mjs",
     "assets": "python scripts/process_assets.py",
     "test:shop": "node scripts/test-shop.mjs",
+    "deck": "node deck/build-deck.mjs",
     "prices": "python scripts/import_prices.py"
   },
   "dependencies": {

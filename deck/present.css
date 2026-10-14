@@ -1,0 +1,90 @@
+/* The web deck: canvas, landing-page hero, slides as stickers on it, and the controls.
+   Slide styling itself comes from the <style> in deck.html. */
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #ffa905;
+  background-image: radial-gradient(rgba(0, 0, 0, .13) 1.6px, transparent 1.8px);
+  background-size: 26px 26px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #111;
+}
+
+.viewport { position: fixed; inset: 0; overflow: hidden; touch-action: none; user-select: none; }
+.world { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+
+/* ---------- the landing page, 1600 x 900 ---------- */
+.hero {
+  position: absolute; left: 0; top: 0; width: 1600px; height: 900px;
+  background: radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, .28), transparent 60%);
+}
+.hero-kicker {
+  position: absolute; left: 50%; top: 128px; margin: 0; transform: translateX(-50%) rotate(-3deg);
+  font: 22px 'Bungee', sans-serif; text-transform: uppercase; background: #fff; border: 4px solid #000;
+  border-radius: 999px; padding: 8px 22px; box-shadow: 4px 4px 0 #000; white-space: nowrap;
+}
+.hero-logo { position: absolute; left: 420px; top: 185px; width: 760px; }
+.hero-logo svg { display: block; width: 100%; height: auto; overflow: visible; }
+.hero-logo .glood-bg { display: none; } /* the logo's own orange backing would show as a box */
+.hero-tag {
+  position: absolute; left: 0; right: 0; top: 715px; margin: 0; text-align: center;
+  font: 76px 'Lilita One', sans-serif; color: #fff; -webkit-text-stroke: 3px #000;
+  text-shadow: 5px 5px 0 #000; transform: rotate(2deg);
+}
+.hero-sticker { position: absolute; filter: drop-shadow(5px 6px 0 rgba(0, 0, 0, .35)); }
+.hero-sticker.s1 { left: 55px; top: 140px; width: 210px; transform: rotate(-14deg); }
+.hero-sticker.s2 { right: 70px; top: 70px; width: 165px; transform: rotate(10deg); }
+.hero-sticker.s3 { left: 85px; top: 585px; width: 190px; transform: rotate(-6deg); }
+.hero-sticker.s4 { right: 95px; top: 625px; width: 170px; transform: rotate(8deg); }
+
+/* ---------- slides on the canvas ---------- */
+.world .slide {
+  position: absolute; left: 0; top: 0; margin: 0; transform-origin: 50% 50%;
+  border-radius: 26px; box-shadow: 0 0 0 16px #fff, 14px 14px 0 16px #000;
+}
+.world .slide.cover { background: transparent; box-shadow: none; overflow: visible; }
+.world .slide.cover::before { display: none; }
+.is-overview .world .slide:not(.cover) { cursor: zoom-in; }
+
+/* ---------- controls ---------- */
+.deck-bar {
+  position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 10;
+  display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 999px;
+  background: rgba(255, 244, 220, .92); border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+  transition: opacity .3s ease;
+}
+.deck-bar button {
+  font: 13px 'Bungee', sans-serif; text-transform: uppercase; cursor: pointer; color: #000;
+  background: #fff; border: 3px solid #000; border-radius: 999px; padding: 6px 13px; box-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
+}
+.deck-bar button:hover { background: #ffd400; }
+.deck-bar button:active { transform: translate(2px, 2px); box-shadow: none; }
+.deck-bar button[aria-pressed="true"] { background: #00bbd1; }
+.deck-bar button:focus-visible { outline: 3px solid #e10b19; outline-offset: 2px; }
+.deck-count {
+  font: 13px 'Bungee', sans-serif; background: #000; color: #ffd400; border-radius: 999px;
+  padding: 7px 14px; min-width: 76px; text-align: center;
+}
+.deck-notes {
+  position: fixed; right: 16px; bottom: 76px; z-index: 10; width: min(440px, calc(100vw - 32px));
+  max-height: 40vh; overflow: auto; margin: 0; padding: 16px 18px; font-size: 16px; line-height: 1.5;
+  background: #fff4dc; border: 3px solid #000; border-radius: 16px; box-shadow: 5px 5px 0 #000;
+}
+.deck-hint {
+  position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 10; margin: 0;
+  font: 11px 'Bungee', sans-serif; text-transform: uppercase; background: #000; color: #ffd400;
+  padding: 6px 12px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+  animation: hint-out .6s ease 6s forwards;
+}
+@keyframes hint-out { to { opacity: 0; } }
+.is-idle .deck-bar { opacity: 0; }
+.is-idle { cursor: none; }
+
+@media (max-width: 640px) {
+  .deck-bar { gap: 5px; padding: 6px; }
+  .deck-bar button { padding: 5px 9px; font-size: 11px; }
+  .deck-bar [data-go="full"], .deck-hint { display: none; }
+}

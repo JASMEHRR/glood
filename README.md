@@ -142,6 +142,14 @@ logo). Swap slugs in that list to change which stickers get slapped on.
 | `npm run assets` | Screens and optimises raw sticker images (needs Python with Pillow and numpy) |
 | `npm run prices` | Copies each sticker's price and name from GLOOD's VentureAdda listing into `src/stickers/sizes.json` |
 | `npm run logo` | Re-traces the logo SVG from `glood-logo.png` and prints how closely it matches |
+| `npm run deck` | Builds the animated, editable PowerPoint `deck/GLOOD_Startup_Presentation.pptx` from `deck/deck.html` (Windows with PowerPoint; install the fonts made by `python deck/make_fonts.py node_modules/@fontsource deck/fonts` first) |
+
+## Pitch deck
+
+The startup presentation lives in `deck/deck.html` (slides) and `deck/team.js` (team slides). Two outputs come from it:
+
+- **Web deck at `/deck/`**: a Prezi-style zooming canvas over the landing page. Arrow keys or space to move, O for the overview, N for speaker notes, F for full screen. Links like `/deck/#5` open a slide directly.
+- **PowerPoint**: `npm run deck`, with editable text, embedded fonts, Morph transitions and entrance animations.
 
 ## Project notes
 

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>GLOOD deck</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/lilita-one/index.css" />
+<link rel="stylesheet" href="../node_modules/@fontsource/bungee/index.css" />
+<link rel="stylesheet" href="../node_modules/@fontsource/space-grotesk/400.css" />
+<link rel="stylesheet" href="../node_modules/@fontsource/space-grotesk/500.css" />
+<link rel="stylesheet" href="../node_modules/@fontsource/space-grotesk/700.css" />
+<style>
+  :root {
+    --orange: #ffa905; --red: #e10b19; --cyan: #00bbd1; --black: #000; --white: #fff;
+    --yellow: #ffd400; --pink: #ff8fc7; --green: #3ddc84; --purple: #8a6bff; --cream: #fff4dc; --ink: #111;
+    --line: 4px solid var(--black); --shadow: 7px 7px 0 var(--black); --radius: 22px;
+    --head: 'Lilita One', sans-serif; --label: 'Bungee', sans-serif; --body: 'Space Grotesk', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #444; font-family: var(--body); color: var(--ink); }
+  .slide {
+    position: relative; width: 1600px; height: 900px; overflow: hidden; margin: 0 auto 40px;
+    background: var(--orange); padding: 64px 80px;
+  }
+  .slide.cream { background: var(--cream); }
+  .slide.yellow { background: var(--yellow); }
+  .slide.cyan { background: var(--cyan); }
+  /* the site's dotted paper texture */
+  .slide::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .13;
+    background-image: radial-gradient(var(--black) 1.6px, transparent 1.8px); background-size: 26px 26px;
+  }
+  .slide > * { position: relative; }
+  .num {
+    position: absolute; right: 40px; bottom: 30px; font: 18px var(--label); background: var(--black);
+    color: var(--yellow); padding: 6px 14px; border-radius: 999px;
+  }
+  .eyebrow {
+    display: inline-block; font: 22px var(--label); background: var(--black); color: var(--yellow);
+    padding: 8px 18px; border-radius: 10px; transform: rotate(-2deg); margin: 0 0 14px;
+  }
+  h1, h2, h3 { font-family: var(--head); font-weight: 400; margin: 0; line-height: 1; }
+  h2 { font-size: 84px; }
+  h3 { font-size: 40px; }
+  p { margin: 0; }
+  .card { background: var(--white); border: var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .chip {
+    display: inline-block; font: 20px var(--label); padding: 8px 16px; border: 3px solid var(--black);
+    border-radius: 999px; background: var(--white); box-shadow: 3px 3px 0 var(--black); margin: 0 10px 12px 0;
+  }
+  .c-orange { background: var(--orange) } .c-red { background: var(--red); color: #fff } .c-cyan { background: var(--cyan) }
+  .c-yellow { background: var(--yellow) } .c-pink { background: var(--pink) } .c-green { background: var(--green) }
+  .c-purple { background: var(--purple); color: #fff } .c-black { background: var(--black); color: var(--yellow) }
+  .sticker { position: absolute; filter: drop-shadow(5px 6px 0 rgba(0,0,0,.35)); }
+  /* browser and phone frames for website screenshots */
+  .browser { border: var(--line); border-radius: 18px; overflow: hidden; background: var(--white); box-shadow: var(--shadow); }
+  .browser .bar {
+    height: 40px; border-bottom: var(--line); display: flex; align-items: center; gap: 9px; padding: 0 16px; background: var(--cream);
+  }
+  .browser .bar i { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--black); }
+  .browser .bar i:nth-child(1) { background: var(--red) } .browser .bar i:nth-child(2) { background: var(--yellow) } .browser .bar i:nth-child(3) { background: var(--green) }
+  .browser .bar span { margin-left: 14px; font: 600 17px var(--body); background: var(--white); border: 2.5px solid var(--black); border-radius: 999px; padding: 2px 18px; }
+  .browser img { display: block; width: 100%; }
+  .phone { border: 5px solid var(--black); border-radius: 34px; overflow: hidden; background: var(--black); box-shadow: var(--shadow); padding: 8px; }
+  .phone img { display: block; width: 100%; border-radius: 26px; }
+
+  /* 1 cover */
+  .cover-bar {
+    position: absolute; left: 150px; right: 150px; top: 22px; padding: 12px 22px; border-radius: 18px;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .cover-bar .chip { margin: 0; }
+  .cover-bar p { font: 500 22px var(--body); }
+  .cover-pills { position: absolute; left: 0; right: 0; bottom: 24px; display: flex; justify-content: center; gap: 16px; }
+  .cover-pills .chip { margin: 0; font-size: 22px; }
+  .pills { display: flex; gap: 14px; }
+
+  /* card grids */
+  .grid3 { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: 1fr 1fr; gap: 28px; margin-top: 34px; height: 580px; }
+  .grid3 .card { padding: 28px 32px; }
+  .grid3 .tall { grid-row: span 2; }
+  .head-row { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .dot { width: 58px; height: 58px; border-radius: 50%; border: var(--line); display: grid; place-items: center; font: 28px var(--label); flex: none; }
+  .card p, .card li { font-size: 25px; line-height: 1.4; }
+  .card ul { margin: 18px 0 0; padding-left: 28px; }
+  .card li { margin-bottom: 8px; }
+
+  /* team */
+  .team-slide { display: grid; grid-template-columns: 470px 1fr; gap: 56px; align-items: center; }
+  .profile { text-align: center; }
+  .pfp {
+    width: 420px; height: 420px; margin: 0 auto; border: var(--line); border-radius: 50%; box-shadow: var(--shadow);
+    display: grid; place-items: center; overflow: hidden;
+  }
+  .pfp svg { width: 86%; margin-top: 40px; }
+  .profile .name { font: 60px var(--head); margin-top: 34px; }
+  .profile .role { margin-top: 14px; font-size: 22px; }
+  .team-slide h2 { font-size: 66px; margin-bottom: 30px; }
+  .team-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .team-cards .card { padding: 24px 28px; min-height: 236px; }
+  .team-cards h3 { font-size: 34px; }
+  .team-cards .dot { width: 50px; height: 50px; font-size: 22px; }
+  .team-cards p { font-size: 24px; line-height: 1.38; }
+  .member-no { font: 22px var(--label); }
+</style>
+</head>
+<body>
+
+<!-- 1 COVER: the website's landing page is the slide (see build-deck.mjs backdrop) -->
+<section class="slide cover" data-cover data-notes="Hi everyone, we are Team Glood. Glood is our student-run sticker brand at Thapar: stickers for literally every obsession, from F1 and Marvel to anime, memes, music and sports. Behind us is the landing page of our own website, glood.vercel.app. Today we will show you the brand, the website and the team behind it.">
+  <div class="card cover-bar"><span class="chip c-black">Team</span><p>JasMehr Singh · Prashant Pal · Meenakshi Sharma · Rishabh Sharma · Sanyam · Aniket Kumar</p></div>
+  <div class="cover-pills"><span class="chip c-black">glood.vercel.app</span><span class="chip c-cyan">Open 24/7</span></div>
+</section>
+
+<!-- 2 OUR STARTUP -->
+<section class="slide cream" data-notes="Open with the hook: ask the audience to look at their laptop. Then introduce Glood as the fix for boring laptops, bottles and phone cases. The screenshot is our own website, where a plain laptop gets sticker-bombed as you scroll.">
+  <p class="eyebrow">Our startup</p>
+  <div style="display:grid;grid-template-columns:600px 1fr;gap:50px;margin-top:18px">
+    <div>
+      <h2 style="font-size:78px">Look at your laptop.</h2>
+      <h2 style="font-size:78px;color:var(--red);margin-top:14px">Now imagine your obsession on it.</h2>
+      <p style="font-size:27px;line-height:1.45;margin-top:36px">Glood is a student-run sticker brand at Thapar. Whatever you're into (an F1 team, an anime, a meme, a band), there's probably a sticker for it.</p>
+      <p style="font-size:24px;line-height:1.45;margin-top:22px;font-weight:500">For your laptop, bottle, notebook, phone case: anything that looks too boring without one.</p>
+    </div>
+    <div style="padding-top:30px">
+      <div class="browser" style="transform:rotate(1.5deg)"><div class="bar"><i></i><i></i><i></i><span>glood.vercel.app</span></div><img src="../screenshots/desktop-04-sticker-bombed.png" /></div>
+      <p class="chip c-yellow" style="margin-top:30px;transform:rotate(-2deg)">A blank laptop, sticker-bombed on our site</p>
+    </div>
+  </div>
+  <span class="num">02</span>
+</section>
+
+<!-- 3 SOLUTION -->
+<section class="slide yellow" data-notes="Key features: 9 categories and 167 designs, a website where you add to cart and order on WhatsApp, open 24/7. Advantage: we are students who share these fandoms. Benefits: affordable personalisation and easy gifting.">
+  <p class="eyebrow">Solution</p>
+  <h2>Every fandom, one sticker shop.</h2>
+  <div class="grid3">
+    <div class="card tall">
+      <div class="head-row"><span class="dot c-red">★</span><h3>Key Features</h3></div>
+      <span class="chip c-red">Racing</span><span class="chip c-pink">Anime</span><span class="chip c-purple">Gaming</span>
+      <span class="chip c-green">Gym</span><span class="chip c-yellow">Memes</span><span class="chip c-cyan">Sports</span>
+      <span class="chip">Music</span><span class="chip c-black">TV &amp; Film</span><span class="chip c-red">Superheroes</span>
+      <ul>
+        <li><b>9 categories, 167 designs</b>, all on one website</li>
+        <li>Add to cart, then order on WhatsApp</li>
+        <li>Pay by UPI or cash on delivery</li>
+        <li>Open 24/7 for orders</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="head-row"><span class="dot c-cyan">⚡</span><h3>Advantage</h3></div>
+      <p>Made by students who share these fandoms, sold right on campus. New trends and memes become stickers fast.</p>
+    </div>
+    <div class="card">
+      <div class="head-row"><span class="dot c-green">♥</span><h3>Benefits</h3></div>
+      <p>Cheap, instant self-expression. Personalise laptops, bottles and phone cases, or gift a friend their fandom.</p>
+    </div>
+  </div>
+  <span class="num">03</span>
+</section>
+
+<!-- 4 THE WEBSITE -->
+<section class="slide cream" data-notes="We built our own online store: glood.vercel.app. As you scroll, a 3D laptop turns, our logo flies onto the lid, stickers slap on one by one and the lid opens. The logo's eyes follow your mouse and blink. Every sticker peels when you hover it. It works on phones too, and there is a motion on or off switch. Everything was built with free, open-source tools.">
+  <p class="eyebrow">New: our website</p>
+  <h2>glood.vercel.app</h2>
+  <div style="display:grid;grid-template-columns:1fr 520px;gap:44px;margin-top:30px">
+    <div style="position:relative">
+      <div class="browser"><div class="bar"><i></i><i></i><i></i><span>glood.vercel.app</span></div><img src="../screenshots/desktop-05-lid-open.png" /></div>
+      <div class="phone" style="position:absolute;width:200px;right:-40px;bottom:-60px;transform:rotate(5deg)"><img src="../screenshots/mobile-01-hero.png" /></div>
+    </div>
+    <div>
+      <div class="card" style="padding:26px 30px">
+        <ul style="margin:0;padding-left:26px">
+          <li><b>3D laptop story:</b> scroll and watch it get sticker-bombed, then open</li>
+          <li><b>Living logo:</b> the eyes follow your mouse and blink</li>
+          <li><b>Peel to preview:</b> hover any sticker and it peels back</li>
+          <li><b>Phone ready,</b> with a motion on/off switch</li>
+        </ul>
+      </div>
+      <p class="chip c-black" style="margin-top:26px;transform:rotate(-1.5deg);font-size:18px;white-space:nowrap">Built free: Three.js · GSAP · Vite · Vercel</p>
+    </div>
+  </div>
+  <span class="num">04</span>
+</section>
+
+<!-- 5 SHOP FLOW -->
+<section class="slide" data-notes="This is the full buying journey on the website. Pick a category, open a sticker to see its size and price, add it to the cart, and place the order. The order opens straight in WhatsApp with every sticker, the total and the delivery details already typed out, so we can confirm it in one reply.">
+  <p class="eyebrow">How you buy</p>
+  <h2>Scroll to order in 4 taps.</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-top:70px">
+    <div><span class="chip c-yellow">1 · Pick a category</span><div class="browser" style="transform:rotate(-1.5deg)"><div class="bar"><i></i><i></i><i></i></div><img src="../screenshots/desktop-05b-categories.png" /></div></div>
+    <div><span class="chip c-pink">2 · Open a sticker</span><div class="browser" style="transform:rotate(1.2deg)"><div class="bar"><i></i><i></i><i></i></div><img src="../screenshots/desktop-11-product.png" /></div></div>
+    <div><span class="chip c-cyan">3 · Add to cart</span><div class="browser" style="transform:rotate(-1deg)"><div class="bar"><i></i><i></i><i></i></div><img src="../screenshots/desktop-12-cart.png" /></div></div>
+    <div><span class="chip c-green">4 · Order on WhatsApp</span><div class="browser" style="transform:rotate(1.5deg)"><div class="bar"><i></i><i></i><i></i></div><img src="../screenshots/desktop-13-checkout.png" /></div></div>
+  </div>
+  <div class="card" style="margin-top:90px;padding:22px 30px;display:flex;gap:40px;align-items:center;font-size:25px">
+    <b style="font:30px var(--head)">Also on the site:</b>
+    <span>Similar stickers on every page</span><span>Buy now in one tap</span><span>Cart saved on your phone</span>
+  </div>
+  <span class="num">05</span>
+</section>
+
+<!-- 6 PRICED BY SIZE -->
+<section class="slide cream" data-notes="Pricing is simple. Every sticker comes in one fixed size, measured along its longest side, and that size sets the price: 20 rupees for small, 30 for medium, 50 for large. The website uses the same prices as our VentureAdda menu.">
+  <p class="eyebrow">Pricing</p>
+  <h2>Priced by size. That's it.</h2>
+  <div style="display:flex;justify-content:center;align-items:flex-end;gap:90px;margin-top:50px">
+    <div style="text-align:center">
+      <div class="card c-yellow" style="width:250px;height:250px;border-radius:50%;display:grid;place-items:center;margin:0 auto"><img src="../src/stickers/photo/f1-logo.webp" style="width:170px" /></div>
+      <p style="font:80px var(--head);margin-top:22px">₹20</p><p class="chip" style="margin:6px 0 0">Small · 1 to 2 in</p>
+    </div>
+    <div style="text-align:center">
+      <div class="card c-pink" style="width:310px;height:310px;border-radius:50%;display:grid;place-items:center;margin:0 auto"><img src="../src/stickers/photo/baka.webp" style="width:210px" /></div>
+      <p style="font:80px var(--head);margin-top:22px">₹30</p><p class="chip" style="margin:6px 0 0">Medium · 2 to 3 in</p>
+    </div>
+    <div style="text-align:center">
+      <div class="card c-cyan" style="width:370px;height:370px;border-radius:50%;display:grid;place-items:center;margin:0 auto"><img src="../src/stickers/photo/kalesh-aurat.webp" style="width:250px" /></div>
+      <p style="font:80px var(--head);margin-top:22px">₹50</p><p class="chip" style="margin:6px 0 0">Large · 3+ in</p>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:24px;margin-top:30px;font-weight:500">One fixed size per sticker, same prices as our VentureAdda menu.</p>
+  <span class="num">06</span>
+</section>
+
+<!-- 7 ACHIEVEMENTS -->
+<section class="slide yellow" data-notes="What we have built so far: 167 designs across 9 categories on our own website, 22 anime designs alone, a store that is open 24/7, designs that have sold out, and a listing on VentureAdda.">
+  <p class="eyebrow">Key achievements</p>
+  <h2>What we've built so far.</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:30px 36px;margin-top:40px">
+    <div class="card c-white" style="padding:22px 28px;transform:rotate(-1.5deg)"><p style="font:88px var(--head);color:var(--red)">167</p><p style="font-size:26px">sticker designs live on our website</p></div>
+    <div class="card" style="padding:22px 28px;transform:rotate(1deg);background:var(--cyan)"><p style="font:88px var(--head)">9</p><p style="font-size:26px">fandom categories to browse</p></div>
+    <div class="card" style="padding:22px 28px;transform:rotate(-1deg);background:var(--pink)"><p style="font:88px var(--head)">22</p><p style="font-size:26px">anime designs in one category alone</p></div>
+    <div class="card" style="padding:22px 28px;transform:rotate(1.2deg);background:var(--green)"><p style="font:88px var(--head)">24/7</p><p style="font-size:26px">open for orders, any time</p></div>
+    <div class="card" style="padding:22px 28px;transform:rotate(-1.4deg);background:var(--red);color:#fff"><p style="font:88px var(--head)">SOLD OUT</p><p style="font-size:26px">our most popular designs sold through</p></div>
+    <div class="card" style="padding:22px 28px;transform:rotate(1deg);background:var(--black);color:var(--yellow)"><p style="font:88px var(--head)">LIVE</p><p style="font-size:26px;color:#fff">our own store at glood.vercel.app</p></div>
+  </div>
+  <div class="card" style="margin-top:34px;padding:16px 26px;font-size:24px;display:flex;align-items:center;gap:18px">
+    <span class="dot c-orange" style="width:46px;height:46px;font-size:20px">✓</span>
+    <span>Listed on VentureAdda, Thapar's directory of student-run ventures.</span>
+  </div>
+  <span class="num">07</span>
+</section>
+
+<!-- 8 to 13 TEAM (filled by script below) -->
+<div id="team"></div>
+
+<!-- 14 CLOSING -->
+<section class="slide" style="text-align:center" data-notes="Close by repeating the brand promise: if you're into it, there's probably a sticker for it. Invite the audience to visit glood.vercel.app, find Glood on VentureAdda and order on WhatsApp. Thank you.">
+  <img class="logo-pop" src="out/glood-logo-clear.svg" style="width:440px;margin-top:6px" />
+  <h2 style="font-size:88px;margin-top:26px">If you're into it,</h2>
+  <h2 style="font-size:88px;color:var(--white);-webkit-text-stroke:3px var(--black);text-shadow:6px 6px 0 var(--black)">there's probably a sticker for it.</h2>
+  <p style="font-size:28px;margin-top:26px;font-weight:500">Your laptop has been boring long enough. Come find your obsession.</p>
+  <div style="display:flex;justify-content:center;gap:22px;margin-top:38px">
+    <span class="chip c-black" style="font-size:20px;padding:10px 20px">glood.vercel.app</span>
+    <span class="chip c-cyan" style="font-size:20px;padding:10px 20px">Find us on VentureAdda</span>
+    <span class="chip c-green" style="font-size:20px;padding:10px 20px">Order on WhatsApp</span>
+    <span class="chip c-yellow" style="font-size:20px;padding:10px 20px">Open 24/7</span>
+  </div>
+  <p style="font:26px var(--label);margin-top:44px">Thank you! · Team Glood</p>
+  <img class="sticker" src="../src/stickers/custom/one-more-game.svg" style="width:220px;left:40px;top:60px;transform:rotate(-12deg)" />
+  <img class="sticker" src="../src/stickers/custom/chai-over-everything.svg" style="width:220px;right:40px;top:80px;transform:rotate(10deg)" />
+  <img class="sticker" src="../src/stickers/custom/gym-then-biryani.svg" style="width:150px;left:40px;bottom:30px;transform:rotate(8deg)" />
+  <img class="sticker" src="../src/stickers/photo/box-box-box.webp" style="width:160px;right:50px;bottom:70px;transform:rotate(-9deg)" />
+</section>
+
+<script src="team.js"></script><!-- also imported by present.js for the web deck -->
+</body>
+</html>

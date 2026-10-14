@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GLOOD | Pitch deck</title>
+    <meta name="description" content="The GLOOD startup presentation: a zooming canvas over the GLOOD landing page." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#ffa905" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main class="viewport" aria-roledescription="presentation" aria-label="GLOOD startup presentation">
+      <div class="world"></div>
+    </main>
+
+    <nav class="deck-bar" aria-label="Presentation controls">
+      <button type="button" data-go="prev" aria-label="Previous slide">&larr;</button>
+      <span class="deck-count" aria-live="polite">1 / 14</span>
+      <button type="button" data-go="next" aria-label="Next slide">&rarr;</button>
+      <button type="button" data-go="overview" aria-label="Zoom out to the overview">Overview</button>
+      <button type="button" data-go="notes" aria-label="Show speaker notes" aria-pressed="false">Notes</button>
+      <button type="button" data-go="full" aria-label="Full screen">Full screen</button>
+    </nav>
+    <aside class="deck-notes" hidden></aside>
+    <p class="deck-hint">&larr; &rarr; or space to move &middot; O overview &middot; N notes &middot; F full screen</p>
+
+    <script type="module" src="./present.js"></script>
+  </body>
+</html>
