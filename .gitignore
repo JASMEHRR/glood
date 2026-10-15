@@ -12,3 +12,6 @@ deck/out/
 deck/*.pptx
 deck/fonts/
 .claude/
+deck/vid/*.mp4
+deck/vid/work/
+deck/vid/overlay_pack/

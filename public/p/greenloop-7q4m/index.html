@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>GreenLoop Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: one zooming canvas. The cover sits in the middle of a recycling loop; the 12 content
+   slides ride the loop around it. The camera flies between them, waste items orbit the cover, the
+   loop's dashes flow, and every slide builds in when the camera lands. */
+:root {
+  --paper: #eef7e9;
+  --ink: #102a1b;
+  --leaf: #1f9d55;
+  --lime: #c8f53a;
+  --coral: #ff6a45;
+  --sky: #7cc8ff;
+  --kraft: #f2dfb8;
+  --white: #ffffff;
+  --muted: #3d5a47;
+  --display: 'Bricolage Grotesque', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink); font-family: var(--body); }
+.viewport { position: fixed; inset: 0; overflow: hidden; touch-action: none; user-select: none;
+  background: radial-gradient(circle at 18% 12%, rgba(200,245,58,.4), transparent 42%),
+              radial-gradient(circle at 86% 84%, rgba(124,200,255,.35), transparent 46%), var(--paper); }
+.world { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.loop-path { position: absolute; left: -1800px; top: -1400px; width: 5200px; height: 3700px; pointer-events: none; overflow: visible; }
+.flow { animation: flow 6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -480; } }
+.no-motion .flow, .no-motion .spin, .no-motion .orbit, .no-motion .bob { animation: none !important; }
+
+/* ---------- slides: 1600 x 900 ---------- */
+.slide { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; box-sizing: border-box;
+  padding: 64px 84px 70px; background: var(--white); border-radius: 52px; transform-origin: 50% 50%;
+  box-shadow: 0 0 0 7px var(--ink), 20px 24px 0 7px var(--ink); overflow: hidden;
+  display: flex; flex-direction: column; }
+.slide.cover { background: transparent; box-shadow: none; overflow: visible; padding: 0; }
+.slide.dark { background: var(--ink); color: var(--white); }
+.is-overview .slide:not(.cover) { cursor: zoom-in; }
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 34px; }
+.slide h2 { font: 800 104px/0.94 var(--display); letter-spacing: -0.04em; margin: 0; text-wrap: balance; max-width: 1250px; }
+.slide h3 { font: 800 40px/1.04 var(--display); letter-spacing: -0.02em; margin: 0 0 12px; }
+.slide p, .slide li { font: 500 28px/1.38 var(--body); margin: 0; }
+.tag { display: inline-flex; align-self: flex-start; font: 800 21px var(--body); letter-spacing: .1em; text-transform: uppercase;
+  background: var(--ink); color: var(--lime); padding: 10px 20px; border-radius: 999px; margin-bottom: 22px; }
+.dark .tag { background: var(--lime); color: var(--ink); }
+.mark { background-image: linear-gradient(var(--lime), var(--lime)); background-repeat: no-repeat;
+  background-position: 0 86%; background-size: 100% 34%; padding: 0 6px; }
+.dark .mark { color: var(--lime); background: none; }
+.fill { flex: 1; min-height: 0; display: grid; gap: 26px; }
+.card { background: var(--paper); border: 5px solid var(--ink); border-radius: 34px; padding: 30px 32px;
+  display: flex; flex-direction: column; min-width: 0; position: relative; }
+.card.lime { background: var(--lime); } .card.kraft { background: var(--kraft); } .card.sky { background: var(--sky); }
+.card.coral { background: var(--coral); } .card.ink { background: var(--ink); color: var(--white); } .card.white { background: var(--white); }
+.card.ink h3 { color: var(--lime); }
+.card .big { font: 800 120px/0.85 var(--display); letter-spacing: -0.05em; margin-bottom: 14px; }
+.card .push { margin-top: auto; }
+.icon { width: 76px; height: 76px; border-radius: 24px; display: grid; place-items: center; border: 5px solid var(--ink);
+  background: var(--white); margin-bottom: 18px; flex: none; }
+.icon svg { width: 42px; height: 42px; stroke: var(--ink); stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.stamp { position: absolute; font: 800 34px/1 var(--display); background: var(--lime); border: 5px solid var(--ink); border-radius: 999px;
+  padding: 18px 28px; transform: rotate(-8deg); box-shadow: 7px 7px 0 var(--ink); z-index: 2; }
+.pill { font: 700 24px var(--body); color: var(--ink); border: 4px solid var(--ink); border-radius: 999px; padding: 12px 24px; background: var(--white); white-space: nowrap; }
+.pill.lime { background: var(--lime); }
+.pills { display: flex; gap: 14px; flex-wrap: wrap; }
+.src { font: 500 17px var(--body); color: var(--muted); margin-top: 16px; }
+.num { position: absolute; right: 44px; top: 40px; font: 800 26px var(--display); color: var(--leaf); }
+.dark .num { color: var(--lime); }
+.ghost { position: absolute; right: -40px; bottom: -120px; font: 800 520px/1 var(--display); letter-spacing: -0.06em;
+  color: rgba(31,157,85,.07); pointer-events: none; }
+
+/* journey */
+.journey { position: relative; grid-template-columns: repeat(7, 1fr); gap: 18px; align-items: stretch; }
+.journey .card { padding: 26px 22px; }
+.journey .card .big { font-size: 96px; }
+.journey .card h3 { font-size: 34px; }
+.journey .card p { font-size: 23px; }
+.track { position: absolute; left: 0; right: 0; top: 50%; height: 10px; background: repeating-linear-gradient(90deg, var(--ink) 0 18px, transparent 18px 34px); z-index: 0; border-radius: 9px; }
+.truck { position: absolute; top: calc(50% - 34px); left: 0; width: 78px; height: 78px; z-index: 3; }
+
+/* cover */
+.cover-wrap { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.logo-ring { width: 300px; height: 300px; margin: 0 auto 4px; display: block; }
+.spin { animation: spin 14s linear infinite; transform-origin: 50% 50%; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.cover h1 { font: 800 230px/0.84 var(--display); letter-spacing: -0.065em; margin: 0; }
+.cover h1 .ch { display: inline-block; }
+.cover h1 .g { color: var(--leaf); }
+.cover .sub { font: 700 50px/1.12 var(--display); letter-spacing: -0.02em; margin: 26px 0 30px; }
+.orbiter { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+.orbit { animation: orbit var(--dur, 30s) linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+.item { position: absolute; width: 110px; height: 110px; margin: -55px; border-radius: 34px; background: var(--white);
+  border: 5px solid var(--ink); display: grid; place-items: center; box-shadow: 6px 6px 0 var(--ink); }
+.item svg { width: 60px; height: 60px; stroke: var(--ink); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.bob { animation: bob 3.2s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-14px) rotate(4deg); } }
+
+/* controls */
+.bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 10;
+  display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 999px; background: var(--white);
+  border: 3px solid var(--ink); box-shadow: 4px 4px 0 var(--ink); transition: opacity .3s ease; }
+.bar button { font: 700 14px var(--body); cursor: pointer; color: var(--ink); background: var(--paper); border: 3px solid var(--ink);
+  border-radius: 999px; padding: 7px 14px; white-space: nowrap; }
+.bar button:hover { background: var(--lime); }
+.bar button[aria-pressed="true"] { background: var(--sky); }
+.bar button:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+.count { font: 800 15px var(--display); background: var(--ink); color: var(--lime); border-radius: 999px; padding: 8px 14px; min-width: 70px; text-align: center; }
+.notes { position: fixed; right: 16px; bottom: 82px; z-index: 10; width: min(460px, calc(100vw - 32px)); max-height: 42vh; overflow: auto;
+  margin: 0; padding: 16px 18px; font-size: 16px; line-height: 1.5; background: var(--white); border: 3px solid var(--ink); border-radius: 18px; box-shadow: 5px 5px 0 var(--ink); }
+.hint { position: fixed; left: 50%; top: calc(12px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 10; margin: 0;
+  font: 700 12px var(--body); letter-spacing: .06em; text-transform: uppercase; background: var(--ink); color: var(--lime);
+  padding: 7px 14px; border-radius: 999px; white-space: nowrap; pointer-events: none; animation: hint-out .6s ease 7s forwards; }
+@keyframes hint-out { to { opacity: 0; } }
+.is-idle .bar { opacity: 0; } .is-idle { cursor: none; }
+@media (max-width: 640px) { .bar { gap: 4px; padding: 6px; } .bar button { padding: 6px 9px; font-size: 12px; } .bar [data-go="full"], .hint { display: none; } }
+</style>
+
+</head>
+<body>
+<main class="viewport" aria-roledescription="presentation" aria-label="GreenLoop marketing presentation">
+  <div class="world">
+    <svg class="loop-path" viewBox="0 0 5200 3700" aria-hidden="true">
+      <ellipse cx="2600" cy="1850" rx="2050" ry="1290" fill="none" stroke="#c8f53a" stroke-width="34" opacity=".55"/>
+      <ellipse class="flow" cx="2600" cy="1850" rx="2050" ry="1290" fill="none" stroke="#1f9d55" stroke-width="22" stroke-dasharray="70 50" stroke-linecap="round"/>
+    </svg>
+
+    <!-- 1 COVER -->
+    <section class="slide cover" data-notes="Hi everyone. We are presenting GreenLoop: doorstep waste pickup that pays you back. We are launching in the Chandigarh Tricity. In the next few minutes: the problem, why now, how it works, who it is for, and how we will market it and make money.">
+      <div class="orbiter orbit" style="--dur: 34s" aria-hidden="true">
+        <div class="item bob" style="left:-640px; top:-120px; background: var(--sky)"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <div class="item bob" style="left:600px; top:-210px; background: var(--kraft); animation-delay:-1s"><svg viewBox="0 0 24 24"><path d="M9 3h6l4 4-3 2v12H8V9L5 7z"/></svg></div>
+        <div class="item bob" style="left:540px; top:250px; background: var(--lime); animation-delay:-2s"><svg viewBox="0 0 24 24"><path d="M9 2h6v4l2 3v12H7V9l2-3z"/><path d="M9 6h6"/></svg></div>
+        <div class="item bob" style="left:-560px; top:280px; background: var(--white); animation-delay:-.5s"><svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/><path d="M14 3v5h5M8 13h8M8 17h6"/></svg></div>
+      </div>
+      <div class="cover-wrap"><div>
+        <svg class="logo-ring a-pop" viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="86" fill="#c8f53a" stroke="#102a1b" stroke-width="8"/>
+          <g class="spin">
+            <path d="M60 118a44 44 0 0 1 64-62" fill="none" stroke="#102a1b" stroke-width="13" stroke-linecap="round"/>
+            <path d="M140 82a44 44 0 0 1-64 62" fill="none" stroke="#1f9d55" stroke-width="13" stroke-linecap="round"/>
+            <path d="M114 42l14 15-19 6" fill="none" stroke="#102a1b" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M86 158l-14-15 19-6" fill="none" stroke="#1f9d55" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+        </svg>
+        <h1 class="split">Green<span class="g">Loop</span></h1>
+        <p class="sub a-up">Doorstep waste pickup that <span class="mark">pays you back</span>.</p>
+        <div class="pills a-up" style="justify-content:center"><span class="pill lime">Chandigarh Tricity launch</span><span class="pill">Marketing &amp; growth strategy</span></div>
+      </div></div>
+    </section>
+
+    <!-- 2 PROBLEM -->
+    <section class="slide" data-notes="Walk into any apartment storeroom: old phones, chargers, clothes, plastic. There is no easy way to get rid of them properly, so they get dumped into mixed waste and end up at the Dadumajra landfill. Residents get nothing for segregating, and RWAs have no tools to prove they are following the rules.">
+      <span class="ghost" aria-hidden="true">?!</span><span class="num">02</span>
+      <span class="tag a-pop">The problem</span>
+      <div class="head"><h2 class="a-up">Every flat has a pile <span class="mark">nobody collects</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card kraft a-card"><div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V6h8v3M10 13h4"/></svg></div><h3>It piles up</h3><p>Old phones, cables, clothes and plastic sit in storerooms for months.</p></div>
+        <div class="card coral a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 20l3-9 3 5 3-8 3 12"/></svg></div><h3>It goes to landfill</h3><p>Mixed waste ends up at Dadumajra. Very little is recovered.</p></div>
+        <div class="card a-card"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8 8l8 8"/></svg></div><h3>Zero reward</h3><p>Segregating feels like a chore with no visible result.</p></div>
+        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M9 4h6l1 3h3v13H5V7h3z"/><path d="M9 13l2 2 4-4"/></svg></div><h3>RWAs can't prove it</h3><p>Societies must comply but have no tracking or reports.</p></div>
+      </div>
+    </section>
+
+    <!-- 3 WHY NOW -->
+    <section class="slide" data-notes="Why now? Two sets of rules. First, the Solid Waste Management Rules 2026, notified on 27 January 2026 and in force from 1 April 2026. They replace the 2016 rules and make every household separate waste into four streams: wet, dry, sanitary and special care. Second, the E-Waste Management Rules 2022, in force since April 2023, which set rising recycling targets for producers, so certified recyclers need more collected e-waste. Households now have to sort. GreenLoop makes sorting easy and rewarding.">
+      <span class="ghost" aria-hidden="true">2026</span><span class="num">03</span>
+      <span class="tag a-pop">Why now</span>
+      <div class="head"><h2 class="a-up">The rules just <span class="mark">got stricter</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: 1.1fr 1fr;">
+        <div class="card lime a-card">
+          <h3>Solid Waste Management Rules, 2026</h3>
+          <p>In force <b>1 April 2026</b>, replacing the 2016 rules.</p>
+          <div class="pills push" style="margin-top:18px"><span class="pill">Wet</span><span class="pill">Dry</span><span class="pill">Sanitary</span><span class="pill">Special care</span></div>
+          <p style="margin-top:16px">Every household must sort into these <b>4 streams</b>. Big societies carry more responsibility.</p>
+        </div>
+        <div class="card white a-card">
+          <h3>E-Waste (Management) Rules, 2022</h3>
+          <p>In force <b>1 April 2023</b>. Producers must hit recycling targets through registered recyclers.</p>
+          <div class="push" style="display:flex; gap:14px; align-items:flex-end; margin-top:18px">
+            <div class="bar-col" style="--h:60%"><b>60%</b><span>2023-25</span></div>
+            <div class="bar-col" style="--h:70%"><b>70%</b><span>2025-27</span></div>
+            <div class="bar-col" style="--h:80%"><b>80%</b><span>2027-28 on</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="src">Sources: MoEFCC, SWM Rules 2026 (notified 27 Jan 2026); E-Waste (Management) Rules 2022 (notified 2 Nov 2022). Check exact clauses in the gazette.</p>
+    </section>
+
+    <!-- 4 SOLUTION -->
+    <section class="slide" data-notes="Here is the GreenLoop journey. Sign up and get 100 welcome points. List your items: e-waste, plastic, clothes, paper. Pick a pickup slot. Our collector weighs QR-tagged bags at your door. Points are credited straight away, with an impact dashboard. Redeem them at partner stores or for upcycled goods made from the waste. And your society climbs the leaderboard.">
+      <span class="num">04</span>
+      <span class="tag a-pop">The solution</span>
+      <div class="head"><h2 class="a-up">Schedule. Weigh. <span class="mark">Earn</span>. Repeat.</h2></div>
+      <div class="fill journey">
+        <div class="track" aria-hidden="true"></div>
+        <svg class="truck" viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="18" width="34" height="26" rx="6" fill="#c8f53a" stroke="#102a1b" stroke-width="4"/><path d="M38 26h12l8 10v8H38z" fill="#fff" stroke="#102a1b" stroke-width="4" stroke-linejoin="round"/><circle cx="16" cy="48" r="6" fill="#102a1b"/><circle cx="48" cy="48" r="6" fill="#102a1b"/></svg>
+        <div class="card lime a-card"><span class="big">1</span><h3>Sign up</h3><p class="push">100 welcome points</p></div>
+        <div class="card white a-card"><span class="big">2</span><h3>List items</h3><p class="push">E-waste, plastic, clothes, paper</p></div>
+        <div class="card white a-card"><span class="big">3</span><h3>Pick a slot</h3><p class="push">Doorstep, morning or afternoon</p></div>
+        <div class="card kraft a-card"><span class="big">4</span><h3>Weigh at door</h3><p class="push">QR-tagged bags, calibrated scale</p></div>
+        <div class="card sky a-card"><span class="big">5</span><h3>Earn points</h3><p class="push">Plus a live impact dashboard</p></div>
+        <div class="card white a-card"><span class="big">6</span><h3>Redeem</h3><p class="push">Partner stores or upcycled goods</p></div>
+        <div class="card ink a-card"><span class="big">7</span><h3>Climb</h3><p class="push">Society rises on the leaderboard</p></div>
+      </div>
+      <span class="stamp a-pop" style="right:120px; top:70px">+100 pts</span>
+    </section>
+
+    <!-- 5 STP -->
+    <section class="slide" data-notes="Who is it for. Our primary target is eco-aware families aged 25 to 45 in gated societies in Sectors 44 to 54, Manimajra and Mohali: smartphone-first, value convenience and rewards. Secondary target: RWAs, who need compliance and cleaner premises, and who are the gatekeepers to whole societies. Partners: eco brands and CSR teams who want a hyperlocal green audience.">
+      <span class="num">05</span>
+      <span class="tag a-pop">Target market</span>
+      <div class="head"><h2 class="a-up">Built for <span class="mark">gated societies</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: 1.25fr 1fr 1fr; grid-template-rows: 1fr auto;">
+        <div class="card lime a-card"><span class="tag" style="margin-bottom:16px">Primary</span><h3>Eco-aware families, 25 to 45</h3><p class="push">Gated societies in Sectors 44 to 54, Manimajra and Mohali. Smartphone-first, want convenience and rewards.</p></div>
+        <div class="card white a-card"><span class="tag" style="margin-bottom:16px">Secondary</span><h3>RWAs</h3><p class="push">Need compliance and cleaner premises. The gatekeeper to every flat.</p></div>
+        <div class="card kraft a-card"><span class="tag" style="margin-bottom:16px">Partners</span><h3>Brands &amp; CSR</h3><p class="push">Grocers, sustainable fashion and retail chains that want eco-conscious local customers.</p></div>
+        <div class="card ink a-card" style="grid-column: 1 / -1; padding:24px 32px"><p style="font:800 36px var(--display)">“The easiest way to recycle at home and get rewarded for it.”</p></div>
+      </div>
+    </section>
+
+    <!-- 6 COMPETITION -->
+    <section class="slide" data-notes="Who else is out there. Kabadiwalas are familiar and pay cash, but there is no verification or impact data. E-waste recyclers like Attero are certified but mostly B2B. Scrap apps like Scrapuncle and Recykal handle pickups but are purely transactional. NGOs like Goonj have trust but no rewards. Municipal collection is free but unreliable for bulky items. Nobody combines doorstep pickup, rewards and community.">
+      <span class="num">06</span>
+      <span class="tag a-pop">Competition</span>
+      <div class="head"><h2 class="a-up">Lots of pickups. <span class="mark">No loop</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(5, 1fr); grid-template-rows: 1fr auto; gap: 20px; --h3: 33px;">
+        <style>.fill h3 { font-size: var(--h3, 40px); overflow-wrap: anywhere; }</style>
+        <div class="card white a-card"><h3>Kabadiwalas</h3><p style="font-size:24px">✓ Instant cash</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No proof or impact data</p></div>
+        <div class="card white a-card"><h3>E-waste recyclers</h3><p style="font-size:21px;color:var(--muted)">Attero, Namo eWaste</p><p style="font-size:24px">✓ Certified</p><p class="push" style="font-size:24px; color:#b23a1d">✗ Mostly B2B</p></div>
+        <div class="card white a-card"><h3>Scrap apps</h3><p style="font-size:21px;color:var(--muted)">Scrapuncle, Recykal</p><p style="font-size:24px">✓ App pickup</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No community</p></div>
+        <div class="card white a-card"><h3>NGOs</h3><p style="font-size:21px;color:var(--muted)">Goonj</p><p style="font-size:24px">✓ Trust</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No rewards</p></div>
+        <div class="card white a-card"><h3>Municipal</h3><p style="font-size:24px">✓ Free</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No bulky items, no tracking</p></div>
+        <div class="card lime a-card" style="grid-column: 1 / -1; padding:22px 32px"><p style="font:800 34px var(--display)">GreenLoop = doorstep pickup + rewards + community + visible impact.</p></div>
+      </div>
+      <p class="src">Indicative comparison; check current offerings before presenting.</p>
+    </section>
+
+    <!-- 7 MARKETING ANGLE -->
+    <section class="slide" data-notes="This is the heart of our marketing. One: community challenges. Every month we ask: which society recycles the most? Leaderboards and trophies turn recycling into neighbourhood pride. Two: partnerships with the municipal corporation for compliance and with brands that fund rewards. Three: a visible impact tracker, in the app and on society notice boards.">
+      <span class="ghost" aria-hidden="true">#1</span><span class="num">07</span>
+      <span class="tag a-pop">Marketing angle</span>
+      <div class="head"><h2 class="a-up">“Which society <span class="mark">recycles the most</span>?”</h2></div>
+      <div class="fill" style="grid-template-columns: 1.3fr 1fr 1fr; grid-template-rows: 1fr auto;">
+        <div class="card lime a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></div><h3>Community challenges</h3><p class="push">Monthly society-vs-society leaderboard, tower captains and trophies.</p></div>
+        <div class="card white a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M8 12l3 3 5-6"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Partnerships</h3><p class="push">Municipal tie-ups for compliance. Brands fund vouchers and trophies.</p></div>
+        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Impact tracker</h3><p class="push">Kilos, CO2 and water saved, in the app and on society boards.</p></div>
+        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">Diwali e-waste drive</span><span class="pill">Winter wardrobe clean-out</span><span class="pill">Earth Day challenge</span><span class="pill lime">Refer a neighbour, both earn</span></div>
+      </div>
+    </section>
+
+    <!-- 8 USP -->
+    <section class="slide" data-notes="What makes us different. Proof at the door: calibrated scale and QR bags, so every kilo is verified. Rewards people actually want: real brand vouchers, not vague eco points. Competition between societies. And impact you can see.">
+      <span class="num">08</span>
+      <span class="tag a-pop">Why GreenLoop wins</span>
+      <div class="head"><h2 class="a-up">Four things <span class="mark">nobody else</span> does together.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card white a-card"><span class="big">01</span><h3>Proof at the door</h3><p class="push">Calibrated scale, QR-tagged bags. Every kilo verified.</p></div>
+        <div class="card lime a-card"><span class="big">02</span><h3>Rewards that matter</h3><p class="push">Real brand vouchers or upcycled products.</p></div>
+        <div class="card kraft a-card"><span class="big">03</span><h3>Society vs society</h3><p class="push">Leaderboards make recycling social and a habit.</p></div>
+        <div class="card sky a-card"><span class="big">04</span><h3>Visible impact</h3><p class="push">Live kilos, CO2 and water saved per flat.</p></div>
+      </div>
+    </section>
+
+    <!-- 9 MARKETING MIX -->
+    <section class="slide" data-notes="Our marketing mix. Product: pickup service, points wallet, impact dashboard, upcycled goods and an RWA compliance pack. Price: routine pickups are free, express e-waste pickup is 29 to 49 rupees, RWA plans 1,000 to 3,000 a month. Place: app plus doorstep, seeded through societies. Promotion: RWA demos, WhatsApp groups, referrals, local influencers. People: trained collectors as brand ambassadors. Proof: impact certificates and leaderboards.">
+      <span class="num">09</span>
+      <span class="tag a-pop">Marketing mix</span>
+      <div class="head"><h2 class="a-up">4 Ps, plus <span class="mark">People and Proof</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 22px;">
+        <div class="card lime a-card"><h3>Product</h3><p class="push" style="font-size:25px">Pickup, points wallet, impact dashboard, upcycled goods, RWA pack.</p></div>
+        <div class="card white a-card"><h3>Price</h3><p class="push" style="font-size:25px">Routine pickup free. Express Rs 29 to 49. RWA plans Rs 1,000 to 3,000 a month.</p></div>
+        <div class="card white a-card"><h3>Place</h3><p class="push" style="font-size:25px">App plus doorstep, seeded society by society through RWAs.</p></div>
+        <div class="card white a-card"><h3>Promotion</h3><p class="push" style="font-size:25px">RWA demos, WhatsApp groups, referrals, local influencers.</p></div>
+        <div class="card kraft a-card"><h3>People</h3><p class="push" style="font-size:25px">Trained collectors as ambassadors, a champion per tower.</p></div>
+        <div class="card sky a-card"><h3>Proof</h3><p class="push" style="font-size:25px">Impact certificates, leaderboards, audit reports.</p></div>
+      </div>
+    </section>
+
+    <!-- 10 REVENUE -->
+    <section class="slide" data-notes="How we make money. Three main streams: selling recovered materials to certified recyclers, selling upcycled products like bags and decor made by artisan partners, and corporate sponsorships that fund vouchers and trophies from CSR budgets. Two smaller streams: RWA subscription plans and express pickup fees. We stay asset-light: partner recyclers and artisans, no owned factories.">
+      <span class="ghost" aria-hidden="true">₹</span><span class="num">10</span>
+      <span class="tag a-pop">Revenue</span>
+      <div class="head"><h2 class="a-up">Waste in. <span class="mark">Worth out</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr auto;">
+        <div class="card lime a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 7l8-4 8 4-8 4z"/><path d="M4 7v10l8 4 8-4V7"/></svg></div><h3>Recovered materials</h3><p class="push">Sorted metals, PET, paper and textiles sold to certified recyclers.</p></div>
+        <div class="card kraft a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 13H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></div><h3>Upcycled products</h3><p class="push">Bags, planters and decor by artisan partners. Rs 199 to 799.</p></div>
+        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M10 21v-6h4v6"/></svg></div><h3>Corporate sponsorships</h3><p class="push">Brands fund vouchers, trophies and drives from CSR budgets.</p></div>
+        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">+ RWA plans Rs 1,000 to 3,000 / month</span><span class="pill">+ Express pickup Rs 29 to 49</span><span class="pill lime">Asset-light: no owned factories</span></div>
+      </div>
+    </section>
+
+    <!-- 11 GTM -->
+    <section class="slide" data-notes="Go-to-market in three steps. Months 0 to 3, seed: 3 to 5 pilot societies, free drives, RWA pitches, WhatsApp onboarding. Months 3 to 9, densify: cover Sectors 44 to 54 and Manimajra, switch on referrals, sign the first voucher partners and paid RWA plans. Months 9 to 18, go Tricity: Mohali and Panchkula, sponsorships, an online upcycled store and municipal tie-ups.">
+      <span class="num">11</span>
+      <span class="tag a-pop">Go-to-market</span>
+      <div class="head"><h2 class="a-up">Seed. Densify. <span class="mark">Tricity</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr auto;">
+        <div class="card lime a-card"><span class="tag" style="margin-bottom:16px">Months 0 to 3</span><h3>Seed</h3><p class="push">3 to 5 pilot societies. Free drives, RWA pitches, WhatsApp onboarding.</p></div>
+        <div class="card white a-card"><span class="tag" style="margin-bottom:16px">Months 3 to 9</span><h3>Densify</h3><p class="push">Sectors 44 to 54 and Manimajra. Referrals, voucher partners, paid RWA plans.</p></div>
+        <div class="card sky a-card"><span class="tag" style="margin-bottom:16px">Months 9 to 18</span><h3>Tricity</h3><p class="push">Mohali and Panchkula. Sponsorships, upcycled store online, municipal tie-ups.</p></div>
+        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">RWA meetings</span><span class="pill">WhatsApp &amp; Instagram</span><span class="pill">Notice boards &amp; bins</span><span class="pill">Local influencers</span><span class="pill">College eco clubs</span></div>
+      </div>
+    </section>
+
+    <!-- 12 KPIs -->
+    <section class="slide" data-notes="How we will know it is working. Acquisition: societies onboarded and cost per household. Engagement: pickups per household per month and streaks. Operations: kilos per trip and cost per pickup. Revenue: material margin, RWA plan revenue, sponsorships. Impact: tonnes diverted, CO2 and water saved. Brand: referral share and leaderboard participation.">
+      <span class="num">12</span>
+      <span class="tag a-pop">Success metrics</span>
+      <div class="head"><h2 class="a-up">What we'll <span class="mark">measure</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 22px;">
+        <div class="card white a-card"><h3>Acquisition</h3><p class="push" style="font-size:25px">Societies onboarded, households signed up, cost per household</p></div>
+        <div class="card lime a-card"><h3>Engagement</h3><p class="push" style="font-size:25px">Pickups per household per month, active users, streaks</p></div>
+        <div class="card white a-card"><h3>Operations</h3><p class="push" style="font-size:25px">Kg per trip, cost per pickup, on-time rate</p></div>
+        <div class="card kraft a-card"><h3>Revenue</h3><p class="push" style="font-size:25px">Material margin, RWA plan revenue, sponsorship income</p></div>
+        <div class="card sky a-card"><h3>Impact</h3><p class="push" style="font-size:25px">Tonnes diverted, CO2 avoided, litres of water saved</p></div>
+        <div class="card white a-card"><h3>Brand</h3><p class="push" style="font-size:25px">Referral share, repeat rate, leaderboard participation</p></div>
+      </div>
+    </section>
+
+    <!-- 13 CLOSE -->
+    <section class="slide dark" data-notes="To close: GreenLoop turns waste into worth, one doorstep at a time. Our next steps: finalise pilot societies, sign the first voucher partners, start RWA outreach, and add our survey results. Thank you, happy to take questions.">
+      <span class="num">13</span>
+      <span class="tag a-pop">Thank you</span>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center">
+        <h2 class="a-up" style="font-size:140px; max-width:1400px">Turn waste into worth, <span class="mark">one doorstep at a time.</span></h2>
+        <div class="pills a-up" style="margin-top:56px"><span class="pill lime">Finalise pilot societies</span><span class="pill">Sign first voucher partners</span><span class="pill">Launch RWA outreach</span><span class="pill">Add survey insights</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<nav class="bar" aria-label="Presentation controls">
+  <button type="button" id="b-prev" data-go="prev" aria-label="Previous slide">&larr;</button>
+  <span class="count" aria-live="polite">1 / 13</span>
+  <button type="button" id="b-next" data-go="next" aria-label="Next slide">&rarr;</button>
+  <button type="button" id="b-over" data-go="overview">Overview</button>
+  <button type="button" id="b-notes" data-go="notes" aria-pressed="false">Notes</button>
+  <button type="button" id="b-motion" data-go="motion" aria-pressed="true">Motion on</button>
+  <button type="button" id="b-full" data-go="full">Full screen</button>
+</nav>
+<aside class="notes" hidden></aside>
+<p class="hint">&larr; &rarr; or space to move &middot; O overview &middot; N notes &middot; F full screen</p>
+
+<style>
+.bar-col { flex: 1; height: 220px; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; text-align: center; }
+.bar-col b { font: 800 44px var(--display); }
+.bar-col span { font: 600 20px var(--body); color: var(--muted); margin-top: 8px; }
+.bar-col::before { content: ''; order: 1; height: var(--h); background: var(--leaf); border: 5px solid var(--ink); border-radius: 18px 18px 6px 6px; margin-top: 8px; }
+.bar-col b { order: 0; } .bar-col span { order: 2; }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function () {
+  const world = document.querySelector('.world');
+  const viewport = document.querySelector('.viewport');
+  const slides = [...document.querySelectorAll('.slide')];
+  const counter = document.querySelector('.count');
+  const notesEl = document.querySelector('.notes');
+  const notesBtn = document.getElementById('b-notes');
+  const motionBtn = document.getElementById('b-motion');
+  // Motion is on by default, even if the computer asks for reduced motion (that setting is often
+  // switched on in Windows without people knowing). The Motion button turns it off.
+  let motion = true;
+  try { motion = localStorage.getItem('greenloop:motion') !== 'off'; } catch (e) {}
+  const SCALE = 0.3;
+  const CX = 800, CY = 450, RX = 2050, RY = 1290;
+  const BAR = 84; // keep slides clear of the control bar
+
+  // Split the cover title into letters so they can bounce in one by one.
+  document.querySelectorAll('.split').forEach((h) => {
+    const walk = (node) => [...node.childNodes].forEach((c) => {
+      if (c.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        [...c.textContent].forEach((ch) => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; frag.append(s); });
+        c.replaceWith(frag);
+      } else walk(c);
+    });
+    walk(h);
+  });
+
+  const views = slides.map((s, i) => {
+    s.setAttribute('aria-roledescription', 'slide');
+    s.setAttribute('aria-label', (i + 1) + ' of ' + slides.length);
+    if (i === 0) return { cx: CX, cy: CY, w: 1800, h: 1000, rot: 0 };
+    const a = -Math.PI / 2 + (i - 1) * (2 * Math.PI / (slides.length - 1));
+    const cx = CX + RX * Math.cos(a), cy = CY + RY * Math.sin(a);
+    const rot = [-3, 2, -2, 3, -1.5, 2.5][(i - 1) % 6];
+    s.style.transform = `translate(${cx - 800}px, ${cy - 450}px) rotate(${rot}deg) scale(${SCALE})`;
+    return { cx, cy, w: 1600 * SCALE * 1.04, h: 900 * SCALE * 1.04, rot };
+  });
+  const OVERVIEW = { cx: CX, cy: CY, w: 2 * RX + 1600 * SCALE + 200, h: 2 * RY + 900 * SCALE + 200, rot: 0 };
+
+  // Entrance animations, built once per slide and replayed when the camera lands.
+  const entrances = slides.map((s) => {
+    const tl = gsap.timeline({ paused: true });
+    let at = 0.02;
+    s.querySelectorAll('.a-pop, .ch, .a-up, .a-card, .truck, .mark, .bar-col').forEach((el, n) => {
+      if (el.classList.contains('ch')) {
+        tl.from(el, { y: -140, rotation: (n % 2 ? 20 : -20), opacity: 0, duration: 0.6, ease: 'bounce.out' }, at); at += 0.05;
+      } else if (el.classList.contains('a-pop')) {
+        tl.from(el, { scale: 0, rotation: -25, opacity: 0, duration: 0.6, ease: 'back.out(2.6)' }, at); at += 0.12;
+      } else if (el.classList.contains('a-card')) {
+        tl.from(el, { y: 160, rotation: (n % 2 ? 6 : -6), scale: 0.7, opacity: 0, duration: 0.65, ease: 'back.out(1.7)' }, at); at += 0.09;
+        const icon = el.querySelector('.icon');
+        if (icon) tl.from(icon, { scale: 0, rotation: 180, duration: 0.5, ease: 'back.out(2)' }, at + 0.2);
+        const big = el.querySelector('.big');
+        if (big) tl.from(big, { scale: 2.2, opacity: 0, duration: 0.45, ease: 'power3.out' }, at + 0.15);
+      } else if (el.classList.contains('mark')) {
+        tl.from(el, { backgroundSize: '0% 34%', duration: 0.6, ease: 'power2.out' }, 0.45);
+      } else if (el.classList.contains('bar-col')) {
+        tl.from(el, { scaleY: 0, transformOrigin: '50% 100%', duration: 0.7, ease: 'back.out(1.6)' }, at + 0.3); at += 0.12;
+      } else if (el.classList.contains('truck')) {
+        tl.fromTo(el, { left: '-6%' }, { left: '96%', duration: 2.6, ease: 'power1.inOut' }, 0.5);
+      } else {
+        tl.from(el, { y: 50, opacity: 0, duration: 0.6, ease: 'power3.out' }, at); at += 0.12;
+      }
+    });
+    return tl.progress(1);
+  });
+
+  const cam = { cx: OVERVIEW.cx, cy: OVERVIEW.cy, k: 0.1, rot: 0 };
+  let current = -2, flight = null;
+  const fit = (v) => Math.min(innerWidth / v.w, (innerHeight - BAR) / v.h);
+  const render = () => {
+    world.style.transform = `translate(${innerWidth / 2}px, ${(innerHeight - BAR) / 2}px) rotate(${-cam.rot}deg) scale(${cam.k}) translate(${-cam.cx}px, ${-cam.cy}px)`;
+  };
+
+  function flyTo(v, onArrive) {
+    if (flight) flight.kill();
+    const from = { ...cam };
+    const to = { cx: v.cx, cy: v.cy, k: fit(v), rot: v.rot };
+    if (!motion) { Object.assign(cam, to); render(); onArrive && onArrive(); return; }
+    const dx = Math.abs(to.cx - from.cx), dy = Math.abs(to.cy - from.cy);
+    const outK = 0.8 * Math.min(innerWidth / (dx + 700), innerHeight / (dy + 500));
+    const bump = Math.max(0, Math.log(Math.min(from.k, to.k)) - Math.log(outK));
+    const lnA = Math.log(from.k), lnB = Math.log(to.k);
+    const st = { t: 0 };
+    let arrived = false;
+    world.style.willChange = 'transform';
+    flight = gsap.to(st, {
+      t: 1, duration: bump > 0.2 ? 1.4 : 0.9, ease: 'power2.inOut',
+      onUpdate() {
+        const t = st.t;
+        cam.cx = from.cx + (to.cx - from.cx) * t;
+        cam.cy = from.cy + (to.cy - from.cy) * t;
+        cam.rot = from.rot + (to.rot - from.rot) * t;
+        cam.k = Math.exp(lnA + (lnB - lnA) * t - bump * Math.sin(Math.PI * t));
+        render();
+        if (!arrived && t > 0.7) { arrived = true; onArrive && onArrive(); }
+      },
+      onComplete() { world.style.willChange = 'auto'; if (!arrived && onArrive) onArrive(); },
+    });
+  }
+
+  function go(i) {
+    i = Math.max(-1, Math.min(slides.length - 1, i));
+    if (i === current) return;
+    entrances.forEach((tl) => tl.progress(1));
+    current = i;
+    document.body.classList.toggle('is-overview', i < 0);
+    counter.textContent = i < 0 ? 'Overview' : (i + 1) + ' / ' + slides.length;
+    slides.forEach((s, n) => s.toggleAttribute('aria-current', n === i));
+    try { history.replaceState(null, '', i < 0 ? '#overview' : '#' + (i + 1)); } catch (e) {}
+    notesEl.textContent = i >= 0 ? (slides[i].dataset.notes || '') : 'Pick a slide to see its notes.';
+    flyTo(i < 0 ? OVERVIEW : views[i], () => { if (i >= 0 && motion) entrances[i].restart(); });
+  }
+  const next = () => go(current < 0 ? 0 : current + 1);
+  const prev = () => go(current <= 0 ? 0 : current - 1);
+  const toggleNotes = () => { notesEl.hidden = !notesEl.hidden; notesBtn.setAttribute('aria-pressed', String(!notesEl.hidden)); };
+  const toggleFull = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
+  };
+  const applyMotion = () => {
+    document.body.classList.toggle('no-motion', !motion);
+    motionBtn.textContent = motion ? 'Motion on' : 'Motion off';
+    motionBtn.setAttribute('aria-pressed', String(motion));
+  };
+  const toggleMotion = () => {
+    motion = !motion; applyMotion();
+    try { localStorage.setItem('greenloop:motion', motion ? 'on' : 'off'); } catch (e) {}
+  };
+  applyMotion();
+
+  document.querySelector('.bar').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-go]'); if (!b) return;
+    ({ prev, next, overview: () => go(current < 0 ? 0 : -1), notes: toggleNotes, motion: toggleMotion, full: toggleFull })[b.dataset.go]();
+  });
+  addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (['arrowright', 'arrowdown', 'pagedown', ' ', 'enter'].includes(k)) next();
+    else if (['arrowleft', 'arrowup', 'pageup', 'backspace'].includes(k)) prev();
+    else if (k === 'home') go(0);
+    else if (k === 'end') go(slides.length - 1);
+    else if (k === 'o' || (k === 'escape' && !document.fullscreenElement)) go(current < 0 ? 0 : -1);
+    else if (k === 'n') toggleNotes();
+    else if (k === 'f') toggleFull();
+    else return;
+    e.preventDefault();
+  });
+  let down = null;
+  viewport.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; });
+  viewport.addEventListener('pointerup', (e) => {
+    if (!down) return;
+    const dx = e.clientX - down.x, moved = Math.hypot(dx, e.clientY - down.y); down = null;
+    if (moved > 50 && Math.abs(dx) > 50) return dx < 0 ? next() : prev();
+    if (moved > 10) return;
+    if (current < 0) { const hit = e.target.closest('.slide'); go(hit ? slides.indexOf(hit) : 0); } else next();
+  });
+  addEventListener('resize', () => {
+    if (flight) flight.kill();
+    const v = current < 0 ? OVERVIEW : views[current];
+    Object.assign(cam, { cx: v.cx, cy: v.cy, k: fit(v), rot: v.rot }); render(); world.style.willChange = 'auto';
+  });
+  let idle;
+  addEventListener('pointermove', () => {
+    document.body.classList.remove('is-idle'); clearTimeout(idle);
+    idle = setTimeout(() => document.body.classList.add('is-idle'), 2500);
+  });
+
+  cam.k = fit(OVERVIEW); render();
+  const h = location.hash.slice(1);
+  const start = h === 'overview' ? -1 : Math.max(1, Number(h) || 1) - 1;
+  setTimeout(() => go(start), motion ? 600 : 0);
+})();
+</script>
+
+</body>
+</html>
