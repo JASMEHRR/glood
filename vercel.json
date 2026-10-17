@@ -3,6 +3,9 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/greenloop", "destination": "/p/greenloop-7q4m/", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
