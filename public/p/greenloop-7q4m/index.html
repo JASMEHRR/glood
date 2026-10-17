@@ -37,6 +37,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
 .loop-path { position: absolute; pointer-events: none; overflow: visible; }
 .flow { animation: flow 6s linear infinite; }
 @keyframes flow { to { stroke-dashoffset: -480; } }
+.flying .spin, .flying .orbit, .flying .bob { animation-play-state: paused !important; }
 .no-motion .flow, .no-motion .spin, .no-motion .orbit, .no-motion .bob { animation: none !important; }
 
 /* ---------- slides: 1600 x 900 ---------- */
@@ -66,6 +67,10 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
 .card.ink h3 { color: var(--lime); }
 .card:not(.ink) { color: var(--ink); } /* light cards keep dark text on the dark slides */
 .chart.card { justify-content: center; }
+.shots { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 16px; }
+.shots.two { grid-template-columns: 1fr; }
+.shot { padding: 8px; justify-content: center; align-items: center; background: #fff; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: contain; }
 .card .big { font: 800 96px/0.85 var(--display); letter-spacing: -0.05em; margin-bottom: 12px; }
 .card .push { margin-top: auto; }
 .card p.s, .card li.s { font-size: 22px; }
@@ -168,7 +173,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
   <div class="world">
     <svg class="loop-path" aria-hidden="true">
       <ellipse class="glow" fill="none" stroke="#c8f53a" stroke-width="34" opacity=".55"/>
-      <ellipse class="flow" fill="none" stroke="#1f9d55" stroke-width="22" stroke-dasharray="70 50" stroke-linecap="round"/>
+      <ellipse fill="none" stroke="#1f9d55" stroke-width="22" stroke-dasharray="70 50" stroke-linecap="round"/>
     </svg>
 
     <!-- COVER -->
@@ -254,11 +259,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
       <span class="num">04</span>
       <span class="tag a-pop">Survey · who answered</span>
       <div class="head"><h2 class="a-up">83 voices, <span class="mark">mixed habits</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(3, 1fr);">
-        <div class="card white a-card chart" data-chart="q1"></div>
-        <div class="card white a-card chart" data-chart="q2"></div>
-        <div class="card white a-card chart" data-chart="q3"></div>
-      </div>
+      <div class="fill shots"><div class="card white a-card shot"><img src="shots/q01.png" alt="Google Forms chart, question 1"></div><div class="card white a-card shot"><img src="shots/q02.png" alt="Google Forms chart, question 2"></div><div class="card white a-card shot"><img src="shots/q03.png" alt="Google Forms chart, question 3"></div><div class="card lime a-card"><h3>83 responses</h3><p class="s push">Convenience sample: young (45 aged 18 to 24) and mostly independent houses. Directional, not representative.</p></div></div>
       <p class="src">Google Forms, n = 83. Convenience sample: directional, not representative of Tricity households.</p>
     </section>
 
@@ -266,21 +267,18 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
     <section class="slide" data-notes="Eight statements rated 1 to 5. The green part is people who agreed, 4 or 5. Strongest: 69 of 83 would be interested in GreenLoop with convenient doorstep collection, 68 would be more likely to use it if their society or community partnered, and 66 say doorstep service would make disposal easier, want one pickup for all materials, and are concerned about environmental impact. 64 say knowing where waste is processed would increase trust. Rewards motivate 60. And 46 of 83 say disposing responsibly is difficult today, which is the problem we solve.">
       <span class="num">05</span>
       <span class="tag a-pop">Survey · attitudes</span>
-      <div class="head" style="margin-bottom:18px"><h2 class="a-up" style="font-size:80px"><span class="mark">69 of 83</span> would use doorstep pickup.</h2></div>
-      <div class="fill" style="grid-template-rows: 1fr auto; gap: 14px;">
-        <div class="chart a-up" data-likert style="gap:10px"></div>
-        <div class="legend a-up"><span><i style="background:var(--l1)"></i>1 Strongly disagree</span><span><i style="background:var(--l2)"></i>2</span><span><i style="background:var(--l3)"></i>3</span><span><i style="background:var(--l4)"></i>4</span><span><i style="background:var(--l5)"></i>5 Strongly agree</span><span class="nnote">Right: number who answered 4 or 5, out of 83</span></div>
-      </div>
+      <div class="head" style="margin-bottom:18px"><h2 class="a-up" style="font-size:80px">People care, and <span class="mark">want it easier</span>.</h2></div>
+      <div class="fill shots"><div class="card white a-card shot"><img src="shots/q04.png" alt="Google Forms chart, question 4"></div><div class="card white a-card shot"><img src="shots/q05.png" alt="Google Forms chart, question 5"></div><div class="card white a-card shot"><img src="shots/q06.png" alt="Google Forms chart, question 6"></div><div class="card white a-card shot"><img src="shots/q07.png" alt="Google Forms chart, question 7"></div></div>
     </section>
+
+    <!-- 04b2 SURVEY: ATTITUDES 2 --><section class="slide" data-notes="Four more statements. Rewards would motivate 60 of 83 to recycle more. Knowing where waste is processed would increase trust for 64. 69 would use GreenLoop with convenient doorstep collection, the strongest result. And 68 would be more likely to use it if their society or community partnered with it."><span class="tag a-pop">Survey · attitudes</span><div class="head" style="margin-bottom:18px"><h2 class="a-up" style="font-size:80px"><span class="mark">69 of 83</span> would use doorstep pickup.</h2></div><div class="fill shots"><div class="card white a-card shot"><img src="shots/q08.png" alt="Google Forms chart, question 8"></div><div class="card white a-card shot"><img src="shots/q09.png" alt="Google Forms chart, question 9"></div><div class="card white a-card shot"><img src="shots/q10.png" alt="Google Forms chart, question 10"></div><div class="card white a-card shot"><img src="shots/q11.png" alt="Google Forms chart, question 11"></div></div></section>
 
     <!-- 04c SURVEY: PRICING & MOTIVATION -->
     <section class="slide" data-notes="Pricing: the biggest group, 31 of 83, wants free collection paid for by recycling revenue and partnerships. 16 prefer pay per pickup, 14 free basic with paid extras, 11 a monthly subscription, and 11 are not sure. So we test a free basic model against real route costs. Motivation: environmental protection, 28, and convenience, 27, lead. Transparency matters to 17. Rewards on their own were the top pick for only 8, so rewards support the offer but are not the headline.">
       <span class="num">06</span>
       <span class="tag a-pop">Survey · price &amp; motivation</span>
       <div class="head"><h2 class="a-up">Free first. <span class="mark">Planet and ease</span> win.</h2></div>
-      <div class="fill" style="grid-template-columns: 1fr 1fr;">
-        <div class="card white a-card chart" data-chart="q12"></div>
-        <div class="card white a-card chart" data-chart="q13"></div>
+      <div class="fill shots two"><div class="card white a-card shot"><img src="shots/q12.png" alt="Google Forms chart, question 12"></div><div class="card white a-card shot"><img src="shots/q13.png" alt="Google Forms chart, question 13"></div>
       </div>
       <p class="src">Google Forms, n = 83. Single-choice questions.</p>
     </section>
@@ -290,9 +288,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
       <span class="num">07</span>
       <span class="tag a-pop">Survey · channels &amp; concerns</span>
       <div class="head"><h2 class="a-up">Community spreads it. <span class="mark">Privacy</span> worries it.</h2></div>
-      <div class="fill" style="grid-template-columns: 1fr 1fr;">
-        <div class="card white a-card chart" data-chart="q14"></div>
-        <div class="card white a-card chart" data-chart="q15"></div>
+      <div class="fill shots two"><div class="card white a-card shot"><img src="shots/q14.png" alt="Google Forms chart, question 14"></div><div class="card white a-card shot"><img src="shots/q15.png" alt="Google Forms chart, question 15"></div>
       </div>
       <p class="src">Google Forms, n = 83. Single-choice questions.</p>
     </section>
@@ -389,23 +385,6 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
         <div class="card white a-card"><h3>Promotion</h3><p class="s push">Social media, referrals, WhatsApp, environmental campaigns.</p></div>
         <div class="card kraft a-card"><h3>People</h3><p class="s push">Collectors trained to explain sorting and confirm weights.</p></div>
         <div class="card sky a-card"><h3>Physical evidence</h3><p class="s push">Clear website, pickup confirmation, impact dashboard, partner proof.</p></div>
-      </div>
-    </section>
-
-    <!-- 11 WEBSITE & DIGITAL -->
-    <section class="slide" data-notes="The website has one job: turn interest into a booking, and build trust. Core pages: home, how it works, accepted materials, service areas, rewards and pricing, process transparency, FAQs, contact and privacy. One main call to action: Book a pickup, or Join the pilot. We measure visits by source, area checks, sign-ups, booking completion, drop-off steps and completed pickups. A screenshot of the customer website goes here once it is ready.">
-      <span class="num">15</span>
-      <span class="tag a-pop">Website &amp; digital journey</span>
-      <div class="head"><h2 class="a-up">One site, one action: <span class="mark">Book a pickup</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: 1.2fr 1fr;">
-        <div class="card white a-card" style="justify-content:center; align-items:center; text-align:center; border-style:dashed">
-          <p class="todo" style="font-size:24px">Customer website screenshot goes here</p>
-          <p class="s" style="margin-top:16px; color:var(--muted)">Add once the booking site is live and tested</p>
-        </div>
-        <div style="display:grid; gap:18px; grid-template-rows: 1fr 1fr">
-          <div class="card lime a-card"><h3>Core pages</h3><p class="s">Home · How it works · What we accept · Areas · Rewards &amp; pricing · Process transparency · FAQ · Privacy</p></div>
-          <div class="card sky a-card"><h3>We measure</h3><p class="s">Visits by source → area checks → sign-ups → booking completion → completed pickups</p></div>
-        </div>
       </div>
     </section>
 
@@ -581,6 +560,9 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
     walk(h);
   });
 
+  // Number every slide by its position, so the corner number always matches the counter.
+  slides.forEach((s, i) => { if (i === 0) return; let n = s.querySelector('.num'); if (!n) { n = document.createElement('span'); n.className = 'num'; s.prepend(n); } n.textContent = String(i + 1).padStart(2, '0'); });
+
   const views = slides.map((s, i) => {
     s.setAttribute('aria-roledescription', 'slide');
     s.setAttribute('aria-label', (i + 1) + ' of ' + slides.length);
@@ -639,6 +621,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
     const st = { t: 0 };
     let arrived = false;
     world.style.willChange = 'transform';
+    document.body.classList.add('flying');
     flight = gsap.to(st, {
       t: 1, duration: bump > 0.2 ? 1.4 : 0.9, ease: 'power2.inOut',
       onUpdate() {
@@ -650,7 +633,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
         render();
         if (!arrived && t > 0.7) { arrived = true; onArrive && onArrive(); }
       },
-      onComplete() { world.style.willChange = 'auto'; if (!arrived && onArrive) onArrive(); },
+      onComplete() { world.style.willChange = 'auto'; document.body.classList.remove('flying'); if (!arrived && onArrive) onArrive(); },
     });
   }
 
@@ -728,5 +711,4 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
 })();
 </script>
 
-</body>
-</html>
+</body></html>
