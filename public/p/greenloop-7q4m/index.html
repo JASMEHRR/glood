@@ -7,11 +7,12 @@
 <title>GreenLoop Pitch</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: one zooming canvas. The cover sits in the middle of a recycling loop; the 12 content
-   slides ride the loop around it. The camera flies between them, waste items orbit the cover, the
-   loop's dashes flow, and every slide builds in when the camera lands. */
+/* Layout: one zooming canvas. The cover sits in the middle of a recycling loop; the content
+   slides ride the loop around it. The camera flies between them, waste items orbit the cover,
+   the loop's dashes flow, and every slide builds in when the camera lands. Survey charts are
+   drawn from the Google Form counts (n = 83) and grow in on arrival. */
 :root {
   --paper: #eef7e9;
   --ink: #102a1b;
@@ -22,6 +23,7 @@
   --kraft: #f2dfb8;
   --white: #ffffff;
   --muted: #3d5a47;
+  --l1: #ff6a45; --l2: #ffb199; --l3: #d9dfd6; --l4: #9fdcab; --l5: #1f9d55;
   --display: 'Bricolage Grotesque', 'Arial Rounded MT Bold', system-ui, sans-serif;
   --body: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme: light;
@@ -32,59 +34,95 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
   background: radial-gradient(circle at 18% 12%, rgba(200,245,58,.4), transparent 42%),
               radial-gradient(circle at 86% 84%, rgba(124,200,255,.35), transparent 46%), var(--paper); }
 .world { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
-.loop-path { position: absolute; left: -1800px; top: -1400px; width: 5200px; height: 3700px; pointer-events: none; overflow: visible; }
+.loop-path { position: absolute; pointer-events: none; overflow: visible; }
 .flow { animation: flow 6s linear infinite; }
 @keyframes flow { to { stroke-dashoffset: -480; } }
 .no-motion .flow, .no-motion .spin, .no-motion .orbit, .no-motion .bob { animation: none !important; }
 
 /* ---------- slides: 1600 x 900 ---------- */
 .slide { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; box-sizing: border-box;
-  padding: 64px 84px 70px; background: var(--white); border-radius: 52px; transform-origin: 50% 50%;
+  padding: 60px 80px 64px; background: var(--white); border-radius: 52px; transform-origin: 50% 50%;
   box-shadow: 0 0 0 7px var(--ink), 20px 24px 0 7px var(--ink); overflow: hidden;
   display: flex; flex-direction: column; }
 .slide.cover { background: transparent; box-shadow: none; overflow: visible; padding: 0; }
 .slide.dark { background: var(--ink); color: var(--white); }
 .is-overview .slide:not(.cover) { cursor: zoom-in; }
-.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 34px; }
-.slide h2 { font: 800 104px/0.94 var(--display); letter-spacing: -0.04em; margin: 0; text-wrap: balance; max-width: 1250px; }
-.slide h3 { font: 800 40px/1.04 var(--display); letter-spacing: -0.02em; margin: 0 0 12px; }
-.slide p, .slide li { font: 500 28px/1.38 var(--body); margin: 0; }
-.tag { display: inline-flex; align-self: flex-start; font: 800 21px var(--body); letter-spacing: .1em; text-transform: uppercase;
-  background: var(--ink); color: var(--lime); padding: 10px 20px; border-radius: 999px; margin-bottom: 22px; }
+.head { margin-bottom: 28px; }
+.slide h2 { font: 800 92px/0.95 var(--display); letter-spacing: -0.04em; margin: 0; text-wrap: balance; max-width: 1300px; }
+.slide h3 { font: 800 36px/1.05 var(--display); letter-spacing: -0.02em; margin: 0 0 10px; }
+.slide p, .slide li { font: 500 25px/1.38 var(--body); margin: 0; }
+.slide ul { margin: 0; padding-left: 26px; display: grid; gap: 8px; }
+.tag { display: inline-flex; align-self: flex-start; font: 800 20px var(--body); letter-spacing: .1em; text-transform: uppercase;
+  background: var(--ink); color: var(--lime); padding: 9px 18px; border-radius: 999px; margin-bottom: 18px; }
 .dark .tag { background: var(--lime); color: var(--ink); }
 .mark { background-image: linear-gradient(var(--lime), var(--lime)); background-repeat: no-repeat;
   background-position: 0 86%; background-size: 100% 34%; padding: 0 6px; }
 .dark .mark { color: var(--lime); background: none; }
-.fill { flex: 1; min-height: 0; display: grid; gap: 26px; }
-.card { background: var(--paper); border: 5px solid var(--ink); border-radius: 34px; padding: 30px 32px;
-  display: flex; flex-direction: column; min-width: 0; position: relative; }
+.fill { flex: 1; min-height: 0; display: grid; gap: 22px; }
+.card { background: var(--paper); border: 5px solid var(--ink); border-radius: 30px; padding: 24px 28px;
+  display: flex; flex-direction: column; min-width: 0; min-height: 0; position: relative; }
 .card.lime { background: var(--lime); } .card.kraft { background: var(--kraft); } .card.sky { background: var(--sky); }
 .card.coral { background: var(--coral); } .card.ink { background: var(--ink); color: var(--white); } .card.white { background: var(--white); }
 .card.ink h3 { color: var(--lime); }
-.card .big { font: 800 120px/0.85 var(--display); letter-spacing: -0.05em; margin-bottom: 14px; }
+.card:not(.ink) { color: var(--ink); } /* light cards keep dark text on the dark slides */
+.chart.card { justify-content: center; }
+.card .big { font: 800 96px/0.85 var(--display); letter-spacing: -0.05em; margin-bottom: 12px; }
 .card .push { margin-top: auto; }
-.icon { width: 76px; height: 76px; border-radius: 24px; display: grid; place-items: center; border: 5px solid var(--ink);
-  background: var(--white); margin-bottom: 18px; flex: none; }
-.icon svg { width: 42px; height: 42px; stroke: var(--ink); stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.stamp { position: absolute; font: 800 34px/1 var(--display); background: var(--lime); border: 5px solid var(--ink); border-radius: 999px;
-  padding: 18px 28px; transform: rotate(-8deg); box-shadow: 7px 7px 0 var(--ink); z-index: 2; }
-.pill { font: 700 24px var(--body); color: var(--ink); border: 4px solid var(--ink); border-radius: 999px; padding: 12px 24px; background: var(--white); white-space: nowrap; }
+.card p.s, .card li.s { font-size: 22px; }
+.icon { width: 64px; height: 64px; border-radius: 20px; display: grid; place-items: center; border: 5px solid var(--ink);
+  background: var(--white); margin-bottom: 14px; flex: none; }
+.icon svg { width: 36px; height: 36px; stroke: var(--ink); stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.stamp { position: absolute; font: 800 30px/1 var(--display); background: var(--lime); border: 5px solid var(--ink); border-radius: 999px;
+  padding: 16px 24px; transform: rotate(-8deg); box-shadow: 7px 7px 0 var(--ink); z-index: 2; }
+.pill { font: 700 22px var(--body); color: var(--ink); border: 4px solid var(--ink); border-radius: 999px; padding: 10px 20px; background: var(--white); white-space: nowrap; }
 .pill.lime { background: var(--lime); }
-.pills { display: flex; gap: 14px; flex-wrap: wrap; }
-.src { font: 500 17px var(--body); color: var(--muted); margin-top: 16px; }
-.num { position: absolute; right: 44px; top: 40px; font: 800 26px var(--display); color: var(--leaf); }
+.pills { display: flex; gap: 12px; flex-wrap: wrap; }
+.src { font: 500 17px var(--body); color: var(--muted); margin-top: 12px; }
+.dark .src { color: #b9d3c2; }
+.num { position: absolute; right: 44px; top: 38px; font: 800 26px var(--display); color: var(--leaf); }
 .dark .num { color: var(--lime); }
-.ghost { position: absolute; right: -40px; bottom: -120px; font: 800 520px/1 var(--display); letter-spacing: -0.06em;
+.ghost { position: absolute; right: -40px; bottom: -120px; font: 800 480px/1 var(--display); letter-spacing: -0.06em;
   color: rgba(31,157,85,.07); pointer-events: none; }
+.status { display: inline-block; font: 800 15px var(--body); letter-spacing: .08em; text-transform: uppercase; border: 3px solid var(--ink);
+  border-radius: 999px; padding: 3px 10px; background: var(--white); margin-left: 8px; vertical-align: middle; }
+.todo { display: inline-block; font: 700 20px var(--body); color: var(--muted); border: 3px dashed var(--muted); border-radius: 12px; padding: 4px 10px; }
+.flowline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.flowline .pill { font-size: 24px; }
+.flowline .arrow { font: 800 34px var(--display); color: var(--leaf); }
+
+/* charts */
+.chart { display: grid; gap: 12px; align-content: start; }
+.chart .q { font: 700 21px/1.25 var(--body); margin-bottom: 4px; }
+.row { display: grid; grid-template-columns: 210px 1fr 110px; gap: 12px; align-items: center; }
+.row .lab { font: 600 19px/1.15 var(--body); }
+.row .trk { height: 30px; background: rgba(16,42,27,.07); border-radius: 10px; overflow: hidden; }
+.row .br { height: 100%; background: var(--leaf); border-radius: 10px; transform-origin: 0 50%; border: 3px solid var(--ink); box-sizing: border-box; }
+.row .br.top { background: var(--lime); }
+.row .val { font: 800 20px var(--display); font-variant-numeric: tabular-nums; }
+.lk { display: grid; grid-template-columns: 470px 1fr 120px; gap: 16px; align-items: center; }
+.lk .lab { font: 600 20px/1.2 var(--body); }
+.lk .stack { display: flex; height: 38px; border: 4px solid var(--ink); border-radius: 12px; overflow: hidden; transform-origin: 0 50%; }
+.lk .stack span { display: grid; place-items: center; font: 800 15px var(--body); color: var(--ink); overflow: hidden; }
+.lk .agree { font: 800 30px/1 var(--display); font-variant-numeric: tabular-nums; }
+.lk .agree small { display: block; font: 600 15px var(--body); color: var(--muted); }
+.legend { display: flex; gap: 18px; flex-wrap: wrap; font: 600 18px var(--body); align-items: center; }
+.legend i { display: inline-block; width: 18px; height: 18px; border: 3px solid var(--ink); border-radius: 5px; margin-right: 6px; vertical-align: -3px; }
+.nnote { font: 700 18px var(--body); color: var(--muted); }
 
 /* journey */
-.journey { position: relative; grid-template-columns: repeat(7, 1fr); gap: 18px; align-items: stretch; }
-.journey .card { padding: 26px 22px; }
-.journey .card .big { font-size: 96px; }
-.journey .card h3 { font-size: 34px; }
-.journey .card p { font-size: 23px; }
+.journey { position: relative; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+.journey .card { padding: 22px 20px; }
+.journey .card .big { font-size: 84px; }
+.journey .card h3 { font-size: 30px; }
 .track { position: absolute; left: 0; right: 0; top: 50%; height: 10px; background: repeating-linear-gradient(90deg, var(--ink) 0 18px, transparent 18px 34px); z-index: 0; border-radius: 9px; }
 .truck { position: absolute; top: calc(50% - 34px); left: 0; width: 78px; height: 78px; z-index: 3; }
+
+/* table */
+.tbl { width: 100%; border-collapse: separate; border-spacing: 0; border: 5px solid var(--ink); border-radius: 26px; overflow: hidden; }
+.tbl th, .tbl td { text-align: left; padding: 12px 16px; font: 500 20px/1.3 var(--body); border-bottom: 3px solid rgba(16,42,27,.15); vertical-align: top; }
+.tbl th { font: 800 20px var(--display); background: var(--ink); color: var(--lime); }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl tr:nth-child(even) td { background: var(--paper); }
 
 /* cover */
 .cover-wrap { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
@@ -126,15 +164,15 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
 
 </head>
 <body>
-<main class="viewport" aria-roledescription="presentation" aria-label="GreenLoop marketing presentation">
+<main class="viewport" aria-roledescription="presentation" aria-label="GreenLoop marketing plan presentation">
   <div class="world">
-    <svg class="loop-path" viewBox="0 0 5200 3700" aria-hidden="true">
-      <ellipse cx="2600" cy="1850" rx="2050" ry="1290" fill="none" stroke="#c8f53a" stroke-width="34" opacity=".55"/>
-      <ellipse class="flow" cx="2600" cy="1850" rx="2050" ry="1290" fill="none" stroke="#1f9d55" stroke-width="22" stroke-dasharray="70 50" stroke-linecap="round"/>
+    <svg class="loop-path" aria-hidden="true">
+      <ellipse class="glow" fill="none" stroke="#c8f53a" stroke-width="34" opacity=".55"/>
+      <ellipse class="flow" fill="none" stroke="#1f9d55" stroke-width="22" stroke-dasharray="70 50" stroke-linecap="round"/>
     </svg>
 
-    <!-- 1 COVER -->
-    <section class="slide cover" data-notes="Hi everyone. We are presenting GreenLoop: doorstep waste pickup that pays you back. We are launching in the Chandigarh Tricity. In the next few minutes: the problem, why now, how it works, who it is for, and how we will market it and make money.">
+    <!-- COVER -->
+    <section class="slide cover" data-notes="Hi everyone. This is GreenLoop: doorstep recycling and upcycling for households and communities in the Chandigarh Tricity. We will walk through the business, the market, what our survey of 83 people told us, our STP and marketing mix, and how we would run a pilot.">
       <div class="orbiter orbit" style="--dur: 34s" aria-hidden="true">
         <div class="item bob" style="left:-640px; top:-120px; background: var(--sky)"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
         <div class="item bob" style="left:600px; top:-210px; background: var(--kraft); animation-delay:-1s"><svg viewBox="0 0 24 24"><path d="M9 3h6l4 4-3 2v12H8V9L5 7z"/></svg></div>
@@ -152,187 +190,304 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
           </g>
         </svg>
         <h1 class="split">Green<span class="g">Loop</span></h1>
-        <p class="sub a-up">Doorstep waste pickup that <span class="mark">pays you back</span>.</p>
-        <div class="pills a-up" style="justify-content:center"><span class="pill lime">Chandigarh Tricity launch</span><span class="pill">Marketing &amp; growth strategy</span></div>
+        <p class="sub a-up">Recycle from home. <span class="mark">Know where it goes.</span></p>
+        <div class="pills a-up" style="justify-content:center"><span class="pill lime">Marketing plan</span><span class="pill">Chandigarh Tricity pilot</span><span class="pill">Survey: 83 responses</span></div>
       </div></div>
     </section>
 
-    <!-- 2 PROBLEM -->
-    <section class="slide" data-notes="Walk into any apartment storeroom: old phones, chargers, clothes, plastic. There is no easy way to get rid of them properly, so they get dumped into mixed waste and end up at the Dadumajra landfill. Residents get nothing for segregating, and RWAs have no tools to prove they are following the rules.">
-      <span class="ghost" aria-hidden="true">?!</span><span class="num">02</span>
-      <span class="tag a-pop">The problem</span>
-      <div class="head"><h2 class="a-up">Every flat has a pile <span class="mark">nobody collects</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card kraft a-card"><div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V6h8v3M10 13h4"/></svg></div><h3>It piles up</h3><p>Old phones, cables, clothes and plastic sit in storerooms for months.</p></div>
-        <div class="card coral a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 20l3-9 3 5 3-8 3 12"/></svg></div><h3>It goes to landfill</h3><p>Mixed waste ends up at Dadumajra. Very little is recovered.</p></div>
-        <div class="card a-card"><div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8 8l8 8"/></svg></div><h3>Zero reward</h3><p>Segregating feels like a chore with no visible result.</p></div>
-        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M9 4h6l1 3h3v13H5V7h3z"/><path d="M9 13l2 2 4-4"/></svg></div><h3>RWAs can't prove it</h3><p>Societies must comply but have no tracking or reports.</p></div>
+    <!-- 01 EXECUTIVE SUMMARY -->
+    <section class="slide" data-notes="In one slide: GreenLoop is a doorstep recycling and upcycling service. Households book a collection for e-waste, plastic, clothes and paper. We route the material to proper recovery partners and offer points or other incentives. Our market is households of every housing type in the Tricity, reached directly and through communities. The promise: convenient, transparent and rewarding recycling. Our near-term priority is a focused pilot across more than one housing type, to prove reliability and economics before expanding.">
+      <span class="num">01</span>
+      <span class="tag a-pop">Executive summary</span>
+      <div class="head"><h2 class="a-up">Doorstep recycling that's <span class="mark">easy to trust</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr auto;">
+        <div class="card lime a-card"><h3>Concept</h3><p class="s">Book a pickup for e-waste, plastic, clothes and paper. We route it to proper recovery partners and offer rewards.</p></div>
+        <div class="card white a-card"><h3>Market</h3><p class="s">Households of every housing type in the Tricity, reached directly and through communities.</p></div>
+        <div class="card sky a-card"><h3>Promise</h3><p class="s">Convenient, transparent and rewarding, with visible results.</p></div>
+        <div class="card kraft a-card"><h3>Priority</h3><p class="s">A focused pilot across housing types. Prove reliability and economics, then expand.</p></div>
+        <div class="flowline a-up" style="grid-column: 1 / -1"><span class="pill lime">Book</span><span class="arrow">→</span><span class="pill">Sort</span><span class="arrow">→</span><span class="pill">Doorstep pickup</span><span class="arrow">→</span><span class="pill">Verified processing</span><span class="arrow">→</span><span class="pill lime">Impact &amp; rewards</span></div>
       </div>
     </section>
 
-    <!-- 3 WHY NOW -->
-    <section class="slide" data-notes="Why now? Two sets of rules. First, the Solid Waste Management Rules 2026, notified on 27 January 2026 and in force from 1 April 2026. They replace the 2016 rules and make every household separate waste into four streams: wet, dry, sanitary and special care. Second, the E-Waste Management Rules 2022, in force since April 2023, which set rising recycling targets for producers, so certified recyclers need more collected e-waste. Households now have to sort. GreenLoop makes sorting easy and rewarding.">
-      <span class="ghost" aria-hidden="true">2026</span><span class="num">03</span>
-      <span class="tag a-pop">Why now</span>
-      <div class="head"><h2 class="a-up">The rules just <span class="mark">got stricter</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: 1.1fr 1fr;">
-        <div class="card lime a-card">
-          <h3>Solid Waste Management Rules, 2026</h3>
-          <p>In force <b>1 April 2026</b>, replacing the 2016 rules.</p>
-          <div class="pills push" style="margin-top:18px"><span class="pill">Wet</span><span class="pill">Dry</span><span class="pill">Sanitary</span><span class="pill">Special care</span></div>
-          <p style="margin-top:16px">Every household must sort into these <b>4 streams</b>. Big societies carry more responsibility.</p>
-        </div>
-        <div class="card white a-card">
-          <h3>E-Waste (Management) Rules, 2022</h3>
-          <p>In force <b>1 April 2023</b>. Producers must hit recycling targets through registered recyclers.</p>
-          <div class="push" style="display:flex; gap:14px; align-items:flex-end; margin-top:18px">
-            <div class="bar-col" style="--h:60%"><b>60%</b><span>2023-25</span></div>
-            <div class="bar-col" style="--h:70%"><b>70%</b><span>2025-27</span></div>
-            <div class="bar-col" style="--h:80%"><b>80%</b><span>2027-28 on</span></div>
-          </div>
-        </div>
-      </div>
-      <p class="src">Sources: MoEFCC, SWM Rules 2026 (notified 27 Jan 2026); E-Waste (Management) Rules 2022 (notified 2 Nov 2022). Check exact clauses in the gazette.</p>
-    </section>
-
-    <!-- 4 SOLUTION -->
-    <section class="slide" data-notes="Here is the GreenLoop journey. Sign up and get 100 welcome points. List your items: e-waste, plastic, clothes, paper. Pick a pickup slot. Our collector weighs QR-tagged bags at your door. Points are credited straight away, with an impact dashboard. Redeem them at partner stores or for upcycled goods made from the waste. And your society climbs the leaderboard.">
-      <span class="num">04</span>
-      <span class="tag a-pop">The solution</span>
-      <div class="head"><h2 class="a-up">Schedule. Weigh. <span class="mark">Earn</span>. Repeat.</h2></div>
+    <!-- 02 SERVICE OVERVIEW -->
+    <section class="slide" data-notes="What the customer actually gets. Book a pickup, say what you have, sort it using our guidance, and get a confirmation plus a weight or item record. We accept e-waste, plastic, textiles and paper, subject to item rules and safe handling. Some details are still to be confirmed: pickup radius, minimum quantity, fees, points conversion and how we handle personal data. We label features as available, pilot or planned so we never overclaim.">
+      <span class="num">02</span>
+      <span class="tag a-pop">The service</span>
+      <div class="head"><h2 class="a-up">What a household <span class="mark">actually gets</span>.</h2></div>
       <div class="fill journey">
         <div class="track" aria-hidden="true"></div>
         <svg class="truck" viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="18" width="34" height="26" rx="6" fill="#c8f53a" stroke="#102a1b" stroke-width="4"/><path d="M38 26h12l8 10v8H38z" fill="#fff" stroke="#102a1b" stroke-width="4" stroke-linejoin="round"/><circle cx="16" cy="48" r="6" fill="#102a1b"/><circle cx="48" cy="48" r="6" fill="#102a1b"/></svg>
-        <div class="card lime a-card"><span class="big">1</span><h3>Sign up</h3><p class="push">100 welcome points</p></div>
-        <div class="card white a-card"><span class="big">2</span><h3>List items</h3><p class="push">E-waste, plastic, clothes, paper</p></div>
-        <div class="card white a-card"><span class="big">3</span><h3>Pick a slot</h3><p class="push">Doorstep, morning or afternoon</p></div>
-        <div class="card kraft a-card"><span class="big">4</span><h3>Weigh at door</h3><p class="push">QR-tagged bags, calibrated scale</p></div>
-        <div class="card sky a-card"><span class="big">5</span><h3>Earn points</h3><p class="push">Plus a live impact dashboard</p></div>
-        <div class="card white a-card"><span class="big">6</span><h3>Redeem</h3><p class="push">Partner stores or upcycled goods</p></div>
-        <div class="card ink a-card"><span class="big">7</span><h3>Climb</h3><p class="push">Society rises on the leaderboard</p></div>
+        <div class="card lime a-card"><span class="big">1</span><h3>Book</h3><p class="s push">Pick a slot online</p></div>
+        <div class="card white a-card"><span class="big">2</span><h3>List items</h3><p class="s push">E-waste, plastic, textiles, paper</p></div>
+        <div class="card white a-card"><span class="big">3</span><h3>Sort</h3><p class="s push">Simple sorting guide</p></div>
+        <div class="card kraft a-card"><span class="big">4</span><h3>Pickup</h3><p class="s push">Collector at your door</p></div>
+        <div class="card sky a-card"><span class="big">5</span><h3>Record</h3><p class="s push">Weight or item receipt</p></div>
+        <div class="card ink a-card"><span class="big">6</span><h3>Impact</h3><p class="s push">Where it went, plus rewards</p></div>
       </div>
-      <span class="stamp a-pop" style="right:120px; top:70px">+100 pts</span>
+      <p class="src a-up">To confirm: pickup radius, minimum quantity, frequency, accepted and excluded items, fees, points conversion, cancellations, data handling.</p>
     </section>
 
-    <!-- 5 STP -->
-    <section class="slide" data-notes="Who is it for. Our primary target is eco-aware families aged 25 to 45 in gated societies in Sectors 44 to 54, Manimajra and Mohali: smartphone-first, value convenience and rewards. Secondary target: RWAs, who need compliance and cleaner premises, and who are the gatekeepers to whole societies. Partners: eco brands and CSR teams who want a hyperlocal green audience.">
+    <!-- 03 SITUATION & MARKET -->
+    <section class="slide" data-notes="The situation. Recyclables are sold to scrap collectors, mixed into general waste, or stored at home waiting for a chance to get rid of them. Our own survey shows exactly this mix. Policy is pushing in our direction: the Solid Waste Management Rules 2026 came into force on 1 April 2026 and require households to sort into four streams, and the E-Waste Management Rules 2022 set rising recycling targets for producers. Quick SWOT: a convenient concept with visible impact; operations and partners still to be built; real demand for simpler sorting and credible processing; and threats from unreliable pickups, material prices, low density and established alternatives.">
+      <span class="ghost" aria-hidden="true">2026</span><span class="num">03</span>
+      <span class="tag a-pop">Situation &amp; market</span>
+      <div class="head"><h2 class="a-up">Rules are stricter. <span class="mark">Habits aren't.</span></h2></div>
+      <div class="fill" style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 18px;">
+        <div class="card lime a-card"><h3>Solid Waste Mgmt Rules, 2026</h3><p class="s">In force 1 April 2026. Households must sort into 4 streams: wet, dry, sanitary, special care.</p></div>
+        <div class="card white a-card"><h3>E-Waste (Mgmt) Rules, 2022</h3><p class="s">In force 1 April 2023. Producers' recycling targets rise from 60% to 80% by 2027-28.</p></div>
+        <div class="card kraft a-card"><h3>Today's habits</h3><p class="s">Sold to scrap dealers, mixed with general waste, or stored at home until a chance comes.</p></div>
+        <div class="card white a-card" style="padding:18px 24px">
+          <h3 style="font-size:30px">SWOT</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 16px">
+            <p class="s" style="font-size:19px"><b>S</b> Convenient, impact made visible</p>
+            <p class="s" style="font-size:19px"><b>W</b> Ops and partners to build</p>
+            <p class="s" style="font-size:19px"><b>O</b> People want simpler sorting</p>
+            <p class="s" style="font-size:19px"><b>T</b> Reliability, prices, density</p>
+          </div>
+        </div>
+      </div>
+      <p class="src">Sources: MoEFCC, SWM Rules 2026 (notified 27 Jan 2026); E-Waste (Management) Rules 2022. Check exact clauses in the gazette.</p>
+    </section>
+
+    <!-- 04a SURVEY: WHO -->
+    <section class="slide" data-notes="We ran a Google Form and got 83 responses. This is a convenience sample, so it is directional, not representative of the Tricity. It skews young: 45 of 83 are aged 18 to 24. Housing is varied: 39 live in independent houses, 24 rent or live in hostels, 16 in apartments or gated societies. And disposal habits are mixed: 38 give recyclables to scrap dealers, 19 mix them with general waste, 12 use a recycling facility and 9 store them until they get a chance.">
+      <span class="num">04</span>
+      <span class="tag a-pop">Survey · who answered</span>
+      <div class="head"><h2 class="a-up">83 voices, <span class="mark">mixed habits</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="card white a-card chart" data-chart="q1"></div>
+        <div class="card white a-card chart" data-chart="q2"></div>
+        <div class="card white a-card chart" data-chart="q3"></div>
+      </div>
+      <p class="src">Google Forms, n = 83. Convenience sample: directional, not representative of Tricity households.</p>
+    </section>
+
+    <!-- 04b SURVEY: ATTITUDES -->
+    <section class="slide" data-notes="Eight statements rated 1 to 5. The green part is people who agreed, 4 or 5. Strongest: 69 of 83 would be interested in GreenLoop with convenient doorstep collection, 68 would be more likely to use it if their society or community partnered, and 66 say doorstep service would make disposal easier, want one pickup for all materials, and are concerned about environmental impact. 64 say knowing where waste is processed would increase trust. Rewards motivate 60. And 46 of 83 say disposing responsibly is difficult today, which is the problem we solve.">
       <span class="num">05</span>
-      <span class="tag a-pop">Target market</span>
-      <div class="head"><h2 class="a-up">Built for <span class="mark">gated societies</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: 1.25fr 1fr 1fr; grid-template-rows: 1fr auto;">
-        <div class="card lime a-card"><span class="tag" style="margin-bottom:16px">Primary</span><h3>Eco-aware families, 25 to 45</h3><p class="push">Gated societies in Sectors 44 to 54, Manimajra and Mohali. Smartphone-first, want convenience and rewards.</p></div>
-        <div class="card white a-card"><span class="tag" style="margin-bottom:16px">Secondary</span><h3>RWAs</h3><p class="push">Need compliance and cleaner premises. The gatekeeper to every flat.</p></div>
-        <div class="card kraft a-card"><span class="tag" style="margin-bottom:16px">Partners</span><h3>Brands &amp; CSR</h3><p class="push">Grocers, sustainable fashion and retail chains that want eco-conscious local customers.</p></div>
-        <div class="card ink a-card" style="grid-column: 1 / -1; padding:24px 32px"><p style="font:800 36px var(--display)">“The easiest way to recycle at home and get rewarded for it.”</p></div>
+      <span class="tag a-pop">Survey · attitudes</span>
+      <div class="head" style="margin-bottom:18px"><h2 class="a-up" style="font-size:80px"><span class="mark">69 of 83</span> would use doorstep pickup.</h2></div>
+      <div class="fill" style="grid-template-rows: 1fr auto; gap: 14px;">
+        <div class="chart a-up" data-likert style="gap:10px"></div>
+        <div class="legend a-up"><span><i style="background:var(--l1)"></i>1 Strongly disagree</span><span><i style="background:var(--l2)"></i>2</span><span><i style="background:var(--l3)"></i>3</span><span><i style="background:var(--l4)"></i>4</span><span><i style="background:var(--l5)"></i>5 Strongly agree</span><span class="nnote">Right: number who answered 4 or 5, out of 83</span></div>
       </div>
     </section>
 
-    <!-- 6 COMPETITION -->
-    <section class="slide" data-notes="Who else is out there. Kabadiwalas are familiar and pay cash, but there is no verification or impact data. E-waste recyclers like Attero are certified but mostly B2B. Scrap apps like Scrapuncle and Recykal handle pickups but are purely transactional. NGOs like Goonj have trust but no rewards. Municipal collection is free but unreliable for bulky items. Nobody combines doorstep pickup, rewards and community.">
+    <!-- 04c SURVEY: PRICING & MOTIVATION -->
+    <section class="slide" data-notes="Pricing: the biggest group, 31 of 83, wants free collection paid for by recycling revenue and partnerships. 16 prefer pay per pickup, 14 free basic with paid extras, 11 a monthly subscription, and 11 are not sure. So we test a free basic model against real route costs. Motivation: environmental protection, 28, and convenience, 27, lead. Transparency matters to 17. Rewards on their own were the top pick for only 8, so rewards support the offer but are not the headline.">
       <span class="num">06</span>
-      <span class="tag a-pop">Competition</span>
-      <div class="head"><h2 class="a-up">Lots of pickups. <span class="mark">No loop</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(5, 1fr); grid-template-rows: 1fr auto; gap: 20px; --h3: 33px;">
-        <style>.fill h3 { font-size: var(--h3, 40px); overflow-wrap: anywhere; }</style>
-        <div class="card white a-card"><h3>Kabadiwalas</h3><p style="font-size:24px">✓ Instant cash</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No proof or impact data</p></div>
-        <div class="card white a-card"><h3>E-waste recyclers</h3><p style="font-size:21px;color:var(--muted)">Attero, Namo eWaste</p><p style="font-size:24px">✓ Certified</p><p class="push" style="font-size:24px; color:#b23a1d">✗ Mostly B2B</p></div>
-        <div class="card white a-card"><h3>Scrap apps</h3><p style="font-size:21px;color:var(--muted)">Scrapuncle, Recykal</p><p style="font-size:24px">✓ App pickup</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No community</p></div>
-        <div class="card white a-card"><h3>NGOs</h3><p style="font-size:21px;color:var(--muted)">Goonj</p><p style="font-size:24px">✓ Trust</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No rewards</p></div>
-        <div class="card white a-card"><h3>Municipal</h3><p style="font-size:24px">✓ Free</p><p class="push" style="font-size:24px; color:#b23a1d">✗ No bulky items, no tracking</p></div>
-        <div class="card lime a-card" style="grid-column: 1 / -1; padding:22px 32px"><p style="font:800 34px var(--display)">GreenLoop = doorstep pickup + rewards + community + visible impact.</p></div>
+      <span class="tag a-pop">Survey · price &amp; motivation</span>
+      <div class="head"><h2 class="a-up">Free first. <span class="mark">Planet and ease</span> win.</h2></div>
+      <div class="fill" style="grid-template-columns: 1fr 1fr;">
+        <div class="card white a-card chart" data-chart="q12"></div>
+        <div class="card white a-card chart" data-chart="q13"></div>
       </div>
-      <p class="src">Indicative comparison; check current offerings before presenting.</p>
+      <p class="src">Google Forms, n = 83. Single-choice questions.</p>
     </section>
 
-    <!-- 7 MARKETING ANGLE -->
-    <section class="slide" data-notes="This is the heart of our marketing. One: community challenges. Every month we ask: which society recycles the most? Leaderboards and trophies turn recycling into neighbourhood pride. Two: partnerships with the municipal corporation for compliance and with brands that fund rewards. Three: a visible impact tracker, in the app and on society notice boards.">
-      <span class="ghost" aria-hidden="true">#1</span><span class="num">07</span>
-      <span class="tag a-pop">Marketing angle</span>
-      <div class="head"><h2 class="a-up">“Which society <span class="mark">recycles the most</span>?”</h2></div>
-      <div class="fill" style="grid-template-columns: 1.3fr 1fr 1fr; grid-template-rows: 1fr auto;">
-        <div class="card lime a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/></svg></div><h3>Community challenges</h3><p class="push">Monthly society-vs-society leaderboard, tower captains and trophies.</p></div>
-        <div class="card white a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M8 12l3 3 5-6"/><circle cx="12" cy="12" r="9"/></svg></div><h3>Partnerships</h3><p class="push">Municipal tie-ups for compliance. Brands fund vouchers and trophies.</p></div>
-        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Impact tracker</h3><p class="push">Kilos, CO2 and water saved, in the app and on society boards.</p></div>
-        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">Diwali e-waste drive</span><span class="pill">Winter wardrobe clean-out</span><span class="pill">Earth Day challenge</span><span class="pill lime">Refer a neighbour, both earn</span></div>
+    <!-- 04d SURVEY: CHANNELS & CONCERNS -->
+    <section class="slide" data-notes="Channels: the apartment society or residential community is the top influence, 23 of 83, then recommendations from friends and family, 20, and social media, 16. WhatsApp and municipal campaigns are 12 each. Concerns: 31 have no major concern. Among those who do, privacy leads at 18, then trust in processing at 13, complicated sorting at 10 and unreliable pickups at 9. Only 2 worry about rewards.">
+      <span class="num">07</span>
+      <span class="tag a-pop">Survey · channels &amp; concerns</span>
+      <div class="head"><h2 class="a-up">Community spreads it. <span class="mark">Privacy</span> worries it.</h2></div>
+      <div class="fill" style="grid-template-columns: 1fr 1fr;">
+        <div class="card white a-card chart" data-chart="q14"></div>
+        <div class="card white a-card chart" data-chart="q15"></div>
       </div>
+      <p class="src">Google Forms, n = 83. Single-choice questions.</p>
     </section>
 
-    <!-- 8 USP -->
-    <section class="slide" data-notes="What makes us different. Proof at the door: calibrated scale and QR bags, so every kilo is verified. Rewards people actually want: real brand vouchers, not vague eco points. Competition between societies. And impact you can see.">
+    <!-- 04e SURVEY: SO WHAT -->
+    <section class="slide dark" data-notes="What this means for our marketing. Lead with environmental benefit and convenience, since those were the top motivators. Make privacy safeguards and processing transparency obvious, because those are the top concerns. Simplify sorting and set reliable pickup expectations. And test community outreach and referrals first, since those were the strongest channels. Remember the sample is young and not representative, so we validate this in the pilot.">
       <span class="num">08</span>
-      <span class="tag a-pop">Why GreenLoop wins</span>
-      <div class="head"><h2 class="a-up">Four things <span class="mark">nobody else</span> does together.</h2></div>
+      <span class="tag a-pop">What the survey means</span>
+      <div class="head"><h2 class="a-up">Four moves from <span class="mark">83 answers</span>.</h2></div>
       <div class="fill" style="grid-template-columns: repeat(4, 1fr);">
-        <div class="card white a-card"><span class="big">01</span><h3>Proof at the door</h3><p class="push">Calibrated scale, QR-tagged bags. Every kilo verified.</p></div>
-        <div class="card lime a-card"><span class="big">02</span><h3>Rewards that matter</h3><p class="push">Real brand vouchers or upcycled products.</p></div>
-        <div class="card kraft a-card"><span class="big">03</span><h3>Society vs society</h3><p class="push">Leaderboards make recycling social and a habit.</p></div>
-        <div class="card sky a-card"><span class="big">04</span><h3>Visible impact</h3><p class="push">Live kilos, CO2 and water saved per flat.</p></div>
+        <div class="card lime a-card"><span class="big">01</span><h3>Lead with planet + ease</h3><p class="s push">Top motivators: environment (28) and convenience (27).</p></div>
+        <div class="card sky a-card"><span class="big">02</span><h3>Show privacy &amp; processing</h3><p class="s push">Top concerns: privacy (18), processing trust (13).</p></div>
+        <div class="card kraft a-card"><span class="big">03</span><h3>Make sorting simple</h3><p class="s push">10 worry about sorting, 9 about reliability.</p></div>
+        <div class="card white a-card"><span class="big">04</span><h3>Go through communities</h3><p class="s push">Community (23) and referrals (20) lead the channels.</p></div>
       </div>
     </section>
 
-    <!-- 9 MARKETING MIX -->
-    <section class="slide" data-notes="Our marketing mix. Product: pickup service, points wallet, impact dashboard, upcycled goods and an RWA compliance pack. Price: routine pickups are free, express e-waste pickup is 29 to 49 rupees, RWA plans 1,000 to 3,000 a month. Place: app plus doorstep, seeded through societies. Promotion: RWA demos, WhatsApp groups, referrals, local influencers. People: trained collectors as brand ambassadors. Proof: impact certificates and leaderboards.">
+    <!-- 05 OBJECTIVES -->
+    <section class="slide" data-notes="Our marketing objectives are written as pilot goals. Acquisition across at least three housing contexts. Activation: the share of sign-ups that complete a first pickup. Retention: repeat pickups per active household. Service quality: on-time and completed pickups, complaints and rejected material. And economics and impact: cost per pickup, revenue and kilos sent through verified channels. The actual target numbers will be set by the team, each with a baseline, deadline, owner and data source.">
       <span class="num">09</span>
+      <span class="tag a-pop">Marketing objectives</span>
+      <div class="head"><h2 class="a-up">Pilot goals we can <span class="mark">measure</span>.</h2></div>
+      <table class="tbl a-card">
+        <tr><th>Goal</th><th>Metric</th><th>Target</th><th>Owner</th></tr>
+        <tr><td><b>Acquisition</b></td><td>Households onboarded across 3+ housing types</td><td><span class="todo">team to set</span></td><td><span class="todo">name</span></td></tr>
+        <tr><td><b>Activation</b></td><td>Sign-ups that complete a first pickup</td><td><span class="todo">team to set</span></td><td><span class="todo">name</span></td></tr>
+        <tr><td><b>Retention</b></td><td>Repeat pickups per active household per month</td><td><span class="todo">team to set</span></td><td><span class="todo">name</span></td></tr>
+        <tr><td><b>Service quality</b></td><td>On-time rate, completed pickups, complaints, rejected material</td><td><span class="todo">team to set</span></td><td><span class="todo">name</span></td></tr>
+        <tr><td><b>Economics &amp; impact</b></td><td>Cost per pickup, revenue, kg sent to verified processors</td><td><span class="todo">team to set</span></td><td><span class="todo">name</span></td></tr>
+      </table>
+    </section>
+
+    <!-- 06 SEGMENTATION -->
+    <section class="slide" data-notes="Segmentation. Geographically, Tricity localities prioritised by route density, processors and partners. By housing: apartments and gated communities, independent houses, rentals and hostels. By behaviour, straight from our survey: 38 use scrap dealers, 19 mix waste, 12 use a facility and 9 store it. By need: convenience seekers, environmentally motivated, people who want proof, reward-oriented and community-minded.">
+      <span class="num">10</span>
+      <span class="tag a-pop">STP · segmentation</span>
+      <div class="head"><h2 class="a-up">Every kind of <span class="mark">household</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(4, 1fr);">
+        <div class="card white a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><h3>Geographic</h3><p class="s push">Tricity localities, by route density, processors and partners.</p></div>
+        <div class="card lime a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M3 21V10l9-6 9 6v11"/><path d="M9 21v-7h6v7"/></svg></div><h3>Housing</h3><p class="s push">Apartments &amp; gated, independent houses, rentals &amp; hostels.</p></div>
+        <div class="card kraft a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 7h16M7 7v13h10V7M10 4h4"/></svg></div><h3>Behaviour</h3><p class="s push">Scrap dealer 38 · mix it 19 · facility 12 · store it 9 (of 83).</p></div>
+        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 21l-8-8a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/></svg></div><h3>Needs</h3><p class="s push">Convenience, environment, proof, rewards, community.</p></div>
+      </div>
+    </section>
+
+    <!-- 07 TARGETING -->
+    <section class="slide" data-notes="Targeting. Our primary target is households of any housing type in selected Tricity localities who want a convenient way to recycle and will book a pickup. Early adopters are people who already store or mix recyclables, or who want proof of where it goes. RWAs, landlords, hostel managers and campuses are channels and secondary customers, not a requirement to use the service. Recyclers, makers and brands are partners, confirmed before we call them active.">
+      <span class="num">11</span>
+      <span class="tag a-pop">STP · targeting</span>
+      <div class="head"><h2 class="a-up">Open to all. <span class="mark">Pilot</span> where it's dense.</h2></div>
+      <div class="fill" style="grid-template-columns: 1.3fr 1fr 1fr;">
+        <div class="card lime a-card"><span class="tag" style="margin-bottom:14px">Primary</span><h3>Households who want an easy way to recycle</h3><p class="s push">Any housing type, in selected Tricity localities. Early adopters: people who store or mix recyclables, or want proof.</p></div>
+        <div class="card white a-card"><span class="tag" style="margin-bottom:14px">Channels &amp; secondary</span><h3>RWAs, landlords, hostels, campuses</h3><p class="s push">Help us reach residents and may buy coordinated plans.</p></div>
+        <div class="card kraft a-card"><span class="tag" style="margin-bottom:14px">Partners</span><h3>Recyclers, makers, brands</h3><p class="s push">Processing, upcycled products and rewards. Confirmed before named.</p></div>
+      </div>
+    </section>
+
+    <!-- 08 POSITIONING -->
+    <section class="slide dark" data-notes="Positioning. For households across the Tricity who want to recycle without the hassle, GreenLoop provides convenient doorstep collection with clear processing information and visible impact. Our brand promise: recycle from home, know where it goes. Three pillars: convenience, transparency and impact. Rewards encourage repeat use, but convenience and trust come first. And we only claim something was recycled when the partner gives evidence.">
+      <span class="num">12</span>
+      <span class="tag a-pop">STP · positioning</span>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:40px">
+        <h2 class="a-up" style="font-size:132px">Recycle from home. <span class="mark">Know where it goes.</span></h2>
+        <p class="a-up" style="font-size:30px; max-width:1300px; color:#d8eadf">For households across the Tricity who want to recycle without the hassle, GreenLoop offers doorstep collection with clear processing information and visible impact.</p>
+        <div class="pills a-up"><span class="pill lime">Convenience</span><span class="pill">Transparency</span><span class="pill">Impact</span></div>
+      </div>
+    </section>
+
+    <!-- 09 COMPETITIVE ADVANTAGE -->
+    <section class="slide" data-notes="Why choose us over the alternatives. Scrap dealers are familiar and pay, municipal options are free, specialist recyclers handle certain streams, apps offer booking, NGOs have trust. Our intended difference: one booking for multiple materials, a record for every pickup, verified routing, optional rewards and community participation. What we still have to prove: reliable pickups, clear item rules, real processor relationships, secure data and rewards people value.">
+      <span class="num">13</span>
+      <span class="tag a-pop">Competitive advantage</span>
+      <div class="head"><h2 class="a-up">One booking. <span class="mark">Every material.</span> Proof.</h2></div>
+      <table class="tbl a-card">
+        <tr><th>Alternative</th><th>What it does well</th><th>Where GreenLoop differs</th></tr>
+        <tr><td><b>Scrap dealers</b></td><td>Familiar, may pay cash</td><td>Pickup record, verified routing</td></tr>
+        <tr><td><b>Municipal collection</b></td><td>Free and widely available</td><td>Multi-material doorstep pickup, tracking</td></tr>
+        <tr><td><b>Specialist recyclers</b></td><td>Certified processing for some streams</td><td>Household-facing, all streams in one booking</td></tr>
+        <tr><td><b>Collection apps</b></td><td>Online booking</td><td>Impact record, community participation</td></tr>
+        <tr><td><b>NGOs</b></td><td>Community trust</td><td>Scheduled service, optional rewards</td></tr>
+      </table>
+      <p class="src">Based on general category features; verify specific competitors before naming them.</p>
+    </section>
+
+    <!-- 10 MARKETING MIX -->
+    <section class="slide" data-notes="The marketing mix. Product: doorstep pickup, sorting guidance, booking updates, a weight record, processing information, impact reporting and optional rewards. Price: our survey's biggest group, 31 of 83, preferred free collection funded by materials and partnerships, so we test that against route costs, alongside paid express or large-item pickups and plans for institutions. Place: direct booking plus community outreach in compact zones. Promotion: social media, community referrals, WhatsApp and environmental campaigns. People: trained collectors. Evidence: a clear website, pickup confirmations and partner proof.">
+      <span class="num">14</span>
       <span class="tag a-pop">Marketing mix</span>
       <div class="head"><h2 class="a-up">4 Ps, plus <span class="mark">People and Proof</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 22px;">
-        <div class="card lime a-card"><h3>Product</h3><p class="push" style="font-size:25px">Pickup, points wallet, impact dashboard, upcycled goods, RWA pack.</p></div>
-        <div class="card white a-card"><h3>Price</h3><p class="push" style="font-size:25px">Routine pickup free. Express Rs 29 to 49. RWA plans Rs 1,000 to 3,000 a month.</p></div>
-        <div class="card white a-card"><h3>Place</h3><p class="push" style="font-size:25px">App plus doorstep, seeded society by society through RWAs.</p></div>
-        <div class="card white a-card"><h3>Promotion</h3><p class="push" style="font-size:25px">RWA demos, WhatsApp groups, referrals, local influencers.</p></div>
-        <div class="card kraft a-card"><h3>People</h3><p class="push" style="font-size:25px">Trained collectors as ambassadors, a champion per tower.</p></div>
-        <div class="card sky a-card"><h3>Proof</h3><p class="push" style="font-size:25px">Impact certificates, leaderboards, audit reports.</p></div>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 18px;">
+        <div class="card lime a-card"><h3>Product</h3><p class="s push">Pickup, sorting guide, booking updates, weight record, impact report, optional rewards.</p></div>
+        <div class="card white a-card"><h3>Price</h3><p class="s push">Test free basic pickup (top choice, 31/83) plus paid express and institution plans.</p></div>
+        <div class="card white a-card"><h3>Place</h3><p class="s push">Website booking plus community outreach, in compact zones.</p></div>
+        <div class="card white a-card"><h3>Promotion</h3><p class="s push">Social media, referrals, WhatsApp, environmental campaigns.</p></div>
+        <div class="card kraft a-card"><h3>People</h3><p class="s push">Collectors trained to explain sorting and confirm weights.</p></div>
+        <div class="card sky a-card"><h3>Physical evidence</h3><p class="s push">Clear website, pickup confirmation, impact dashboard, partner proof.</p></div>
       </div>
     </section>
 
-    <!-- 10 REVENUE -->
-    <section class="slide" data-notes="How we make money. Three main streams: selling recovered materials to certified recyclers, selling upcycled products like bags and decor made by artisan partners, and corporate sponsorships that fund vouchers and trophies from CSR budgets. Two smaller streams: RWA subscription plans and express pickup fees. We stay asset-light: partner recyclers and artisans, no owned factories.">
-      <span class="ghost" aria-hidden="true">₹</span><span class="num">10</span>
-      <span class="tag a-pop">Revenue</span>
-      <div class="head"><h2 class="a-up">Waste in. <span class="mark">Worth out</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr auto;">
-        <div class="card lime a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M4 7l8-4 8 4-8 4z"/><path d="M4 7v10l8 4 8-4V7"/></svg></div><h3>Recovered materials</h3><p class="push">Sorted metals, PET, paper and textiles sold to certified recyclers.</p></div>
-        <div class="card kraft a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 13H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></div><h3>Upcycled products</h3><p class="push">Bags, planters and decor by artisan partners. Rs 199 to 799.</p></div>
-        <div class="card sky a-card"><div class="icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M10 21v-6h4v6"/></svg></div><h3>Corporate sponsorships</h3><p class="push">Brands fund vouchers, trophies and drives from CSR budgets.</p></div>
-        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">+ RWA plans Rs 1,000 to 3,000 / month</span><span class="pill">+ Express pickup Rs 29 to 49</span><span class="pill lime">Asset-light: no owned factories</span></div>
+    <!-- 11 WEBSITE & DIGITAL -->
+    <section class="slide" data-notes="The website has one job: turn interest into a booking, and build trust. Core pages: home, how it works, accepted materials, service areas, rewards and pricing, process transparency, FAQs, contact and privacy. One main call to action: Book a pickup, or Join the pilot. We measure visits by source, area checks, sign-ups, booking completion, drop-off steps and completed pickups. A screenshot of the customer website goes here once it is ready.">
+      <span class="num">15</span>
+      <span class="tag a-pop">Website &amp; digital journey</span>
+      <div class="head"><h2 class="a-up">One site, one action: <span class="mark">Book a pickup</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: 1.2fr 1fr;">
+        <div class="card white a-card" style="justify-content:center; align-items:center; text-align:center; border-style:dashed">
+          <p class="todo" style="font-size:24px">Customer website screenshot goes here</p>
+          <p class="s" style="margin-top:16px; color:var(--muted)">Add once the booking site is live and tested</p>
+        </div>
+        <div style="display:grid; gap:18px; grid-template-rows: 1fr 1fr">
+          <div class="card lime a-card"><h3>Core pages</h3><p class="s">Home · How it works · What we accept · Areas · Rewards &amp; pricing · Process transparency · FAQ · Privacy</p></div>
+          <div class="card sky a-card"><h3>We measure</h3><p class="s">Visits by source → area checks → sign-ups → booking completion → completed pickups</p></div>
+        </div>
       </div>
     </section>
 
-    <!-- 11 GTM -->
-    <section class="slide" data-notes="Go-to-market in three steps. Months 0 to 3, seed: 3 to 5 pilot societies, free drives, RWA pitches, WhatsApp onboarding. Months 3 to 9, densify: cover Sectors 44 to 54 and Manimajra, switch on referrals, sign the first voucher partners and paid RWA plans. Months 9 to 18, go Tricity: Mohali and Panchkula, sponsorships, an online upcycled store and municipal tie-ups.">
-      <span class="num">11</span>
+    <!-- 12 GO TO MARKET -->
+    <section class="slide" data-notes="Go-to-market in four phases. Prepare: pick pilot zones, confirm processing routes, finalise item rules, booking and support. Pilot: launch drives in areas across housing types, using local social content, referrals, WhatsApp groups and notices with permission. Improve: review reliability, cost per route, satisfaction and repeat use, and adjust. Expand: add areas and partners only when economics, quality and processor capacity support it. Campaign ideas include a neighbourhood clean-out week, an e-waste collection day and community challenges where communities opt in.">
+      <span class="num">16</span>
       <span class="tag a-pop">Go-to-market</span>
-      <div class="head"><h2 class="a-up">Seed. Densify. <span class="mark">Tricity</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr auto;">
-        <div class="card lime a-card"><span class="tag" style="margin-bottom:16px">Months 0 to 3</span><h3>Seed</h3><p class="push">3 to 5 pilot societies. Free drives, RWA pitches, WhatsApp onboarding.</p></div>
-        <div class="card white a-card"><span class="tag" style="margin-bottom:16px">Months 3 to 9</span><h3>Densify</h3><p class="push">Sectors 44 to 54 and Manimajra. Referrals, voucher partners, paid RWA plans.</p></div>
-        <div class="card sky a-card"><span class="tag" style="margin-bottom:16px">Months 9 to 18</span><h3>Tricity</h3><p class="push">Mohali and Panchkula. Sponsorships, upcycled store online, municipal tie-ups.</p></div>
-        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">RWA meetings</span><span class="pill">WhatsApp &amp; Instagram</span><span class="pill">Notice boards &amp; bins</span><span class="pill">Local influencers</span><span class="pill">College eco clubs</span></div>
+      <div class="head"><h2 class="a-up">Prepare. Pilot. Improve. <span class="mark">Expand</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr auto;">
+        <div class="card white a-card"><span class="big">1</span><h3>Prepare</h3><p class="s push">Pilot zones, processing routes, item rules, booking and support.</p></div>
+        <div class="card lime a-card"><span class="big">2</span><h3>Pilot</h3><p class="s push">Launch drives across housing types. Social, referrals, WhatsApp, notices.</p></div>
+        <div class="card kraft a-card"><span class="big">3</span><h3>Improve</h3><p class="s push">Review reliability, cost per route, satisfaction, repeat use.</p></div>
+        <div class="card sky a-card"><span class="big">4</span><h3>Expand</h3><p class="s push">New areas only when economics and quality support it.</p></div>
+        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">Neighbourhood clean-out week</span><span class="pill">E-waste collection day</span><span class="pill">Impact milestones</span><span class="pill lime">Referral credit</span><span class="pill">Community challenge (opt-in)</span></div>
       </div>
     </section>
 
-    <!-- 12 KPIs -->
-    <section class="slide" data-notes="How we will know it is working. Acquisition: societies onboarded and cost per household. Engagement: pickups per household per month and streaks. Operations: kilos per trip and cost per pickup. Revenue: material margin, RWA plan revenue, sponsorships. Impact: tonnes diverted, CO2 and water saved. Brand: referral share and leaderboard participation.">
-      <span class="num">12</span>
-      <span class="tag a-pop">Success metrics</span>
-      <div class="head"><h2 class="a-up">What we'll <span class="mark">measure</span>.</h2></div>
-      <div class="fill" style="grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 22px;">
-        <div class="card white a-card"><h3>Acquisition</h3><p class="push" style="font-size:25px">Societies onboarded, households signed up, cost per household</p></div>
-        <div class="card lime a-card"><h3>Engagement</h3><p class="push" style="font-size:25px">Pickups per household per month, active users, streaks</p></div>
-        <div class="card white a-card"><h3>Operations</h3><p class="push" style="font-size:25px">Kg per trip, cost per pickup, on-time rate</p></div>
-        <div class="card kraft a-card"><h3>Revenue</h3><p class="push" style="font-size:25px">Material margin, RWA plan revenue, sponsorship income</p></div>
-        <div class="card sky a-card"><h3>Impact</h3><p class="push" style="font-size:25px">Tonnes diverted, CO2 avoided, litres of water saved</p></div>
-        <div class="card white a-card"><h3>Brand</h3><p class="push" style="font-size:25px">Referral share, repeat rate, leaderboard participation</p></div>
+    <!-- 13 OPERATIONS -->
+    <section class="slide" data-notes="Operations make the marketing true. Each pickup goes from booking confirmation, to route planning and a time window, to order confirmation at the door, to item and weight recording, to a customer receipt. Material is segregated, stored safely and handed to suitable processors with chain-of-custody records where we can. We document agreements with processors, makers and reward partners, collect only the customer data we need, and keep evidence behind every impact claim.">
+      <span class="num">17</span>
+      <span class="tag a-pop">Operations &amp; partners</span>
+      <div class="head"><h2 class="a-up">Evidence at <span class="mark">every step</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(5, 1fr); grid-template-rows: 1fr auto;">
+        <div class="card white a-card"><h3>Booking</h3><p class="s push">Confirmation + time window</p></div>
+        <div class="card white a-card"><h3>Route</h3><p class="s push">Planned, delays notified</p></div>
+        <div class="card lime a-card"><h3>Doorstep</h3><p class="s push">Order check, items weighed</p></div>
+        <div class="card kraft a-card"><h3>Handling</h3><p class="s push">Segregated, stored safely</p></div>
+        <div class="card sky a-card"><h3>Processor</h3><p class="s push">Chain-of-custody record</p></div>
+        <div class="pills a-up" style="grid-column: 1 / -1"><span class="pill">Documented partner agreements</span><span class="pill">Minimal personal data</span><span class="pill">Reschedule &amp; escalation route</span><span class="pill lime">Evidence for every claim</span></div>
       </div>
     </section>
 
-    <!-- 13 CLOSE -->
-    <section class="slide dark" data-notes="To close: GreenLoop turns waste into worth, one doorstep at a time. Our next steps: finalise pilot societies, sign the first voucher partners, start RWA outreach, and add our survey results. Thank you, happy to take questions.">
-      <span class="num">13</span>
-      <span class="tag a-pop">Thank you</span>
+    <!-- 14 REVENUE & BUDGET -->
+    <section class="slide" data-notes="Revenue and budget. Potential income: selling recovered materials, selling upcycled products, brand-funded incentives and sponsorships, optional premium pickups, and service plans for communities and institutions. Main costs: collectors and training, transport, sorting and storage, technology, rewards, marketing, support and compliance. We will build unit economics per pickup, per route and per household, set a pilot budget, and agree a rule for when to expand.">
+      <span class="ghost" aria-hidden="true">₹</span><span class="num">18</span>
+      <span class="tag a-pop">Revenue &amp; budget</span>
+      <div class="head"><h2 class="a-up">Waste in. <span class="mark">Worth out</span>.</h2></div>
+      <div class="fill" style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto;">
+        <div class="card lime a-card"><h3>Revenue streams</h3><ul><li class="s">Recovered materials</li><li class="s">Upcycled products</li><li class="s">Brand sponsorships &amp; incentives</li><li class="s">Optional premium pickup</li><li class="s">Community / institution plans</li></ul></div>
+        <div class="card white a-card"><h3>Main costs</h3><ul><li class="s">Collectors &amp; training · transport</li><li class="s">Sorting &amp; storage</li><li class="s">Technology &amp; payments</li><li class="s">Rewards · marketing · support</li><li class="s">Compliance &amp; admin</li></ul></div>
+        <div class="card ink a-card" style="grid-column: 1 / -1; padding:18px 28px"><p style="font:700 26px var(--display)">Unit economics per pickup, per route and per household · pilot budget <span class="todo" style="color:#b9d3c2; border-color:#b9d3c2">team to set</span> · expand only above an agreed route contribution</p></div>
+      </div>
+    </section>
+
+    <!-- 15 RISKS -->
+    <section class="slide" data-notes="The risks that could hurt trust or viability, and our response. Unreliable pickups: realistic zones and windows, proactive updates and a missed-pickup recovery process. Distrust of processing: share processor details and evidence. Privacy: minimal data and a clear privacy notice. Confusing sorting: visual guides and feedback at pickup. Low density: bounded pilot zones. Price swings: no single revenue source. Unsafe items: clear exclusions, especially for batteries.">
+      <span class="num">19</span>
+      <span class="tag a-pop">Risks &amp; responses</span>
+      <div class="head"><h2 class="a-up">What could break it, <span class="mark">and the fix</span>.</h2></div>
+      <table class="tbl a-card">
+        <tr><th>Risk</th><th>Response</th></tr>
+        <tr><td><b>Unreliable pickups</b></td><td>Realistic zones and windows, proactive updates, missed-pickup recovery</td></tr>
+        <tr><td><b>Distrust of processing</b></td><td>Share processor details and evidence; no unsupported claims</td></tr>
+        <tr><td><b>Privacy concerns</b> (top survey worry, 18/83)</td><td>Minimal data, clear purpose, published privacy notice</td></tr>
+        <tr><td><b>Confusing sorting</b></td><td>Visual guides, clear item rules, feedback at pickup</td></tr>
+        <tr><td><b>Low density / participation</b></td><td>Bounded pilot zones; test direct and community acquisition</td></tr>
+        <tr><td><b>Price swings · unsafe items</b></td><td>Several revenue sources; clear exclusions, safe battery handling</td></tr>
+      </table>
+    </section>
+
+    <!-- 16 MEASUREMENT -->
+    <section class="slide" data-notes="How we learn and decide. Acquisition: sign-ups by housing type and channel, and cost per household. Activation and engagement: first-pickup conversion, repeat rate, referrals. Operations: on-time rate, kilos per route, cost per pickup, complaints. Revenue: material margin, sponsorship and route contribution. Impact and trust: material sent to verified destinations, satisfaction and privacy incidents. We review service and funnel numbers weekly during the pilot, and economics monthly.">
+      <span class="num">20</span>
+      <span class="tag a-pop">Measurement &amp; control</span>
+      <div class="head"><h2 class="a-up">Weekly on service. <span class="mark">Monthly</span> on money.</h2></div>
+      <div class="fill" style="grid-template-columns: repeat(5, 1fr); gap: 18px;">
+        <div class="card white a-card"><h3>Acquisition</h3><p class="s push">Sign-ups by housing type &amp; channel, cost per household</p></div>
+        <div class="card lime a-card"><h3>Engagement</h3><p class="s push">First-pickup conversion, repeat rate, referrals</p></div>
+        <div class="card white a-card"><h3>Operations</h3><p class="s push">On-time rate, kg per route, cost per pickup, complaints</p></div>
+        <div class="card kraft a-card"><h3>Revenue</h3><p class="s push">Material margin, sponsorship, route contribution</p></div>
+        <div class="card sky a-card"><h3>Impact &amp; trust</h3><p class="s push">Kg to verified destinations, satisfaction, privacy incidents</p></div>
+      </div>
+    </section>
+
+    <!-- 17 CONCLUSION -->
+    <section class="slide dark" data-notes="To close: we are asking to approve a pilot across housing types in a manageable set of Tricity localities. Next steps: validate the survey with a more balanced sample, confirm processing and reward partners, finalise service rules and unit economics, test the website booking flow, and set pilot targets and owners. GreenLoop makes responsible recycling easier to start, easier to trust and easier to repeat. Thank you.">
+      <span class="num">21</span>
+      <span class="tag a-pop">Conclusion</span>
       <div style="flex:1; display:flex; flex-direction:column; justify-content:center">
-        <h2 class="a-up" style="font-size:140px; max-width:1400px">Turn waste into worth, <span class="mark">one doorstep at a time.</span></h2>
-        <div class="pills a-up" style="margin-top:56px"><span class="pill lime">Finalise pilot societies</span><span class="pill">Sign first voucher partners</span><span class="pill">Launch RWA outreach</span><span class="pill">Add survey insights</span></div>
+        <h2 class="a-up" style="font-size:112px; max-width:1420px">Easier to start. Easier to trust. <span class="mark">Easier to repeat.</span></h2>
+        <p class="a-up" style="font-size:30px; margin-top:34px; color:#d8eadf">Decision: approve a cross-housing-type pilot in selected Tricity localities.</p>
+        <div class="pills a-up" style="margin-top:34px"><span class="pill lime">Validate survey with a balanced sample</span><span class="pill">Confirm partners</span><span class="pill">Finalise rules &amp; unit economics</span><span class="pill">Test booking flow</span><span class="pill">Set targets &amp; owners</span></div>
       </div>
     </section>
   </div>
@@ -340,7 +495,7 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
 
 <nav class="bar" aria-label="Presentation controls">
   <button type="button" id="b-prev" data-go="prev" aria-label="Previous slide">&larr;</button>
-  <span class="count" aria-live="polite">1 / 13</span>
+  <span class="count" aria-live="polite">1 / 22</span>
   <button type="button" id="b-next" data-go="next" aria-label="Next slide">&rarr;</button>
   <button type="button" id="b-over" data-go="overview">Overview</button>
   <button type="button" id="b-notes" data-go="notes" aria-pressed="false">Notes</button>
@@ -350,17 +505,46 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
 <aside class="notes" hidden></aside>
 <p class="hint">&larr; &rarr; or space to move &middot; O overview &middot; N notes &middot; F full screen</p>
 
-<style>
-.bar-col { flex: 1; height: 220px; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; text-align: center; }
-.bar-col b { font: 800 44px var(--display); }
-.bar-col span { font: 600 20px var(--body); color: var(--muted); margin-top: 8px; }
-.bar-col::before { content: ''; order: 1; height: var(--h); background: var(--leaf); border: 5px solid var(--ink); border-radius: 18px 18px 6px 6px; margin-top: 8px; }
-.bar-col b { order: 0; } .bar-col span { order: 2; }
-</style>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 (function () {
+  // ---------- survey data: Google Forms, 83 responses (counts) ----------
+  const N = 83;
+  const CHARTS = {
+    q1: { q: 'Q1 · Age group', rows: [['18 to 24', 45], ['25 to 34', 17], ['35 to 44', 12], ['45 and above', 6], ['Below 18', 3]] },
+    q2: { q: 'Q2 · Accommodation', rows: [['Independent house', 39], ['Rented / hostel', 24], ['Apartment / gated', 16], ['Other', 4]] },
+    q3: { q: 'Q3 · How you dispose of recyclables', rows: [['Scrap dealer / collector', 38], ['Mix with general waste', 19], ['Recycling facility', 12], ['Store until a chance', 9], ['Other', 5]] },
+    q12: { q: 'Q12 · Preferred pricing model', rows: [['Free, funded by recycling & partners', 31], ['Pay per pickup', 16], ['Free basic + paid premium', 14], ['Monthly subscription', 11], ['Not sure', 11]] },
+    q13: { q: 'Q13 · ONE benefit that would most motivate you', rows: [['Environmental protection', 28], ['Doorstep convenience', 27], ['Transparent processing', 17], ['Reward points & discounts', 8], ['Community initiatives', 3]] },
+    q14: { q: 'Q14 · Channel most likely to make you try it', rows: [['Society / residential community', 23], ['Friends & family', 20], ['Instagram / social media', 16], ['WhatsApp', 12], ['Municipal / env. campaigns', 12]] },
+    q15: { q: 'Q15 · Biggest concern', rows: [['No major concerns', 31], ['Privacy of personal info', 18], ['Trust in processing', 13], ['Complicated segregation', 10], ['Unreliable pickups', 9], ['Insufficient rewards', 2]] },
+  };
+  const LIKERT = [
+    ['Q10 · I would use GreenLoop with convenient doorstep collection', [4, 2, 8, 34, 35]],
+    ['Q11 · More likely if my society or community partnered', [6, 2, 7, 32, 36]],
+    ['Q6 · Doorstep service would make disposal easier', [5, 2, 10, 24, 42]],
+    ['Q7 · Prefer one pickup for different recyclables', [4, 5, 8, 27, 39]],
+    ['Q4 · Concerned about impact of improper disposal', [6, 2, 9, 24, 42]],
+    ['Q9 · Knowing where waste is processed builds trust', [5, 7, 7, 31, 33]],
+    ['Q8 · Rewards or discounts would make me recycle more', [7, 3, 13, 26, 34]],
+    ['Q5 · Disposing responsibly is difficult today', [7, 10, 20, 22, 24]],
+  ];
+  const pct = (v) => Math.round((v / N) * 100);
+  document.querySelectorAll('[data-chart]').forEach((el) => {
+    const c = CHARTS[el.dataset.chart];
+    const max = Math.max(...c.rows.map((r) => r[1]));
+    el.innerHTML = `<p class="q">${c.q}</p>` + c.rows.map(([lab, v], i) =>
+      `<div class="row"><span class="lab">${lab}</span><span class="trk"><span class="br a-bar${i === 0 ? ' top' : ''}" style="width:${(v / max) * 100}%; display:block"></span></span><span class="val">${v} <small style="font:600 15px var(--body);color:var(--muted)">${pct(v)}%</small></span></div>`).join('');
+  });
+  document.querySelectorAll('[data-likert]').forEach((el) => {
+    const cols = ['var(--l1)', 'var(--l2)', 'var(--l3)', 'var(--l4)', 'var(--l5)'];
+    el.innerHTML = LIKERT.map(([lab, v]) => {
+      const agree = v[3] + v[4];
+      return `<div class="lk"><span class="lab">${lab}</span><span class="stack a-bar">${v.map((n, i) => `<span style="width:${(n / N) * 100}%; background:${cols[i]}">${n >= 6 ? n : ''}</span>`).join('')}</span><span class="agree">${agree}<small>of 83 agree</small></span></div>`;
+    }).join('');
+  });
+
+  // ---------- canvas ----------
   const world = document.querySelector('.world');
   const viewport = document.querySelector('.viewport');
   const slides = [...document.querySelectorAll('.slide')];
@@ -368,15 +552,24 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
   const notesEl = document.querySelector('.notes');
   const notesBtn = document.getElementById('b-notes');
   const motionBtn = document.getElementById('b-motion');
-  // Motion is on by default, even if the computer asks for reduced motion (that setting is often
-  // switched on in Windows without people knowing). The Motion button turns it off.
+  // Motion is on by default, even if the computer asks for reduced motion (Windows often has
+  // that switched on without people knowing). The Motion button turns it off.
   let motion = true;
   try { motion = localStorage.getItem('greenloop:motion') !== 'off'; } catch (e) {}
   const SCALE = 0.3;
-  const CX = 800, CY = 450, RX = 2050, RY = 1290;
-  const BAR = 84; // keep slides clear of the control bar
+  const CX = 800, CY = 450;
+  const RX = 2900, RY = 1800; // loop size: room for every slide around the cover
+  const BAR = 84;
 
-  // Split the cover title into letters so they can bounce in one by one.
+  // Draw the loop to match.
+  const svg = document.querySelector('.loop-path');
+  const pad = 300;
+  svg.setAttribute('viewBox', `0 0 ${2 * (RX + pad)} ${2 * (RY + pad)}`);
+  Object.assign(svg.style, { left: (CX - RX - pad) + 'px', top: (CY - RY - pad) + 'px', width: 2 * (RX + pad) + 'px', height: 2 * (RY + pad) + 'px' });
+  svg.querySelectorAll('ellipse').forEach((e) => {
+    e.setAttribute('cx', RX + pad); e.setAttribute('cy', RY + pad); e.setAttribute('rx', RX); e.setAttribute('ry', RY);
+  });
+
   document.querySelectorAll('.split').forEach((h) => {
     const walk = (node) => [...node.childNodes].forEach((c) => {
       if (c.nodeType === 3) {
@@ -400,29 +593,28 @@ body { margin: 0; overflow: hidden; background: var(--paper); color: var(--ink);
   });
   const OVERVIEW = { cx: CX, cy: CY, w: 2 * RX + 1600 * SCALE + 200, h: 2 * RY + 900 * SCALE + 200, rot: 0 };
 
-  // Entrance animations, built once per slide and replayed when the camera lands.
   const entrances = slides.map((s) => {
     const tl = gsap.timeline({ paused: true });
     let at = 0.02;
-    s.querySelectorAll('.a-pop, .ch, .a-up, .a-card, .truck, .mark, .bar-col').forEach((el, n) => {
+    s.querySelectorAll('.a-pop, .ch, .a-up, .a-card, .truck, .mark, .a-bar').forEach((el, n) => {
       if (el.classList.contains('ch')) {
         tl.from(el, { y: -140, rotation: (n % 2 ? 20 : -20), opacity: 0, duration: 0.6, ease: 'bounce.out' }, at); at += 0.05;
       } else if (el.classList.contains('a-pop')) {
         tl.from(el, { scale: 0, rotation: -25, opacity: 0, duration: 0.6, ease: 'back.out(2.6)' }, at); at += 0.12;
       } else if (el.classList.contains('a-card')) {
-        tl.from(el, { y: 160, rotation: (n % 2 ? 6 : -6), scale: 0.7, opacity: 0, duration: 0.65, ease: 'back.out(1.7)' }, at); at += 0.09;
+        tl.from(el, { y: 140, rotation: (n % 2 ? 5 : -5), scale: 0.75, opacity: 0, duration: 0.6, ease: 'back.out(1.7)' }, at); at += 0.08;
         const icon = el.querySelector('.icon');
         if (icon) tl.from(icon, { scale: 0, rotation: 180, duration: 0.5, ease: 'back.out(2)' }, at + 0.2);
         const big = el.querySelector('.big');
         if (big) tl.from(big, { scale: 2.2, opacity: 0, duration: 0.45, ease: 'power3.out' }, at + 0.15);
+      } else if (el.classList.contains('a-bar')) {
+        tl.from(el, { scaleX: 0, duration: 0.8, ease: 'power3.out' }, 0.45 + (n % 12) * 0.05);
       } else if (el.classList.contains('mark')) {
         tl.from(el, { backgroundSize: '0% 34%', duration: 0.6, ease: 'power2.out' }, 0.45);
-      } else if (el.classList.contains('bar-col')) {
-        tl.from(el, { scaleY: 0, transformOrigin: '50% 100%', duration: 0.7, ease: 'back.out(1.6)' }, at + 0.3); at += 0.12;
       } else if (el.classList.contains('truck')) {
         tl.fromTo(el, { left: '-6%' }, { left: '96%', duration: 2.6, ease: 'power1.inOut' }, 0.5);
       } else {
-        tl.from(el, { y: 50, opacity: 0, duration: 0.6, ease: 'power3.out' }, at); at += 0.12;
+        tl.from(el, { y: 50, opacity: 0, duration: 0.6, ease: 'power3.out' }, at); at += 0.1;
       }
     });
     return tl.progress(1);
