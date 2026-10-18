@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Group 31 Credit Risk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap">
+<style>
+/* Layout: one zooming canvas laid out like a ledger. The cover sits in the middle; the 12 content
+   slides sit on a gridded orbit around it. The camera flies between them, numbers count up, bars
+   and lines draw in, and rows slide in when the camera lands. */
+:root {
+  --paper: #eef1f6;      /* ledger paper */
+  --navy: #0d1b2e;       /* ink */
+  --navy2: #16304f;
+  --gold: #f2b705;       /* accent */
+  --gold-soft: #fff1c2;
+  --good: #1f9e6a;       /* target met */
+  --bad: #e5484d;        /* target missed */
+  --watch: #f59e0b;
+  --white: #ffffff;
+  --muted: #55657a;
+  --line: rgba(13,27,46,.12);
+  --display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'Consolas', monospace;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body { margin: 0; overflow: hidden; background: var(--paper); color: var(--navy); font-family: var(--display); }
+.viewport { position: fixed; inset: 0; overflow: hidden; touch-action: none; user-select: none;
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 48px 48px,
+    radial-gradient(circle at 80% 10%, rgba(242,183,5,.18), transparent 45%), var(--paper); }
+.world { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.loop-path { position: absolute; pointer-events: none; overflow: visible; }
+.flying .orbit, .flying .tick { animation-play-state: paused !important; }
+.no-motion .orbit, .no-motion .tick { animation: none !important; }
+
+/* ---------- slides 1600 x 900 ---------- */
+.slide { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; box-sizing: border-box;
+  padding: 58px 76px 60px; background: var(--white); border-radius: 18px; transform-origin: 50% 50%;
+  box-shadow: 0 0 0 3px var(--navy), 0 30px 60px rgba(13,27,46,.25); overflow: hidden; display: flex; flex-direction: column; }
+.slide::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: var(--gold); }
+.slide.cover { background: transparent; box-shadow: none; overflow: visible; padding: 0; }
+.slide.cover::before, .slide.dark::before { display: none; }
+.slide.dark { background: var(--navy); color: var(--white); }
+.is-overview .slide:not(.cover) { cursor: zoom-in; }
+.kicker { font: 700 19px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+.dark .kicker { color: var(--gold); }
+.slide h2 { font: 900 66px/1.02 var(--display); letter-spacing: -0.025em; margin: 0 0 30px; max-width: 1380px; text-wrap: balance; }
+.slide h3 { font: 800 28px/1.1 var(--display); margin: 0 0 10px; }
+.slide p, .slide li { font: 500 22px/1.42 var(--display); margin: 0; }
+.hl { background: linear-gradient(transparent 62%, var(--gold) 62%, var(--gold) 94%, transparent 94%); background-repeat: no-repeat; padding: 0 4px; }
+.dark .hl { background: none; color: var(--gold); }
+.num { position: absolute; right: 40px; bottom: 30px; font: 700 20px var(--mono); color: var(--muted); }
+.dark .num { color: var(--gold); }
+.fill { flex: 1; min-height: 0; display: grid; gap: 22px; }
+.panel { border: 3px solid var(--navy); border-radius: 14px; padding: 22px 26px; background: var(--white); min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.panel.tint { background: #f5f7fb; } .panel.gold { background: var(--gold-soft); } .panel.navy { background: var(--navy); color: var(--white); }
+.panel.navy .kicker { color: var(--gold); }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.note { font: 500 19px/1.4 var(--display); color: var(--muted); margin-top: 14px; }
+.dark .note { color: #b5c3d6; }
+
+/* KPI tiles */
+.kpis { display: grid; gap: 18px; }
+.kpi { border: 3px solid var(--navy); border-radius: 14px; padding: 20px 22px; background: var(--white); display: flex; flex-direction: column; justify-content: space-between; min-width: 0; position: relative; overflow: hidden; }
+.kpi .v { font: 800 54px/1 var(--mono); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.kpi .l { font: 600 19px/1.25 var(--display); color: var(--muted); margin-top: 10px; }
+.kpi.good { border-color: var(--good); } .kpi.good .v { color: var(--good); }
+.kpi.bad { border-color: var(--bad); } .kpi.bad .v { color: var(--bad); }
+.kpi.navy { background: var(--navy); color: var(--white); } .kpi.navy .l { color: #b5c3d6; }
+.kpi .flag { position: absolute; right: 14px; top: 12px; font: 800 14px var(--mono); padding: 3px 8px; border-radius: 6px; color: var(--white); }
+.kpi.good .flag { background: var(--good); } .kpi.bad .flag { background: var(--bad); }
+.dark .kpi { background: var(--navy2); border-color: #2c4a70; color: var(--white); }
+.dark .kpi .l { color: #b5c3d6; }
+
+/* tables */
+.tbl { width: 100%; border-collapse: separate; border-spacing: 0; border: 3px solid var(--navy); border-radius: 12px; overflow: hidden; }
+.tbl th, .tbl td { text-align: left; padding: 10px 14px; font: 500 19px/1.3 var(--display); border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl th { font: 700 15px var(--mono); letter-spacing: .08em; text-transform: uppercase; background: var(--navy); color: var(--gold); }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl tr:nth-child(even) td { background: #f5f7fb; }
+.tbl td.m { font-family: var(--mono); font-weight: 700; white-space: nowrap; }
+.tbl tr.total td { font-weight: 800; background: var(--gold-soft) !important; }
+.tbl .base td { background: var(--gold-soft) !important; font-weight: 700; }
+.pos { color: var(--good); } .neg { color: var(--bad); }
+.dark .tbl { border-color: #2c4a70; } .dark .tbl td { color: var(--white); border-bottom-color: #2c4a70; }
+.dark .tbl tr:nth-child(even) td { background: var(--navy2); }
+
+/* charts */
+.hbar { display: grid; gap: 9px; }
+.hbar .r { display: grid; grid-template-columns: 110px 1fr 70px; gap: 12px; align-items: center; }
+.hbar .lab { font: 600 18px var(--display); }
+.hbar .trk { height: 24px; background: #edf0f5; border-radius: 5px; }
+.hbar .b { height: 100%; background: var(--navy); border-radius: 5px; transform-origin: 0 50%; }
+.hbar .r.top .b { background: var(--gold); }
+.hbar .val { font: 700 17px var(--mono); }
+.cols { display: flex; gap: 22px; align-items: flex-end; height: 100%; padding-top: 10px; }
+.cols .c { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.cols .c b { font: 800 26px var(--mono); margin-bottom: 8px; }
+.cols .c i { display: block; width: 100%; border-radius: 8px 8px 2px 2px; transform-origin: 50% 100%; }
+.cols .c span { font: 600 18px var(--display); margin-top: 8px; }
+svg.line text { font: 600 16px var(--display); fill: var(--muted); }
+svg.line .val { font: 700 16px var(--mono); fill: var(--navy); }
+
+/* stacked score bar */
+.stack { display: flex; height: 70px; border: 3px solid var(--navy); border-radius: 12px; overflow: hidden; }
+.stack span { display: grid; place-items: center; font: 800 26px var(--mono); color: var(--navy); transform-origin: 0 50%; }
+
+/* flow (workbook design) */
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; align-items: stretch; }
+.flow .st { border: 3px solid var(--navy); border-radius: 14px; padding: 18px 20px; background: var(--white); position: relative; margin-right: 34px; }
+.flow .st:last-child { margin-right: 0; }
+.flow .st:not(:last-child)::after { content: '→'; position: absolute; right: -32px; top: 50%; transform: translateY(-50%); font: 900 30px var(--display); color: var(--gold); }
+.flow .st b { display: block; font: 800 15px var(--mono); letter-spacing: .1em; color: var(--muted); margin-bottom: 8px; }
+.flow .st p { font-size: 19px; }
+
+/* findings grid */
+.finds { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 14px; }
+.find { border: 2px solid var(--navy); border-radius: 12px; padding: 14px 16px; background: var(--white); display: flex; gap: 12px; align-items: flex-start; }
+.find b { font: 800 26px var(--mono); color: var(--gold); line-height: 1; -webkit-text-stroke: 1px var(--navy); }
+.find p { font-size: 18px; line-height: 1.32; }
+
+/* cover */
+.cover-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 120px; }
+.cover .kicker { font-size: 22px; color: var(--muted); }
+.cover h1 { font: 900 128px/0.94 var(--display); letter-spacing: -0.045em; margin: 10px 0 26px; }
+.cover h1 .g { color: var(--white); background: var(--navy); padding: 0 18px; border-radius: 10px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.cover .sub { font: 600 32px/1.3 var(--display); max-width: 1100px; }
+.cover .team { margin-top: 36px; display: flex; gap: 12px; flex-wrap: wrap; }
+.chip { color: var(--navy); font: 700 20px var(--display); border: 3px solid var(--navy); border-radius: 999px; padding: 9px 18px; background: var(--white); }
+.chip.gold { background: var(--gold); }
+.ticker { position: absolute; left: -200px; right: -200px; top: -150px; height: 64px; background: var(--navy); color: var(--gold); overflow: hidden; display: flex; align-items: center; transform: rotate(-2deg); }
+.ticker .tick { white-space: nowrap; font: 700 24px var(--mono); animation: tick 30s linear infinite; }
+@keyframes tick { to { transform: translateX(-50%); } }
+.orbit-coin { position: absolute; width: 120px; height: 120px; border-radius: 50%; background: var(--gold); border: 4px solid var(--navy); display: grid; place-items: center; font: 900 46px var(--mono); }
+.orbit { animation: orbit 40s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+
+/* controls */
+.bar { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 10;
+  display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 12px; background: var(--white);
+  border: 2px solid var(--navy); box-shadow: 0 8px 24px rgba(13,27,46,.2); transition: opacity .3s ease; }
+.bar button { font: 700 13px var(--mono); cursor: pointer; color: var(--navy); background: var(--paper); border: 2px solid var(--navy);
+  border-radius: 8px; padding: 7px 12px; white-space: nowrap; }
+.bar button:hover { background: var(--gold); }
+.bar button[aria-pressed="true"] { background: var(--gold-soft); }
+.bar button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.count { font: 800 14px var(--mono); background: var(--navy); color: var(--gold); border-radius: 8px; padding: 8px 12px; min-width: 64px; text-align: center; }
+.notes { position: fixed; right: 16px; bottom: 80px; z-index: 10; width: min(460px, calc(100vw - 32px)); max-height: 42vh; overflow: auto;
+  margin: 0; padding: 16px 18px; font: 500 16px/1.5 var(--display); background: var(--white); border: 2px solid var(--navy); border-radius: 12px; box-shadow: 0 8px 24px rgba(13,27,46,.2); }
+.hint { position: fixed; left: 50%; top: calc(12px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 10; margin: 0;
+  font: 700 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; background: var(--navy); color: var(--gold);
+  padding: 7px 14px; border-radius: 8px; white-space: nowrap; pointer-events: none; animation: hint-out .6s ease 7s forwards; }
+@keyframes hint-out { to { opacity: 0; } }
+.is-idle .bar { opacity: 0; } .is-idle { cursor: none; }
+@media (max-width: 640px) { .bar { gap: 4px; padding: 6px; } .bar button { padding: 6px 8px; font-size: 11px; } .bar [data-go="full"], .hint { display: none; } }
+</style>
+
+</head>
+<body>
+<main class="viewport" aria-roledescription="presentation" aria-label="Group 31 credit risk presentation">
+  <div class="world">
+    <svg class="loop-path" aria-hidden="true">
+      <ellipse fill="none" stroke="#0d1b2e" stroke-width="6" stroke-dasharray="4 26" stroke-linecap="round" opacity=".5"/>
+      <ellipse fill="none" stroke="#f2b705" stroke-width="16" opacity=".55"/>
+    </svg>
+
+    <!-- 1 COVER -->
+    <section class="slide cover" data-notes="Good morning. We are Group 31. Our project is Corporate Credit Risk and Portfolio Yield Analytics: an Excel decision model for Apex Corporate Banking that brings 3,000 loans and 68.2 million dollars of exposure into one source of truth.">
+      <div class="ticker" aria-hidden="true"><div class="tick">LOANS 3,000 ▲ · EXPOSURE $68.2M · RATE 20.66% · ECL $1.63M ▼ · RoA 10.76% ▼ · HIGH-RISK 22.6% · LOANS 3,000 ▲ · EXPOSURE $68.2M · RATE 20.66% · ECL $1.63M ▼ · RoA 10.76% ▼ · HIGH-RISK 22.6% ·&nbsp;</div></div>
+      <div class="cover-wrap">
+        <p class="kicker a-up">BA5213 · Excel modelling for decision-making · Group #31</p>
+        <h1 class="a-up">Corporate Credit Risk &amp; <span class="g">Portfolio Yield</span> Analytics</h1>
+        <p class="sub a-up">An Excel decision model for Apex Corporate Banking: 3,000 loans, $68.2M of exposure, one source of truth.</p>
+        <div class="team a-up"><span class="chip gold">JasMehr Singh · Group Captain</span><span class="chip">Rishabh Sharma</span><span class="chip">Prashant Pal</span><span class="chip">Aniket Kumar</span></div>
+        <p class="kicker a-up" style="margin-top:30px">LM Thapar School of Management</p>
+      </div>
+      <div class="orbit" style="position:absolute; left:50%; top:50%; width:0; height:0" aria-hidden="true">
+        <div class="orbit-coin" style="left:640px; top:-420px">$</div>
+        <div class="orbit-coin" style="left:-780px; top:330px; background: var(--white)">%</div>
+      </div>
+    </section>
+
+    <!-- 2 EXEC SUMMARY -->
+    <section class="slide" data-notes="The headline. The book earns a 20.66 percent rate, but after expected loss, cost of funds and operating cost it returns 10.76 percent on assets, short of the 12 percent target. Risk is concentrated: 22.6 percent of loans are High-rated yet carry 46.3 percent of expected loss. Data quality is a risk too: 140 losses exceed principal and only a third of loans have payment history. But the book is resilient: losses only exceed income if default probabilities rise 5.5 times.">
+      <p class="kicker a-up">Executive summary</p>
+      <h2 class="a-up">The book earns 20.66% but returns <span class="hl">10.76%</span> after risk and cost, short of the 12% target</h2>
+      <div class="fill" style="grid-template-rows: 1fr auto;">
+        <div class="kpis" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="kpi a-card"><span class="v" data-count="68.2" data-pre="$" data-suf="M" data-dec="1">$68.2M</span><span class="l">Exposure across 3,000 loans</span></div>
+          <div class="kpi a-card"><span class="v" data-count="14.08" data-pre="$" data-suf="M" data-dec="2">$14.08M</span><span class="l">Estimated annual yield (20.66% rate)</span></div>
+          <div class="kpi bad a-card"><span class="v" data-count="1.63" data-pre="$" data-suf="M" data-dec="2">$1.63M</span><span class="l">Expected credit loss (2.40% of exposure)</span></div>
+          <div class="kpi bad a-card"><span class="flag">vs 12%</span><span class="v" data-count="10.76" data-suf="%" data-dec="2">10.76%</span><span class="l">Risk-adjusted RoA vs 12% target</span></div>
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+          <div class="panel gold a-card"><h3>Concentrated</h3><p>22.6% of loans are High-rated yet carry 46.3% of expected loss.</p></div>
+          <div class="panel tint a-card"><h3>Data quality</h3><p>140 losses exceed principal; only 33% of loans have payment history.</p></div>
+          <div class="panel navy a-card"><h3 style="color:var(--gold)">Resilient</h3><p>Losses only exceed income if PDs rise 5.5x.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 CONTEXT & DESIGN -->
+    <section class="slide" data-notes="The starting point. Apex Corporate Banking: 10 countries, 4 loan categories, 6 corporate borrowers, loans disbursed from 1 January to 5 May 2025. The audit found four disconnected tabs and dirty data: irregular spacing and casing, amounts stored as text in 600 rows, mixed date formats, and packed contact fields. Our fix was 15 tabs with one direction of flow: raw data, cleaned in Phase A, modelled in Phase B, and outputs in Phase C, wrapped by a MasterSheet and a data dictionary.">
+      <p class="kicker a-up">Business context &amp; workbook design</p>
+      <h2 class="a-up">Four disconnected tabs and dirty data blocked <span class="hl">real-time risk assessment</span></h2>
+      <div class="fill" style="grid-template-columns: 1fr 1.25fr;">
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <table class="tbl a-card">
+            <tr><th>What the audit found</th><th>Example</th></tr>
+            <tr><td>Loans, benchmarks, profiles, history on separate tabs</td><td class="m">4 tabs, no links</td></tr>
+            <tr><td>Irregular spacing and casing</td><td class="m">" India ", " fin-103 "</td></tr>
+            <tr><td>Amounts stored as text</td><td class="m">600 rows " $30,631.90 "</td></tr>
+            <tr><td>Mixed date formats</td><td class="m">1,500 text + 1,500 dates</td></tr>
+            <tr><td>Packed contact fields</td><td class="m">"Name (Role)"</td></tr>
+          </table>
+          <p class="note a-up" style="margin-top:0">Apex Corporate Banking: 10 countries, 4 loan categories, 6 corporate borrowers, disbursed 1 Jan to 5 May 2025.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:16px">
+          <h3 class="a-up">Our fix: 15 tabs, one direction of flow</h3>
+          <div class="flow" style="grid-template-columns: 1fr 1fr; gap: 16px 0">
+            <div class="st a-card"><b>RAW</b><p>Transactions 3,000 · Lookups · Demographics 1,000 · Historical 1,000</p></div>
+            <div class="st a-card"><b>CLEANED · PHASE A</b><p>Cleaned_Transactions · Cleaned_Demographics · Cleaning_Log</p></div>
+            <div class="st a-card"><b>MODEL · PHASE B</b><p>Integrated_Model: tblLoans, 3,000 rows x 39 columns</p></div>
+            <div class="st a-card" style="background:var(--gold-soft)"><b>OUTPUTS · PHASE C</b><p>Dashboard · Search_Engine · Analysis_Toolpack · Analytic_Summary</p></div>
+          </div>
+          <p class="note a-up">Wrapped by MasterSheet (hyperlinks to all tabs) and Instructions_DataDict (alphabetical column dictionary).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 PHASE A -->
+    <section class="slide" data-notes="Phase A, cleansing and integration. Eleven formula steps made every value typed and joinable. Text amounts became numbers with VALUE, SUBSTITUTE and TRIM. Country spacing and casing were fixed. Mixed dates were unified with DATEVALUE. Names were cleaned with PROPER, TRIM and CLEAN. Keys were standardised with UPPER. Packed name and role fields were split. And XLOOKUP brought in the rate, LTI and description from the benchmark tab, and the 2023 to 2024 history by loan ID. Every step is logged with its exact formula on the Cleaning_Log tab.">
+      <p class="kicker a-up">Phase A · Cleansing &amp; integration</p>
+      <h2 class="a-up">Eleven formula steps made every value <span class="hl">typed and joinable</span></h2>
+      <table class="tbl a-card">
+        <tr><th>Problem</th><th>Functions</th><th>Before → after</th></tr>
+        <tr><td>Amounts stored as text (600 rows)</td><td class="m">VALUE, SUBSTITUTE, TRIM, IFERROR</td><td class="m">" $30,631.90 " → 30631.90</td></tr>
+        <tr><td>Country spacing; "Uae" casing</td><td class="m">TRIM, PROPER, SUBSTITUTE</td><td class="m">" uae " → UAE</td></tr>
+        <tr><td>Mixed text and real dates</td><td class="m">IF, ISNUMBER, INT, DATEVALUE</td><td class="m">"01-Jan-2025" → date</td></tr>
+        <tr><td>Name casing, hidden characters</td><td class="m">PROPER, TRIM, CLEAN</td><td class="m">david k. miller → David K. Miller</td></tr>
+        <tr><td>Category and ID keys</td><td class="m">UPPER, TRIM</td><td class="m">" fin-103 " → FIN-103</td></tr>
+        <tr><td>"Name (Role)" in one cell</td><td class="m">LEFT, MID, FIND</td><td class="m">→ Siddharth Rao | Account Officer</td></tr>
+        <tr><td>Rate, LTI, description on another tab</td><td class="m">XLOOKUP by Category_Code</td><td class="m">FIN-103 → 22% · Commercial Equipment</td></tr>
+        <tr><td>2023-24 history on another tab</td><td class="m">XLOOKUP by Loan_ID</td><td class="m">TXN-1000 → 3 late days · $14,486 loss</td></tr>
+      </table>
+      <p class="note a-up">Every step is logged with its exact formula on Cleaning_Log.</p>
+    </section>
+
+    <!-- 5 PHASE B SCORING -->
+    <section class="slide" data-notes="Phase B, calculated fields and risk scoring. 23 calculated fields and a 0 to 100 risk score built from four drivers: pricing risk 30 points, late days in 2024 30 points, loss-to-loan ratio 25 points, and credit tier 15 points. Loans with no history get a neutral 27.5 points. The weights are inputs with a check cell that enforces a total of 100. The score maps to a rating, the rating to a probability of default, and that to expected loss: 677 High-rated loans carry 46.3 percent of the 1.63 million dollars of expected credit loss.">
+      <p class="kicker a-up">Phase B · Calculated fields &amp; risk scoring</p>
+      <h2 class="a-up">23 calculated fields and a 0-100 risk score rate <span class="hl">677 loans High</span></h2>
+      <div class="fill" style="grid-template-columns: 1fr 1.15fr;">
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <h3 class="a-up">Score = 100 points from four drivers</h3>
+          <div class="stack a-card">
+            <span class="a-seg" style="width:30%; background:var(--gold)">30</span><span class="a-seg" style="width:30%; background:#ffd75e">30</span><span class="a-seg" style="width:25%; background:#cfd8e6">25</span><span class="a-seg" style="width:15%; background:#a9b8cf">15</span>
+          </div>
+          <table class="tbl a-card">
+            <tr><th>Driver</th><th>Points</th></tr>
+            <tr><td>Pricing risk</td><td class="m">30 x rate ÷ 35% top rate</td></tr>
+            <tr><td>Late days 2024</td><td class="m">30 x MIN(1, days ÷ 11)</td></tr>
+            <tr><td>Loss-to-loan ratio</td><td class="m">25 x MIN(1, ratio)</td></tr>
+            <tr><td>Credit tier</td><td class="m">0 / 7.5 / 15</td></tr>
+          </table>
+          <p class="note a-up" style="margin-top:0">No history → neutral 27.5 points. Weights are inputs; a check cell enforces a total of 100.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <h3 class="a-up">Rating → PD → expected loss</h3>
+          <table class="tbl a-card">
+            <tr><th>Rating</th><th>Loans</th><th>PD</th><th>ECL</th><th>Share</th></tr>
+            <tr><td>Low (&lt; 45)</td><td class="m">1,048</td><td class="m">2%</td><td class="m">$226,566</td><td class="m">13.9%</td></tr>
+            <tr><td>Medium</td><td class="m">1,275</td><td class="m">5%</td><td class="m">$651,987</td><td class="m">39.9%</td></tr>
+            <tr><td><b class="neg">High (≥ 60)</b></td><td class="m">677</td><td class="m">12%</td><td class="m">$756,239</td><td class="m neg">46.3%</td></tr>
+            <tr class="total"><td>Total</td><td class="m">3,000</td><td class="m">5.33%</td><td class="m">$1,634,791</td><td class="m">100%</td></tr>
+          </table>
+          <p class="note a-up" style="margin-top:0">ECL = Amount x PD x PD multiplier x LGD (45%). Fields in six groups: demographic join · time · pricing &amp; cash flow · credit risk · expected loss · statistics, plus 3 helpers for slicers and search.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6 SEARCH & CF -->
+    <section class="slide" data-notes="The search engine. Nine dropdowns, each with All, plus a minimum and maximum amount. Search_Match tests each loan with AND and OR, MATCH finds the k-th hit, and INDEX returns 14 fields for up to 50 results. In the demo, Country India and Rating High return 73 loans, 1.59 million dollars of exposure, a 28.31 percent weighted rate and 85.6 thousand dollars of expected loss. Conditional formatting runs across four tabs so outliers flag themselves.">
+      <p class="kicker a-up">Phase B · Search engine &amp; conditional formatting</p>
+      <h2 class="a-up">Nine dropdowns find any slice of the book; <span class="hl">outliers flag themselves</span></h2>
+      <div class="fill" style="grid-template-columns: 1fr 1.1fr;">
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <div class="panel tint a-card"><p class="kicker">Multi-criteria search</p><p style="font-size:19px">Country · Category · Credit tier · Risk rating · Month · Borrower · Late status (each with "All") + min/max amount. AND/OR test per loan; MATCH finds the k-th hit; INDEX returns 14 fields for up to 50 results.</p></div>
+          <p class="kicker a-up" style="margin:0">Demo: Country = India, Rating = High</p>
+          <div class="kpis" style="grid-template-columns: 1fr 1fr; flex:1">
+            <div class="kpi navy a-card"><span class="v" data-count="73" data-dec="0">73</span><span class="l">matching loans</span></div>
+            <div class="kpi a-card"><span class="v" data-count="1.59" data-pre="$" data-suf="M" data-dec="2">$1.59M</span><span class="l">exposure (2.3% of book)</span></div>
+            <div class="kpi a-card"><span class="v" data-count="28.31" data-suf="%" data-dec="2">28.31%</span><span class="l">weighted rate</span></div>
+            <div class="kpi bad a-card"><span class="v" data-count="85.6" data-pre="$" data-suf="K" data-dec="1">$85.6K</span><span class="l">expected loss</span></div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <h3 class="a-up">Conditional formatting across four tabs</h3>
+          <table class="tbl a-card">
+            <tr><th>Tab</th><th>Rules applied</th></tr>
+            <tr><td><b>Integrated_Model</b></td><td>Traffic lights on rating and late status · red outliers, loss ratio &gt; 1.0 · data bars · icon set on late days</td></tr>
+            <tr><td><b>Search_Engine</b></td><td>Rating colours · Severe and Loss &gt; Principal highlights · warning when min &gt; max</td></tr>
+            <tr><td><b>Dashboard</b></td><td>KPI cards turn green or red against targets</td></tr>
+            <tr><td><b>Analysis_Toolpack</b></td><td>Colour scales on Data Tables · RoA vs 12% target · correlation heat map</td></tr>
+          </table>
+          <div class="a-up" style="display:flex; gap:12px"><span class="chip" style="border-color:var(--good); color:var(--good)">● Low / met</span><span class="chip" style="border-color:var(--watch); color:#b26b00">● Medium / watch</span><span class="chip" style="border-color:var(--bad); color:var(--bad)">● High / breach</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 DASHBOARD -->
+    <section class="slide dark" data-notes="Phase C, the executive dashboard. Twelve slicer-aware KPIs. Two targets are met: the weighted rate at 20.66 percent is above 20, and average late days at 5.5 are under 6. Three are missed: the ECL rate at 2.40 percent is above the 2 percent limit, high-risk share at 22.6 percent is above 20, and risk-adjusted RoA at 10.76 percent is below 12. The six slicers filter the loan table; a SUBTOTAL flag marks visible rows, and every KPI is a SUMIFS or COUNTIFS on that flag.">
+      <p class="kicker a-up">Phase C · Executive dashboard</p>
+      <h2 class="a-up">12 slicer-aware KPIs: <span class="hl">two targets met, three missed</span></h2>
+      <div class="fill" style="grid-template-rows: 1fr auto;">
+        <div class="kpis" style="grid-template-columns: repeat(6, 1fr); grid-template-rows: 1fr 1fr; gap: 14px">
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="3000" data-dec="0" data-sep="1">3,000</span><span class="l">Loans</span></div>
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="68.2" data-pre="$" data-suf="M" data-dec="1">$68.2M</span><span class="l">Exposure</span></div>
+          <div class="kpi good a-card"><span class="flag">MET</span><span class="v" style="font-size:40px" data-count="20.66" data-suf="%" data-dec="2">20.66%</span><span class="l">Wtd. rate (≥ 20%)</span></div>
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="14.08" data-pre="$" data-suf="M" data-dec="2">$14.08M</span><span class="l">Annual yield</span></div>
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="1.63" data-pre="$" data-suf="M" data-dec="2">$1.63M</span><span class="l">Exp. loss</span></div>
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="12.45" data-pre="$" data-suf="M" data-dec="2">$12.45M</span><span class="l">Net yield</span></div>
+          <div class="kpi bad a-card"><span class="flag">MISSED</span><span class="v" style="font-size:40px" data-count="2.40" data-suf="%" data-dec="2">2.40%</span><span class="l">ECL rate (≤ 2%)</span></div>
+          <div class="kpi bad a-card"><span class="flag">MISSED</span><span class="v" style="font-size:40px" data-count="22.6" data-suf="%" data-dec="1">22.6%</span><span class="l">High-risk (≤ 20%)</span></div>
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="50.4" data-dec="1">50.4</span><span class="l">Avg score</span></div>
+          <div class="kpi good a-card"><span class="flag">MET</span><span class="v" style="font-size:40px" data-count="5.5" data-dec="1">5.5</span><span class="l">Late days (≤ 6)</span></div>
+          <div class="kpi a-card"><span class="v" style="font-size:40px" data-count="7.37" data-pre="$" data-suf="M" data-dec="2">$7.37M</span><span class="l">Hist. loss</span></div>
+          <div class="kpi bad a-card"><span class="flag">MISSED</span><span class="v" style="font-size:40px" data-count="10.76" data-suf="%" data-dec="2">10.76%</span><span class="l">Risk-adj. RoA (≥ 12%)</span></div>
+        </div>
+        <p class="note a-up" style="margin-top:0">Six slicers (Country, Risk Category, Credit Tier, Month, Risk Rating, Size Band) filter tblLoans; Is_Visible = SUBTOTAL(103) flags visible rows; every KPI is a SUMIFS / COUNTIFS on Is_Visible = 1. Highlights: top country India (10.7%) · peak month March ($17.38M) · largest loan TXN-2290 ($44,995) · 241 Severe · 140 Loss &gt; Principal.</p>
+      </div>
+    </section>
+
+    <!-- 8 CHARTS -->
+    <section class="slide" data-notes="The dashboard charts. Exposure is evenly spread: from India at 10.7 percent to Germany at 9.1 percent, and by category from 23.8 to 25.5 percent, so there is no concentration. The monthly trend is steady at 14.7 to 17.4 million dollars a month; May is partial because the data ends on 5 May. Yield beats loss 8 to 9 times in every country. But one loan in five is High risk, and the top 10 expected-loss loans are all High.">
+      <p class="kicker a-up">Phase C · Dashboard charts</p>
+      <h2 class="a-up">Exposure is evenly spread, yet <span class="hl">one loan in five is High risk</span></h2>
+      <div class="fill" style="grid-template-columns: 1.1fr 1fr 0.8fr;">
+        <div class="panel a-card"><p class="kicker">Exposure by country · $M</p><div class="hbar" data-hbar></div></div>
+        <div class="panel a-card"><p class="kicker">Exposure by month · $M</p><svg class="line" data-line viewBox="0 0 440 340" style="width:100%; flex:1"></svg><p class="note" style="margin-top:6px">*May is partial (data ends 5 May).</p></div>
+        <div class="panel a-card"><p class="kicker">Loans by rating</p><div class="cols" style="flex:1">
+          <div class="c"><b>1,048</b><i class="a-col" style="height:73%; background:var(--good)"></i><span>Low</span></div>
+          <div class="c"><b>1,275</b><i class="a-col" style="height:89%; background:var(--watch)"></i><span>Medium</span></div>
+          <div class="c"><b>677</b><i class="a-col" style="height:47%; background:var(--bad)"></i><span>High</span></div>
+        </div></div>
+      </div>
+      <p class="note a-up">By category: 23.8% to 25.5%, no concentration. Yield beats loss 8-9x in every country. Late status: 2,000 no history · 431 Current · 328 Watch · 241 Severe.</p>
+    </section>
+
+    <!-- 9 WHAT-IF -->
+    <section class="slide" data-notes="What-if analysis. Data Table 1 shocks the rate: every 100 basis points adds 681,556 dollars of net income, and a 2 percent increase lifts RoA to 12.76. Goal Seek finds that a plus 1.24 percent shock reaches the 12 percent target, that net income only hits zero at a 5.49 times PD multiplier, and that an EMI of 1,000 dollars supports a maximum principal of 37,226 over five years. The scenario manager shows even the Worst case still earns 4.56 percent RoA, and Best reaches 14.06. The worst-to-best swing is 6.47 million dollars.">
+      <p class="kicker a-up">Phase C · What-if analysis</p>
+      <h2 class="a-up"><span class="hl">+124 bps</span> reaches the 12% RoA target; even the Worst case earns 4.56%</h2>
+      <div class="fill" style="grid-template-columns: 0.9fr 1.3fr;">
+        <div style="display:flex; flex-direction:column; gap:12px">
+          <table class="tbl a-card">
+            <tr><th>Rate shock</th><th>Net income</th><th>RoA</th></tr>
+            <tr><td class="m">-2.00%</td><td class="m">$5,972,269</td><td class="m neg">8.76%</td></tr>
+            <tr><td class="m">-1.00%</td><td class="m">$6,653,824</td><td class="m neg">9.76%</td></tr>
+            <tr class="base"><td class="m">0.00% (base)</td><td class="m">$7,335,380</td><td class="m">10.76%</td></tr>
+            <tr><td class="m">+1.00%</td><td class="m">$8,016,936</td><td class="m">11.76%</td></tr>
+            <tr><td class="m">+2.00%</td><td class="m">$8,698,492</td><td class="m pos">12.76%</td></tr>
+            <tr><td class="m">+3.00%</td><td class="m">$9,380,048</td><td class="m pos">13.76%</td></tr>
+          </table>
+          <p class="note a-up" style="margin-top:0">Every +100 bps adds $681,556. Doubled PDs still leave $5.7M net.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px">
+          <div class="kpis" style="grid-template-columns: repeat(3, 1fr)">
+            <div class="kpi navy a-card"><span class="l" style="margin:0 0 6px">GS-1 · target RoA 12%</span><span class="v" style="font-size:44px; color:var(--gold)" data-count="1.24" data-pre="+" data-suf="%" data-dec="2">+1.24%</span><span class="l">rate shock needed</span></div>
+            <div class="kpi a-card"><span class="l" style="margin:0 0 6px">GS-2 · net income = $0</span><span class="v" style="font-size:44px" data-count="5.49" data-suf="x" data-dec="2">5.49x</span><span class="l">break-even PD multiplier</span></div>
+            <div class="kpi a-card"><span class="l" style="margin:0 0 6px">GS-3 · EMI = $1,000</span><span class="v" style="font-size:44px" data-count="37226" data-pre="$" data-dec="0" data-sep="1">$37,226</span><span class="l">max principal (5 years)</span></div>
+          </div>
+          <table class="tbl a-card">
+            <tr><th>Scenario</th><th>Shock · CoF · opex · PD x · LGD</th><th>Net income</th><th>RoA</th></tr>
+            <tr><td><b class="neg">Worst</b></td><td class="m">-1% · 7.5% · 2.0% · 1.75x · 60%</td><td class="m">$3,110,991</td><td class="m neg">4.56%</td></tr>
+            <tr class="base"><td><b>Base</b></td><td class="m">0% · 6.0% · 1.5% · 1.00x · 45%</td><td class="m">$7,335,380</td><td class="m">10.76%</td></tr>
+            <tr><td><b class="pos">Best</b></td><td class="m">+1% · 5.0% · 1.2% · 0.75x · 35%</td><td class="m">$9,584,122</td><td class="m pos">14.06%</td></tr>
+          </table>
+          <p class="note a-up" style="margin-top:0">A dropdown picks the scenario; INDEX/MATCH and CHOOSE return its result. Worst-to-Best swing: $6.47M.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 FINDINGS -->
+    <section class="slide" data-notes="Twelve key findings, each a live sentence in the workbook that updates with the data. The most important: the 677 High-rated loans carry 46.3 percent of expected loss; RoA of 10.76 percent misses the 12 percent target; only a third of loans have history; 140 losses exceed principal, by up to 18.2 times; and late days barely explain losses, with a correlation of minus 0.04.">
+      <p class="kicker a-up">Key findings</p>
+      <h2 class="a-up">Twelve findings, each a <span class="hl">live sentence</span> in the workbook</h2>
+      <div class="fill finds">
+        <div class="find a-card"><b>01</b><p><strong>Scale:</strong> 3,000 loans, $68.16M, avg $22,719, Jan-May 2025</p></div>
+        <div class="find a-card"><b>02</b><p><strong>Spread:</strong> India 10.7% to Germany 9.1%; no concentration</p></div>
+        <div class="find a-card"><b>03</b><p><strong>Pricing:</strong> 20.66% rate; Capital Expansion earns 43% of yield</p></div>
+        <div class="find a-card" style="background:var(--gold-soft)"><b>04</b><p><strong>Rating mix:</strong> 677 High (22.6%) carry 46.3% of ECL</p></div>
+        <div class="find a-card" style="background:var(--gold-soft)"><b>05</b><p><strong>Return:</strong> ECL $1.63M (2.40%); RoA 10.76% misses 12%</p></div>
+        <div class="find a-card"><b>06</b><p><strong>Coverage:</strong> only 1,000 of 3,000 loans (33%) have history</p></div>
+        <div class="find a-card"><b>07</b><p><strong>Delinquency:</strong> 241 Severe, 328 Watch; avg 5.5 late days</p></div>
+        <div class="find a-card"><b>08</b><p><strong>Anomalies:</strong> 140 losses exceed principal, up to 18.2x</p></div>
+        <div class="find a-card"><b>09</b><p><strong>Outliers:</strong> none by Z or IQR; amounts are uniform</p></div>
+        <div class="find a-card"><b>10</b><p><strong>Drivers:</strong> late days vs loss CORREL -0.040, R² 0.0016</p></div>
+        <div class="find a-card"><b>11</b><p><strong>Sensitivity:</strong> +100 bps = +$681,556; break-even at 5.5x PD</p></div>
+        <div class="find a-card"><b>12</b><p><strong>Master data:</strong> 6 unique borrowers across 1,000 profiles</p></div>
+      </div>
+      <p class="note a-up">Risk score rises with weaker tier (Platinum 44.0, Gold 52.1, Silver 59.8). Loan amounts are flat: mean $22,719, SD $12,578, skew -0.01.</p>
+    </section>
+
+    <!-- 11 RECOMMENDATIONS -->
+    <section class="slide" data-notes="Five actions to lift RoA toward 12 percent and cut model risk. One: re-price or cap Capital Expansion lending to High-rated borrowers; 8 of the top 10 expected-loss loans are in that category, and each 10 percent cut in High-risk ECL saves about 75.6 thousand dollars. Two: audit the 140 loans where loss exceeds principal before provisioning. Three: backfill history for TXN-2000 to TXN-3999, since two-thirds of the book is scored on pricing and tier only. Four: add a unique borrower ID. Five: run the scenarios monthly and target plus 124 basis points of combined pricing and funding gain, which meets the 12 percent target.">
+      <p class="kicker a-up">Recommendations</p>
+      <h2 class="a-up">Five actions to lift RoA toward <span class="hl">12%</span> and cut model risk</h2>
+      <table class="tbl a-card">
+        <tr><th>#</th><th>Action</th><th>Evidence</th><th>Effect</th></tr>
+        <tr><td class="m">1</td><td><b>Re-price or cap Capital Expansion (FIN-104) lending to High-rated borrowers</b></td><td>8 of top-10 ECL loans are FIN-104</td><td class="pos">Each 10% cut in High-risk ECL saves ~$75.6K</td></tr>
+        <tr><td class="m">2</td><td><b>Audit the 140 "Loss &gt; Principal" loans before provisioning</b></td><td>Loss ratios up to 18.2x</td><td class="pos">Cleaner loss ratios and ECL</td></tr>
+        <tr><td class="m">3</td><td><b>Backfill 2023-24 history for TXN-2000 to TXN-3999</b></td><td>67% scored on pricing and tier only</td><td class="pos">Accurate scores for two-thirds of the book</td></tr>
+        <tr><td class="m">4</td><td><b>Add a unique Borrower_ID to Raw_Demographics</b></td><td>6 names across 1,000 profiles</td><td class="pos">Correct tier, employer, officer per loan</td></tr>
+        <tr><td class="m">5</td><td><b>Run the scenarios monthly; target +124 bps of combined pricing and funding gain</b></td><td>GS-1; Worst case = 4.56% RoA</td><td class="pos">Meets the 12% RoA target</td></tr>
+      </table>
+    </section>
+
+    <!-- 12 CONTROLS -->
+    <section class="slide" data-notes="Phase D, controls, formulas and limits. 54 functions in about 142,500 formulas with zero errors, behind a locked workbook structure. The MasterSheet links to every tab, and every tab links back. Only search, input and scenario cells are unlocked. The formula inventory covers text and date, lookup, logic, finance and statistics, plus Data Tables, Goal Seek, slicers and validation. Key assumptions and limits: PDs of 2, 5 and 12 percent by rating, LGD of 45 percent, cost of funds 6 percent, opex 1.5 percent; history covers only a third of loans; May is partial; and XLOOKUP needs Excel 365 or 2021.">
+      <p class="kicker a-up">Phase D · Controls, formulas &amp; limits</p>
+      <h2 class="a-up"><span class="hl">54 functions</span> in about 142,500 formulas, zero errors, behind locked structure</h2>
+      <div class="fill" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="panel a-card"><p class="kicker">Navigation &amp; protection</p><ul style="padding-left:22px; display:grid; gap:6px"><li style="font-size:19px">MasterSheet links to A1 of all 15 tabs</li><li style="font-size:19px">"◀ Back to MasterSheet" in A1 of every other tab</li><li style="font-size:19px">Workbook structure locked</li><li style="font-size:19px">Only search, input and scenario cells unlocked</li><li style="font-size:19px">Dashboard and model unprotected so slicers filter</li></ul></div>
+        <div class="panel navy a-card"><p class="kicker">Formula inventory</p><ul style="padding-left:22px; display:grid; gap:6px"><li style="font-size:19px"><b>Text &amp; date:</b> TRIM, CLEAN, PROPER, VALUE, DATEVALUE, DATEDIF</li><li style="font-size:19px"><b>Lookup:</b> XLOOKUP, INDEX + MATCH, VLOOKUP, HLOOKUP, CHOOSE</li><li style="font-size:19px"><b>Logic:</b> IF, AND, OR, IFERROR, SUMIFS, COUNTIFS, SUBTOTAL</li><li style="font-size:19px"><b>Finance &amp; stats:</b> PMT, PV, STDEV.S, SKEW, CORREL, LINEST</li><li style="font-size:19px"><b>Tools:</b> Data Tables, Goal Seek, slicers, validation</li></ul></div>
+        <div class="panel gold a-card"><p class="kicker">Assumptions &amp; limits</p><ul style="padding-left:22px; display:grid; gap:6px"><li style="font-size:19px">PD 2% / 5% / 12% by rating; LGD 45%</li><li style="font-size:19px">Cost of funds 6.0%; opex 1.5%; 5-year EMI term</li><li style="font-size:19px">History covers only 33% of loans</li><li style="font-size:19px">May 2025 is partial (data ends 5 May)</li><li style="font-size:19px">XLOOKUP needs Excel 365 / 2021+; re-run Goal Seek after input changes</li></ul></div>
+      </div>
+      <p class="note a-up">Full formula table with an exact example of each: Analytic_Summary.</p>
+    </section>
+
+    <!-- 13 THANK YOU -->
+    <section class="slide dark" data-notes="To close: one formula-driven workbook now gives the CRO a single, searchable, stress-tested view of credit risk and yield. The deliverable is Group31_BA5213_Final_Submission.xlsx with 15 tabs. Thank you, we are happy to take questions.">
+      <p class="kicker a-up">BA5213 · Group #31</p>
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center">
+        <h2 class="a-up" style="font-size:150px; margin-bottom:24px">Thank <span class="hl">you</span></h2>
+        <p class="a-up" style="font-size:34px; max-width:1300px; line-height:1.3">One formula-driven workbook now gives the CRO a single, searchable, stress-tested view of credit risk and yield.</p>
+        <div class="a-up" style="display:flex; gap:12px; margin-top:40px; flex-wrap:wrap"><span class="chip gold">Group31_BA5213_Final_Submission.xlsx · 15 tabs</span><span class="chip">LM Thapar School of Management</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<nav class="bar" aria-label="Presentation controls">
+  <button type="button" data-go="prev" aria-label="Previous slide">&larr;</button>
+  <span class="count" aria-live="polite">1 / 13</span>
+  <button type="button" data-go="next" aria-label="Next slide">&rarr;</button>
+  <button type="button" data-go="overview">Overview</button>
+  <button type="button" id="b-notes" data-go="notes" aria-pressed="false">Notes</button>
+  <button type="button" id="b-motion" data-go="motion" aria-pressed="true">Motion on</button>
+  <button type="button" data-go="full">Full screen</button>
+</nav>
+<aside class="notes" hidden></aside>
+<p class="hint">&larr; &rarr; or space to move &middot; O overview &middot; N notes &middot; F full screen</p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function () {
+  // ---------- charts from the deck's own chart data ----------
+  const COUNTRY = [['India', 7.31], ['Japan', 7.14], ['US', 7.13], ['Singapore', 7.11], ['UK', 6.95], ['France', 6.68], ['Australia', 6.67], ['Brazil', 6.63], ['UAE', 6.37], ['Germany', 6.17]];
+  const MONTH = [['Jan', 16.95], ['Feb', 14.71], ['Mar', 17.38], ['Apr', 16.4], ['May*', 2.72]];
+  document.querySelectorAll('[data-hbar]').forEach((el) => {
+    const max = 8;
+    el.innerHTML = COUNTRY.map(([c, v], i) => `<div class="r${i === 0 ? ' top' : ''}"><span class="lab">${c}</span><span class="trk"><span class="b a-bar" style="display:block; width:${(v / max) * 100}%"></span></span><span class="val">${v.toFixed(2)}</span></div>`).join('');
+  });
+  document.querySelectorAll('[data-line]').forEach((svg) => {
+    const W = 440, H = 340, L = 30, R = 20, T = 30, B = 40, max = 20;
+    const x = (i) => L + (i * (W - L - R)) / (MONTH.length - 1);
+    const y = (v) => T + (1 - v / max) * (H - T - B);
+    const pts = MONTH.map(([, v], i) => `${x(i)},${y(v)}`).join(' ');
+    let g = '';
+    [0, 5, 10, 15, 20].forEach((v) => { g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(13,27,46,.1)"/><text x="0" y="${y(v) + 5}">${v}</text>`; });
+    g += `<polyline class="a-draw" points="${pts}" fill="none" stroke="#0d1b2e" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0"/>`;
+    MONTH.forEach(([m, v], i) => { g += `<circle class="a-dot" cx="${x(i)}" cy="${y(v)}" r="8" fill="${i === 2 ? '#f2b705' : '#fff'}" stroke="#0d1b2e" stroke-width="4"/><text class="val" x="${x(i)}" y="${y(v) - 16}" text-anchor="middle">${v}</text><text x="${x(i)}" y="${H - 10}" text-anchor="middle">${m}</text>`; });
+    svg.innerHTML = g;
+  });
+
+  // ---------- canvas ----------
+  const world = document.querySelector('.world');
+  const viewport = document.querySelector('.viewport');
+  const slides = [...document.querySelectorAll('.slide')];
+  const counter = document.querySelector('.count');
+  const notesEl = document.querySelector('.notes');
+  const notesBtn = document.getElementById('b-notes');
+  const motionBtn = document.getElementById('b-motion');
+  let motion = true;
+  try { motion = localStorage.getItem('g31:motion') !== 'off'; } catch (e) {}
+  const SCALE = 0.3, CX = 800, CY = 450, RX = 2300, RY = 1450, BAR = 84;
+
+  const svg = document.querySelector('.loop-path');
+  const pad = 200;
+  svg.setAttribute('viewBox', `0 0 ${2 * (RX + pad)} ${2 * (RY + pad)}`);
+  Object.assign(svg.style, { left: (CX - RX - pad) + 'px', top: (CY - RY - pad) + 'px', width: 2 * (RX + pad) + 'px', height: 2 * (RY + pad) + 'px' });
+  svg.querySelectorAll('ellipse').forEach((e) => { e.setAttribute('cx', RX + pad); e.setAttribute('cy', RY + pad); e.setAttribute('rx', RX); e.setAttribute('ry', RY); });
+
+  // Number every slide by its position.
+  slides.forEach((s, i) => { if (i === 0) return; let n = s.querySelector('.num'); if (!n) { n = document.createElement('span'); n.className = 'num'; s.append(n); } n.textContent = String(i + 1).padStart(2, '0') + ' / ' + slides.length; });
+
+  const views = slides.map((s, i) => {
+    s.setAttribute('aria-roledescription', 'slide');
+    s.setAttribute('aria-label', (i + 1) + ' of ' + slides.length);
+    if (i === 0) return { cx: CX, cy: CY, w: 1800, h: 1000, rot: 0 };
+    const a = -Math.PI / 2 + (i - 1) * (2 * Math.PI / (slides.length - 1));
+    const cx = CX + RX * Math.cos(a), cy = CY + RY * Math.sin(a);
+    const rot = [-2, 1.5, -1.5, 2, -1, 1.8][(i - 1) % 6];
+    s.style.transform = `translate(${cx - 800}px, ${cy - 450}px) rotate(${rot}deg) scale(${SCALE})`;
+    return { cx, cy, w: 1600 * SCALE * 1.04, h: 900 * SCALE * 1.04, rot };
+  });
+  const OVERVIEW = { cx: CX, cy: CY, w: 2 * RX + 1600 * SCALE + 200, h: 2 * RY + 900 * SCALE + 200, rot: 0 };
+
+  const fmt = (v, el) => {
+    const dec = +el.dataset.dec || 0;
+    let s = v.toFixed(dec);
+    if (el.dataset.sep) s = Number(s).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    return (el.dataset.pre || '') + s + (el.dataset.suf || '');
+  };
+  const entrances = slides.map((s) => {
+    const tl = gsap.timeline({ paused: true });
+    let at = 0.02;
+    s.querySelectorAll('.a-up, .a-card, .a-bar, .a-seg, .a-col, .a-draw, .a-dot, .hl, tr').forEach((el, n) => {
+      const c = el.classList;
+      if (c.contains('a-card')) { tl.from(el, { y: 90, opacity: 0, duration: 0.55, ease: 'power3.out' }, at); at += 0.07; }
+      else if (el.tagName === 'TR') { tl.from(el, { x: -40, opacity: 0, duration: 0.4, ease: 'power2.out' }, 0.35 + (n % 14) * 0.05); }
+      else if (c.contains('a-bar') || c.contains('a-seg')) { tl.from(el, { scaleX: 0, duration: 0.8, ease: 'power3.out' }, 0.5 + (n % 12) * 0.05); }
+      else if (c.contains('a-col')) { tl.from(el, { scaleY: 0, duration: 0.8, ease: 'back.out(1.4)' }, 0.55 + (n % 4) * 0.1); }
+      else if (c.contains('a-draw')) { tl.fromTo(el, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2, ease: 'power2.inOut' }, 0.5); }
+      else if (c.contains('a-dot')) { tl.from(el, { scale: 0, transformOrigin: '50% 50%', duration: 0.35, ease: 'back.out(3)' }, 0.6 + (n % 6) * 0.2); }
+      else if (c.contains('hl')) { tl.from(el, { backgroundSize: '0% 100%', duration: 0.6, ease: 'power2.out' }, 0.45); }
+      else { tl.from(el, { y: 40, opacity: 0, duration: 0.55, ease: 'power3.out' }, at); at += 0.1; }
+    });
+    s.querySelectorAll('[data-count]').forEach((el) => {
+      const end = parseFloat(el.dataset.count), o = { v: 0 };
+      tl.to(o, { v: end, duration: 1.3, ease: 'power2.out', onUpdate: () => { el.textContent = fmt(o.v, el); } }, 0.35);
+    });
+    return tl.progress(1);
+  });
+  document.querySelectorAll('.hl').forEach((h) => { h.style.backgroundSize = '100% 100%'; });
+
+  const cam = { cx: OVERVIEW.cx, cy: OVERVIEW.cy, k: 0.1, rot: 0 };
+  let current = -2, flight = null;
+  const fit = (v) => Math.min(innerWidth / v.w, (innerHeight - BAR) / v.h);
+  const render = () => { world.style.transform = `translate(${innerWidth / 2}px, ${(innerHeight - BAR) / 2}px) rotate(${-cam.rot}deg) scale(${cam.k}) translate(${-cam.cx}px, ${-cam.cy}px)`; };
+
+  function flyTo(v, onArrive) {
+    if (flight) flight.kill();
+    const from = { ...cam }, to = { cx: v.cx, cy: v.cy, k: fit(v), rot: v.rot };
+    if (!motion) { Object.assign(cam, to); render(); onArrive && onArrive(); return; }
+    const dx = Math.abs(to.cx - from.cx), dy = Math.abs(to.cy - from.cy);
+    const outK = 0.8 * Math.min(innerWidth / (dx + 700), innerHeight / (dy + 500));
+    const bump = Math.max(0, Math.log(Math.min(from.k, to.k)) - Math.log(outK));
+    const lnA = Math.log(from.k), lnB = Math.log(to.k), st = { t: 0 };
+    let arrived = false;
+    world.style.willChange = 'transform';
+    document.body.classList.add('flying');
+    flight = gsap.to(st, {
+      t: 1, duration: bump > 0.2 ? 1.3 : 0.85, ease: 'power2.inOut',
+      onUpdate() {
+        const t = st.t;
+        cam.cx = from.cx + (to.cx - from.cx) * t; cam.cy = from.cy + (to.cy - from.cy) * t;
+        cam.rot = from.rot + (to.rot - from.rot) * t;
+        cam.k = Math.exp(lnA + (lnB - lnA) * t - bump * Math.sin(Math.PI * t));
+        render();
+        if (!arrived && t > 0.7) { arrived = true; onArrive && onArrive(); }
+      },
+      onComplete() { world.style.willChange = 'auto'; document.body.classList.remove('flying'); if (!arrived && onArrive) onArrive(); },
+    });
+  }
+  function go(i) {
+    i = Math.max(-1, Math.min(slides.length - 1, i));
+    if (i === current) return;
+    entrances.forEach((tl) => tl.progress(1));
+    current = i;
+    document.body.classList.toggle('is-overview', i < 0);
+    counter.textContent = i < 0 ? 'Overview' : (i + 1) + ' / ' + slides.length;
+    slides.forEach((s, n) => s.toggleAttribute('aria-current', n === i));
+    try { history.replaceState(null, '', i < 0 ? '#overview' : '#' + (i + 1)); } catch (e) {}
+    notesEl.textContent = i >= 0 ? (slides[i].dataset.notes || '') : 'Pick a slide to see its notes.';
+    flyTo(i < 0 ? OVERVIEW : views[i], () => { if (i >= 0 && motion) entrances[i].restart(); });
+  }
+  const next = () => go(current < 0 ? 0 : current + 1);
+  const prev = () => go(current <= 0 ? 0 : current - 1);
+  const toggleNotes = () => { notesEl.hidden = !notesEl.hidden; notesBtn.setAttribute('aria-pressed', String(!notesEl.hidden)); };
+  const toggleFull = () => { if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {}); };
+  const applyMotion = () => { document.body.classList.toggle('no-motion', !motion); motionBtn.textContent = motion ? 'Motion on' : 'Motion off'; motionBtn.setAttribute('aria-pressed', String(motion)); };
+  const toggleMotion = () => { motion = !motion; applyMotion(); try { localStorage.setItem('g31:motion', motion ? 'on' : 'off'); } catch (e) {} };
+  applyMotion();
+
+  document.querySelector('.bar').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-go]'); if (!b) return;
+    ({ prev, next, overview: () => go(current < 0 ? 0 : -1), notes: toggleNotes, motion: toggleMotion, full: toggleFull })[b.dataset.go]();
+  });
+  addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = e.key.toLowerCase();
+    if (['arrowright', 'arrowdown', 'pagedown', ' ', 'enter'].includes(k)) next();
+    else if (['arrowleft', 'arrowup', 'pageup', 'backspace'].includes(k)) prev();
+    else if (k === 'home') go(0);
+    else if (k === 'end') go(slides.length - 1);
+    else if (k === 'o' || (k === 'escape' && !document.fullscreenElement)) go(current < 0 ? 0 : -1);
+    else if (k === 'n') toggleNotes();
+    else if (k === 'f') toggleFull();
+    else return;
+    e.preventDefault();
+  });
+  let down = null;
+  viewport.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; });
+  viewport.addEventListener('pointerup', (e) => {
+    if (!down) return;
+    const dx = e.clientX - down.x, moved = Math.hypot(dx, e.clientY - down.y); down = null;
+    if (moved > 50 && Math.abs(dx) > 50) return dx < 0 ? next() : prev();
+    if (moved > 10) return;
+    if (current < 0) { const hit = e.target.closest('.slide'); go(hit ? slides.indexOf(hit) : 0); } else next();
+  });
+  addEventListener('resize', () => {
+    if (flight) flight.kill();
+    const v = current < 0 ? OVERVIEW : views[current];
+    Object.assign(cam, { cx: v.cx, cy: v.cy, k: fit(v), rot: v.rot }); render(); world.style.willChange = 'auto';
+  });
+  let idle;
+  addEventListener('pointermove', () => { document.body.classList.remove('is-idle'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('is-idle'), 2500); });
+
+  cam.k = fit(OVERVIEW); render();
+  const h = location.hash.slice(1);
+  const start = h === 'overview' ? -1 : Math.max(1, Number(h) || 1) - 1;
+  setTimeout(() => go(start), motion ? 600 : 0);
+})();
+</script>
+
+</body></html>

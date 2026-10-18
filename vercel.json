@@ -4,7 +4,8 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "redirects": [
-    { "source": "/greenloop", "destination": "/p/greenloop-7q4m/", "permanent": false }
+    { "source": "/greenloop", "destination": "/p/greenloop-7q4m/", "permanent": false },
+    { "source": "/group31", "destination": "/p/group31-b5x2/", "permanent": false }
   ],
   "headers": [
     {
