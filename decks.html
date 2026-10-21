@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>GLOOD | Decks</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      .decks-main { max-width: 980px; margin: 0 auto; padding: 140px var(--gutter) 80px; min-height: 70vh; }
+      .lock { max-width: 420px; margin: 40px auto; text-align: center; background: var(--white); border: var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 36px 28px; }
+      .lock h1 { font-family: var(--font-head); font-size: 44px; margin: 0 0 6px; }
+      .lock p { margin: 0 0 20px; }
+      .pin { display: flex; gap: 10px; justify-content: center; }
+      .pin input { width: 150px; font: 700 28px var(--font-label); text-align: center; letter-spacing: .3em; padding: 10px; border: var(--line); border-radius: 12px; }
+      .pin button { font: 400 18px var(--font-label); border: var(--line); border-radius: 12px; background: var(--yellow); box-shadow: 4px 4px 0 var(--black); padding: 0 18px; cursor: pointer; }
+      .err { color: var(--red); font-weight: 700; min-height: 24px; margin-top: 12px; }
+      .shake { animation: shake .35s; }
+      @keyframes shake { 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px; }
+      .deck { display: block; text-decoration: none; color: var(--ink); background: var(--white); border: var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; transition: transform .15s; }
+      .deck:hover { transform: translate(-3px, -3px); box-shadow: var(--shadow-lift); }
+      .deck b { display: block; font-family: var(--font-head); font-size: 30px; margin-bottom: 6px; }
+      .deck span { font: 400 13px var(--font-label); text-transform: uppercase; background: var(--black); color: var(--yellow); padding: 4px 10px; border-radius: 999px; }
+      .deck p { margin: 12px 0 0; }
+      .decks-head { font-family: var(--font-head); font-size: 56px; margin: 0 0 24px; }
+    </style>
+  </head>
+  <body>
+    <header class="nav"></header>
+    <main class="decks-main">
+      <section class="lock" id="lock">
+        <h1>Decks 🔒</h1>
+        <p>Team only. Enter the passcode.</p>
+        <form class="pin" id="pinform">
+          <label class="visually-hidden" for="pin">Passcode</label>
+          <input id="pin" inputmode="numeric" autocomplete="off" maxlength="8" />
+          <button type="submit">Open</button>
+        </form>
+        <p class="err" id="err" role="alert"></p>
+      </section>
+      <section id="decks" hidden>
+        <h1 class="decks-head">Decks</h1>
+        <div class="grid">
+          <a class="deck" href="/deck/"><span>Startup pitch</span><b>GLOOD</b><p>Zooming web deck: the brand, the website, the team.</p></a>
+          <a class="deck" href="/diary"><span>Venture diary</span><b>GLOOD Diary</b><p>Flip-through diary, 15 Aug to 20 Oct.</p></a>
+          <a class="deck" href="/greenloop"><span>Marketing plan</span><b>GreenLoop</b><p>Doorstep recycling plan with survey results.</p></a>
+          <a class="deck" href="/group31"><span>BA5213</span><b>Group 31</b><p>Corporate credit risk and portfolio yield analytics.</p></a>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"></footer>
+    <script type="module" src="/src/pages/decks.js"></script>
+  </body>
+</html>

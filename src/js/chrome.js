@@ -56,6 +56,7 @@ export function mountNav({ home = false, reloadOnMotion = false } = {}) {
       <a href="${base}#gallery">Stickers</a>
       <a href="${base}#drops">Fresh drops</a>
       <a href="${base}#about">Story</a>
+      <a href="decks.html">Decks 🔒</a>
     </nav>
     <div class="nav-actions">
       <div class="cat-menu">
