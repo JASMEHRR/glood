@@ -12,7 +12,12 @@ const lock = document.getElementById('lock');
 const decks = document.getElementById('decks');
 const err = document.getElementById('err');
 
+// Deck pages send visitors here with ?next=/p/... ; only same-site paths are followed.
+const next = new URLSearchParams(location.search).get('next');
+const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : null;
+
 function open() {
+  if (safeNext) { location.replace(safeNext); return; }
   lock.hidden = true;
   decks.hidden = false;
 }
