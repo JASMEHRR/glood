@@ -231,6 +231,11 @@ kbd { font: 700 11px var(--display); border: 1px solid var(--line-strong); paddi
 .meter { height: 10px; border: 1px solid var(--line-strong); background: rgba(1, 6, 14, 0.7); padding: 1px; }
 .meter-fill { height: 100%; width: 100%; background: var(--accent); box-shadow: 0 0 12px var(--accent); transition: width 0.08s linear; }
 .speed { margin-top: 8px; font: 900 34px var(--display); letter-spacing: 0.05em; text-shadow: 0 0 14px rgba(24, 232, 255, 0.5); }
+.jump-ind { display: inline-block; margin-top: 8px; padding: 3px 10px; font: 700 10px var(--display); letter-spacing: 0.22em; border: 1px solid var(--line-strong); transition: opacity 0.2s; }
+.jump-ind.ready { color: #fff; background: rgba(24, 232, 255, 0.18); text-shadow: 0 0 8px var(--accent); }
+.jump-ind.cool { opacity: 0.3; }
+.jump-ind.air { color: var(--accent); border-color: var(--accent); }
+.jump-ind.none { display: none; }
 .speed small { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); margin-left: 6px; }
 #minimap { position: absolute; right: 16px; bottom: 16px; width: 180px; height: 180px; border: 1px solid var(--line); }
 
@@ -242,7 +247,8 @@ kbd { font: 700 11px var(--display); border: 1px solid var(--line-strong); paddi
 
 .touch { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 12px 14px; pointer-events: none; }
 .touch button { pointer-events: auto; width: 96px; height: 96px; font: 900 34px var(--display); color: #fff; background: rgba(24, 232, 255, 0.12); border: 1px solid var(--line-strong); touch-action: none; }
-.touch .boost { width: 120px; height: 64px; font-size: 13px; letter-spacing: 0.15em; }
+.touch .boost, .touch .jump { width: 112px; height: 64px; font-size: 13px; letter-spacing: 0.15em; }
+.touch .jump { background: rgba(255, 154, 31, 0.16); border-color: rgba(255, 190, 110, 0.75); }
 body.touch-ui .hud-bl { bottom: 128px; }
 body.touch-ui #minimap { bottom: auto; top: 120px; width: 116px; height: 116px; }
 body.touch-ui .chat-overlay { bottom: 236px; }
@@ -290,6 +296,8 @@ body.touch-ui .game-chat { bottom: 204px; }
   #minimap { width: 116px; height: 116px; }
   .speed { font-size: 26px; }
   .chat-overlay, .game-chat { width: calc(100% - 36px); }
+  .touch button { width: 76px; height: 76px; font-size: 28px; }
+  .touch .boost, .touch .jump { width: 84px; height: 56px; font-size: 12px; }
 }
 body.board-open .hud-tr { display: block; }
 
@@ -307,5 +315,5 @@ body.board-open .hud-tr { display: block; }
   body.touch-ui .hud-bl { bottom: 12px; left: 50%; transform: translateX(-50%); width: 150px; }
   body.touch-ui .touch { padding-bottom: 10px; }
   body.touch-ui .touch button { width: 80px; height: 80px; }
-  body.touch-ui .touch .boost { position: absolute; right: 104px; bottom: 10px; width: 92px; height: 54px; }
+  body.touch-ui .touch .boost, body.touch-ui .touch .jump { width: 92px; height: 54px; }
 }

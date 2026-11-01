@@ -127,20 +127,22 @@
           <p>Your bike never stops and leaves a solid line of light behind it. <b>Touch any line and you crash</b>: a rival's, your own, or the arena wall. Last rider still riding wins the round.</p>
           <h3>Tricks</h3>
           <p><b>Boost</b> to cut in front of rivals. Ride <b>close beside a line</b> without touching it to <b>grind</b>: your boost refills faster. When a rider crashes, their line dissolves a moment later (you can switch this off in the room settings).</p>
+          <p><b>Jump</b> to hop over a line. You can't jump over buildings or the arena edge, you crash if you land on a line, and you can jump again after a couple of seconds.</p>
         </div>
         <div>
           <h3>Controls</h3>
           <table class="keys">
             <tr><td><kbd>A</kbd> <kbd>←</kbd></td><td>Turn left</td></tr>
             <tr><td><kbd>D</kbd> <kbd>→</kbd></td><td>Turn right</td></tr>
-            <tr><td><kbd>W</kbd> <kbd>↑</kbd> <kbd>Space</kbd></td><td>Boost (hold)</td></tr>
+            <tr><td><kbd>W</kbd> <kbd>↑</kbd> <kbd>Shift</kbd></td><td>Boost (hold)</td></tr>
+            <tr><td><kbd>Space</kbd></td><td>Jump over a line</td></tr>
             <tr><td><kbd>C</kbd></td><td>Camera: chase / top-down / cockpit</td></tr>
             <tr><td><kbd>Tab</kbd></td><td>Scores (hold)</td></tr>
             <tr><td><kbd>Enter</kbd></td><td>Chat (online)</td></tr>
             <tr><td><kbd>M</kbd></td><td>Music on / off</td></tr>
             <tr><td><kbd>Esc</kbd></td><td>Menu</td></tr>
           </table>
-          <p class="hint">Top-down view: arrows point the bike up, down, left or right on screen. Phones and tablets get touch buttons. Gamepads work too (d-pad or bumpers to turn, A to boost).</p>
+          <p class="hint">Top-down view: arrows point the bike up, down, left or right on screen. Phones and tablets get touch buttons. Gamepads work too (d-pad or bumpers to turn, A to jump, right trigger or B to boost).</p>
         </div>
       </div>
       <div class="row end"><button class="btn small" data-back>Back</button></div>
@@ -161,6 +163,7 @@
           </select>
         </label>
         <label class="field"><span>Sound volume</span><input id="set-volume" type="range" min="0" max="1" step="0.05"></label>
+        <label class="field"><span>Engine volume</span><input id="set-engine" type="range" min="0" max="1" step="0.05"></label>
         <label class="field"><span>Music volume</span><input id="set-music" type="range" min="0" max="1" step="0.05"></label>
       </div>
       <div class="row end"><button class="btn small" data-back>Back</button></div>
@@ -181,6 +184,7 @@
         <div class="hud-label">BOOST <span id="hud-grind" class="grind">GRIND +</span></div>
         <div class="meter"><div id="hud-boost" class="meter-fill"></div></div>
       </div>
+      <div id="hud-jump" class="jump-ind none">JUMP</div>
       <div class="speed"><span id="hud-speed">0</span><small>KM/H</small></div>
     </div>
     <canvas id="minimap" width="180" height="180"></canvas>
@@ -189,6 +193,7 @@
     <div id="touch" class="touch hidden">
       <button data-act="L" aria-label="Turn left">◀</button>
       <button data-act="B" class="boost" aria-label="Boost">BOOST</button>
+      <button data-act="J" class="jump" aria-label="Jump">JUMP</button>
       <button data-act="R" aria-label="Turn right">▶</button>
     </div>
     <div id="chat-overlay" class="chat-overlay"></div>
