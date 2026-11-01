@@ -34,7 +34,7 @@ html, body {
 
 #vignette {
   position: fixed; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  background: radial-gradient(ellipse at center, transparent 65%, rgba(0, 0, 0, 0.3) 100%);
 }
 
 .hidden { display: none !important; }
