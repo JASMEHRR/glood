@@ -7,7 +7,8 @@
     { "source": "/greenloop", "destination": "/p/greenloop-7q4m/", "permanent": false },
     { "source": "/group31", "destination": "/p/group31-b5x2/", "permanent": false },
     { "source": "/diary", "destination": "/p/diary-k3w8/", "permanent": false },
-    { "source": "/bluejhasha", "destination": "/p/bluejhasha-r8t3/", "permanent": false }
+    { "source": "/bluejhasha", "destination": "/p/bluejhasha-r8t3/", "permanent": false },
+    { "source": "/lightwake", "destination": "/games/lightwake-y6r6/", "permanent": false }
   ],
   "headers": [
     {

@@ -41,12 +41,28 @@ const GRID_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="
 const CART_ICON = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 4h2.2l2.1 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.5L21 8H6.3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.6" fill="currentColor"/><circle cx="17" cy="20" r="1.6" fill="currentColor"/></svg>';
 
 /**
+ * The Lightwake game tab is a fifth nav link. Below about 1140px wide five links no longer fit on
+ * one line next to the actions (the nav wraps, then overflows), so the tab hides there, the same
+ * way every nav link hides on phones. The short link /lightwake works at any width.
+ */
+const GAME_TAB_STYLE = '@media (max-width: 1139px) { .nav nav a.nav-game { display: none; } }';
+
+function addGameTabStyle() {
+  if (document.getElementById('nav-game-style')) return;
+  const style = document.createElement('style');
+  style.id = 'nav-game-style';
+  style.textContent = GAME_TAB_STYLE;
+  document.head.append(style);
+}
+
+/**
  * Fills <header class="nav"></header>. `reloadOnMotion` is for the home page, whose scroll story is
  * built once at load: switching motion there reloads so the story is rebuilt the right way.
  */
 export function mountNav({ home = false, reloadOnMotion = false } = {}) {
   const nav = document.querySelector('header.nav');
   if (!nav) throw new Error('Missing <header class="nav">');
+  addGameTabStyle();
   const base = home ? '' : 'index.html';
   nav.innerHTML = `
     <a class="nav-logo" href="${home ? '#top' : 'index.html'}" aria-label="GLOOD home">
@@ -56,6 +72,7 @@ export function mountNav({ home = false, reloadOnMotion = false } = {}) {
       <a href="${base}#gallery">Stickers</a>
       <a href="${base}#drops">Fresh drops</a>
       <a href="${base}#about">Story</a>
+      <a class="nav-game" href="games/lightwake-y6r6/">Lightwake 🎮</a>
       <a href="decks.html">Decks 🔒</a>
     </nav>
     <div class="nav-actions">
