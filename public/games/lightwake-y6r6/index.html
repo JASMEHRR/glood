@@ -15,6 +15,7 @@
 <body>
   <canvas id="view" aria-label="Game view"></canvas>
   <div id="vignette"></div>
+  <div id="letterbox" aria-hidden="true"><i></i><i></i></div>
 
   <section id="screen-title" class="screen">
     <a id="back-link" class="back-link hidden" href="../../">&larr; Back to GLOOD</a>
@@ -128,6 +129,8 @@
           <h3>Tricks</h3>
           <p><b>Boost</b> to cut in front of rivals. Ride <b>close beside a line</b> without touching it to <b>grind</b>: your boost refills faster. When a rider crashes, their line dissolves a moment later (you can switch this off in the room settings).</p>
           <p><b>Jump</b> to hop over a line. You can't jump over buildings or the arena edge, you crash if you land on a line, and you can jump again after a couple of seconds.</p>
+          <h3>Heights</h3>
+          <p>Some arenas have <b>raised decks</b>, <b>trenches</b> and <b>tunnels</b>. <b>Ramps</b> take you up and down; ride off an edge to <b>drop</b> to the level below. Lines on different levels never touch, so you can pass over or under them. You can't steer in the air or on a ramp. <b>Kickers</b> throw you high over lines, and gold <b>boost pads</b> give a burst of speed. On <b>Afterglow</b> lines fade after 4 seconds.</p>
         </div>
         <div>
           <h3>Controls</h3>
@@ -156,6 +159,12 @@
         <label class="field"><span>Graphics</span><select id="set-quality"></select></label>
         <p class="hint">High adds floor reflections. Lower it if the game feels slow.</p>
         <label class="field"><span>Camera</span><select id="set-camera"></select></label>
+        <label class="field"><span>Slow motion</span>
+          <select id="set-slowmo">
+            <option value="on">On: big moments slow down (practice)</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
         <label class="field"><span>Top-down steering</span>
           <select id="set-steering">
             <option value="screen">Arrows = screen directions</option>
@@ -190,6 +199,8 @@
     <canvas id="minimap" width="180" height="180"></canvas>
     <div id="hud-center" class="center-msg"></div>
     <div id="hud-hint" class="hud-hint"></div>
+    <div id="callout" class="callout"></div>
+    <div id="title-card" class="title-card"><div class="tc-name"></div><div class="tc-blurb"></div></div>
     <div id="touch" class="touch hidden">
       <button data-act="L" aria-label="Turn left">◀</button>
       <button data-act="B" class="boost" aria-label="Boost">BOOST</button>
