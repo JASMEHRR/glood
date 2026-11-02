@@ -28,6 +28,7 @@
     <div class="panel title-panel">
       <label class="field"><span>Rider name</span><input id="name" maxlength="16" autocomplete="nickname" spellcheck="false"></label>
       <div class="field"><span>Bike colour</span><div id="swatches" class="swatches"></div></div>
+      <div class="field"><span>Vehicle <small class="hint">(looks only: all ride the same)</small></span><div id="vehicles" class="vehicles"></div></div>
       <div id="invite-banner" class="invite hidden">
         <div>You're invited to room <b id="invite-code"></b></div>
         <button id="btn-accept" class="btn primary">Join room</button>
@@ -131,6 +132,7 @@
           <p><b>Jump</b> to hop over a line. You can't jump over buildings or the arena edge, you crash if you land on a line, and you can jump again after a couple of seconds.</p>
           <h3>Heights</h3>
           <p>Some arenas have <b>raised decks</b>, <b>trenches</b> and <b>tunnels</b>. <b>Ramps</b> take you up and down; ride off an edge to <b>drop</b> to the level below. Lines on different levels never touch, so you can pass over or under them. You can't steer in the air or on a ramp. <b>Kickers</b> throw you high over lines, and gold <b>boost pads</b> give a burst of speed. On <b>Afterglow</b> lines fade after 4 seconds.</p>
+          <p>Pick a <b>vehicle</b> on the start screen: they all ride the same, so it's about style. Turn on <b>Change arena every round</b> in the match settings for a new arena each round.</p>
         </div>
         <div>
           <h3>Controls</h3>
@@ -187,6 +189,7 @@
       <div id="hud-net" class="hud-small"></div>
     </div>
     <div class="hud-tr"><ol id="hud-board" class="board"></ol></div>
+    <div id="hud-room" class="hud-room"></div>
     <div id="hud-feed" class="feed"></div>
     <div class="hud-bl">
       <div id="hud-boostbox">
@@ -217,6 +220,10 @@
     <div class="panel narrow">
       <h2 id="pause-title">Paused</h2>
       <p id="pause-note" class="hint"></p>
+      <div id="pause-room" class="pause-room hidden">
+        <div><span class="label">Room code</span><b id="pause-code"></b></div>
+        <button id="btn-pause-copy" class="btn small">Copy invite link</button>
+      </div>
       <div class="menu">
         <button id="btn-resume" class="btn primary">Resume</button>
         <button id="btn-camera" class="btn">Camera: Chase cam</button>

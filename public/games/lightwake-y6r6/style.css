@@ -245,6 +245,32 @@ kbd { font: 700 11px var(--display); border: 1px solid var(--line-strong); paddi
 @keyframes pop { 0% { transform: translate(-50%, -50%) scale(1.25); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.6; } }
 .hud-hint { position: absolute; left: 50%; top: calc(38% + 92px); transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); font: 600 12px var(--display); letter-spacing: 0.16em; line-height: 1.6; color: #b9dceb; text-align: center; text-shadow: 0 0 6px #000, 0 0 12px #000; }
 
+/* Vehicle picker: a side view of each one, drawn in the rider's colour. */
+.vehicles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.vehicle { background: rgba(24, 232, 255, 0.05); border: 1px solid var(--line); padding: 6px 4px 5px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+.vehicle svg { display: block; width: 100%; height: 26px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 0 3px currentColor); }
+.vehicle span { display: block; margin-top: 3px; font: 600 9px var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.vehicle.on { border-color: currentColor; background: rgba(24, 232, 255, 0.12); box-shadow: inset 0 0 14px rgba(24, 232, 255, 0.18); }
+.vehicle.on span { color: #fff; }
+.field small.hint { font-size: 12px; letter-spacing: 0; text-transform: none; }
+.members .veh { font-size: 12px; color: var(--muted); margin-left: 6px; }
+
+/* The room code, always on screen at the top in an online match so friends can join.
+   The crash feed moves down beneath it. */
+.hud-room { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); padding: 4px 12px; font: 700 13px var(--display); letter-spacing: 0.18em; color: var(--accent); border: 1px solid var(--line-strong); background: rgba(2, 10, 22, 0.72); white-space: nowrap; text-shadow: 0 0 10px rgba(24, 232, 255, 0.6); }
+.hud-room:empty { display: none; }
+.hud-room:not(:empty) + .feed { top: 50px; }
+@media (max-width: 600px) {
+  .hud-room { top: 62px; font-size: 11px; }
+  .hud-room:not(:empty) + .feed { top: 96px; }
+}
+@media (max-height: 520px) {
+  .hud-room { top: 10px; }
+  .hud-room:not(:empty) + .feed { top: 44px; }
+}
+.pause-room { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 14px; padding: 10px 12px; border: 1px solid var(--line); background: rgba(24, 232, 255, 0.05); }
+.pause-room b { display: block; font: 900 24px var(--display); letter-spacing: 0.18em; color: var(--accent); }
+
 /* Film moments: letterbox bars slide in for the fly-in, crashes and the winner shot. */
 #letterbox i { position: fixed; left: 0; right: 0; height: 9vh; background: #000; z-index: 1; pointer-events: none; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); }
 #letterbox i:first-child { top: 0; transform: translateY(-100%); }
@@ -295,6 +321,9 @@ body.touch-ui .game-chat { bottom: 204px; }
 .res-board .nm { flex: 1; }
 .res-board .score { font-family: var(--display); color: #fff; }
 .res-next { color: var(--muted); font-size: 15px; }
+.res-stats { font-size: 15px; color: var(--text); margin: 0 0 10px; line-height: 1.5; }
+.res-best { display: inline-block; margin-left: 4px; padding: 1px 7px; font: 700 10px var(--display); letter-spacing: 0.14em; color: #02060f; background: var(--accent-2); }
+.res-rec { color: var(--muted); }
 .res-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
 
 .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: var(--panel-solid); border: 1px solid var(--line-strong); padding: 10px 18px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; max-width: calc(100% - 32px); text-align: center; z-index: 10; }
